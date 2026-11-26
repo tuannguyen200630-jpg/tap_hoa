@@ -119,13 +119,16 @@ export async function getAllDebtContacts(input: { targetType: DebtTarget }): Pro
 
   const identity = await getCacheIdentity()
   const firstPage = await cachedDebtContacts(identity, { targetType: parsedTarget.data, page: 1 })
-  const contacts = [...firstPage.contacts]
   const pageCount = Math.ceil(firstPage.totalCount / 30)
-
-  for (let page = 2; page <= pageCount; page += 1) {
-    const result = await cachedDebtContacts(identity, { targetType: parsedTarget.data, page })
-    contacts.push(...result.contacts)
-  }
+  const remainingPages = await Promise.all(
+    Array.from({ length: Math.max(pageCount - 1, 0) }, (_, index) =>
+      cachedDebtContacts(identity, { targetType: parsedTarget.data, page: index + 2 })
+    )
+  )
+  const contacts = [
+    ...firstPage.contacts,
+    ...remainingPages.flatMap((page) => page.contacts),
+  ]
 
   return { ...firstPage, contacts }
 }

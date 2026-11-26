@@ -1,5 +1,6 @@
 import { createClient as createSupabaseClient, type SupabaseClient } from '@supabase/supabase-js'
 import { unstable_cache, updateTag } from 'next/cache'
+import { cache } from 'react'
 import { createClient } from '@/lib/supabase/server'
 import type { Database } from '@/lib/types/database'
 
@@ -19,18 +20,44 @@ export type CacheIdentity = {
   accessToken: string
 }
 
-export async function getCacheIdentity(): Promise<CacheIdentity> {
-  const supabase = await createClient()
-  const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-  if (sessionError || !session) throw new Error('Bạn cần đăng nhập để tải dữ liệu.')
+type AuthContext = {
+  identity: CacheIdentity
+  email: string | null
+  name: string | null
+}
 
-  const { data: { user }, error: userError } = await supabase.auth.getUser()
-  if (userError || !user || user.id !== session.user.id) {
-    throw new Error('Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.')
+export const getAuthContext = cache(async (): Promise<AuthContext> => {
+  const supabase = await createClient()
+  const { data: claimsData, error: claimsError } = await supabase.auth.getClaims()
+  const claims = claimsData?.claims
+  const userId = claims?.sub
+  if (claimsError || !claims || typeof userId !== 'string') {
+    throw new Error('Bạn cần đăng nhập để tải dữ liệu.')
   }
 
-  return { userId: user.id, accessToken: session.access_token }
-}
+  const { data: sessionData, error: sessionError } = await supabase.auth.getSession()
+  const accessToken = sessionData.session?.access_token
+  if (sessionError || !accessToken) {
+    throw new Error('Bạn cần đăng nhập để tải dữ liệu.')
+  }
+
+  const metadata = claims.user_metadata
+  const fullName = metadata?.full_name
+  const storeName = metadata?.store_name
+  const name = (typeof fullName === 'string' && fullName)
+    || (typeof storeName === 'string' && storeName)
+    || null
+
+  return {
+    identity: { userId, accessToken },
+    email: typeof claims.email === 'string' ? claims.email : null,
+    name,
+  }
+})
+
+export const getCacheIdentity = cache(async (): Promise<CacheIdentity> => {
+  return (await getAuthContext()).identity
+})
 
 function createCacheClient(accessToken: string): SupabaseClient<Database> {
   return createSupabaseClient<Database>(

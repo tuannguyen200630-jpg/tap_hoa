@@ -25,6 +25,9 @@ const nextConfig: NextConfig = {
     "127.0.0.1",
   ],
   cacheComponents: false,
+  experimental: {
+    staleTimes: { dynamic: 30 },
+  },
   turbopack: {
     rules: {
       "*.css": {

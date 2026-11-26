@@ -39,9 +39,8 @@ export async function proxy(request: NextRequest) {
     }
   )
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const { data } = await supabase.auth.getClaims()
+  const user = data?.claims ?? null
 
   const isAuthPage = request.nextUrl.pathname.startsWith('/dang-nhap')
 

@@ -1,6 +1,5 @@
 import { Suspense } from 'react'
-import { createClient } from '@/lib/supabase/server'
-import { CACHE_TAGS, createUserCache } from '@/lib/cache'
+import { CACHE_TAGS, createUserCache, getAuthContext } from '@/lib/cache'
 import { Sidebar } from '@/components/nav/sidebar'
 import { FontSizeSync } from '@/components/ui/font-size-sync'
 
@@ -31,30 +30,13 @@ async function AppShell({
   let fontSize: 'medium' | 'large' | 'xlarge' = 'medium'
 
   try {
-    const supabase = await createClient()
-    const { data, error } = await supabase.auth.getUser()
-    if (error) throw error
-    if (data?.user) {
-      user = {
-        email: data.user.email ?? null,
-        name:
-          data.user.user_metadata?.full_name ||
-          data.user.user_metadata?.store_name ||
-          null,
-      }
+    const { identity, email, name } = await getAuthContext()
+    user = { email, name }
 
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-      if (sessionError || !session || session.user.id !== data.user.id) {
-        throw new Error('Phiên đăng nhập không hợp lệ.')
-      }
-      const settings = await getCachedShellSettings({
-        userId: data.user.id,
-        accessToken: session.access_token,
-      })
-      if (settings) {
-        storeName = settings.store_name
-        fontSize = settings.font_size
-      }
+    const settings = await getCachedShellSettings(identity)
+    if (settings) {
+      storeName = settings.store_name
+      fontSize = settings.font_size
     }
   } catch (error: unknown) {
     const err = error as { digest?: string; message?: string }

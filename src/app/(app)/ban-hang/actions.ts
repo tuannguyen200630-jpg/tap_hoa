@@ -21,9 +21,42 @@ const SaleCatalogRowSchema = z.object({
   category_code: z.string().nullable(),
 })
 
+const SaleProductCategorySchema = z.object({
+  id: uuidSchema(),
+  name: z.string(),
+  code: z.string(),
+})
+
+const SaleCatalogTableRowSchema = SaleCatalogRowSchema
+  .omit({ category_name: true, category_code: true })
+  .extend({
+    category: z.union([
+      SaleProductCategorySchema,
+      z.array(SaleProductCategorySchema),
+    ]).nullable(),
+  })
+
 const SaleCatalogPageSchema = z.object({
   products: z.array(SaleCatalogRowSchema),
   total_count: DatabaseNumberSchema,
+})
+
+const FavoriteProductRowSchema = z.object({
+  id: uuidSchema(),
+  code: z.string(),
+  name: z.string(),
+  barcode: z.string().nullable(),
+  category_id: uuidSchema().nullable(),
+  unit: z.string(),
+  sell_price: DatabaseNumberSchema.pipe(z.number().int()),
+  stock: DatabaseNumberSchema,
+  category_name: z.string().nullable(),
+  category_code: z.string().nullable(),
+  sold_quantity: DatabaseNumberSchema,
+})
+
+const FavoriteProductsSchema = z.object({
+  products: z.array(FavoriteProductRowSchema),
 })
 
 export type SaleProduct = Omit<
@@ -61,69 +94,17 @@ const cachedGetFavoriteProducts = createUserCache('favorite-sale-products', [
   CACHE_TAGS.SALES,
 ], async (supabase, query: SaleProductQuery): Promise<SaleProduct[]> => {
   try {
-    const soldQuantities = new Map<string, number>()
-    const pageSize = 1000
-
-    for (let offset = 0; ; offset += pageSize) {
-      const { data, error } = await supabase
-        .from('sale_items')
-        .select('product_id, quantity, sales!inner(status)')
-        .eq('sales.status', 'completed')
-        .not('product_id', 'is', null)
-        .order('id', { ascending: true })
-        .range(offset, offset + pageSize - 1)
-
-      if (error) {
-        throw error
-      }
-
-      for (const item of data) {
-        if (item.product_id) {
-          soldQuantities.set(
-            item.product_id,
-            (soldQuantities.get(item.product_id) ?? 0) + Number(item.quantity)
-          )
-        }
-      }
-
-      if (data.length < pageSize) break
+    const { data, error } = await supabase.rpc('get_favorite_products', {
+      p_limit: 20,
+    })
+    if (error) {
+      throw error
     }
 
-    const rankedProducts = [...soldQuantities.entries()]
-      .filter(([, quantity]) => quantity > 0)
-      .sort((left, right) => right[1] - left[1])
-
-    if (rankedProducts.length === 0) return []
-
-    const productsById = new Map<string, SaleProduct>()
-    const productPageSize = 250
-    for (let offset = 0; offset < rankedProducts.length; offset += productPageSize) {
-      const productIds = rankedProducts.slice(offset, offset + productPageSize).map(([id]) => id)
-      let productsQuery = supabase
-        .from('products')
-        .select('id, code, name, barcode, category_id, unit, sell_price, stock, categories(id, name, code)')
-        .eq('is_active', true)
-        .in('id', productIds)
-
-      if (query.categoryId) {
-        productsQuery = productsQuery.eq('category_id', query.categoryId)
-      }
-
-      const { data, error } = await productsQuery
-      if (error) {
-        throw error
-      }
-
-      for (const product of data) {
-        const category = product.categories
-        productsById.set(product.id, {
-          ...product,
-          sold_quantity: soldQuantities.get(product.id) ?? 0,
-          category: category
-            ? { id: category.id, name: category.name, code: category.code }
-            : null,
-        })
-      }
+    const parsed = FavoriteProductsSchema.safeParse(data)
+    if (!parsed.success) {
+      console.error('Dữ liệu món hàng bán chạy không hợp lệ:', parsed.error)
+      throw new Error('Dữ liệu món hàng bán chạy không đúng định dạng')
     }
 
     const searchTerm = query.search?.trim().toLocaleLowerCase('vi')
@@ -135,22 +116,19 @@ const cachedGetFavoriteProducts = createUserCache('favorite-sale-products', [
       .toLocaleLowerCase('vi')
     const normalizedSearch = searchTerm ? normalize(searchTerm) : ''
 
-    return rankedProducts
-      .flatMap(([id]) => {
-        const product = productsById.get(id)
-        if (!product) return []
-
-        const matchesSearch = !normalizedSearch || [
-          product.name,
-          product.code,
-          product.barcode ?? '',
-        ].some((value) => normalize(value).includes(normalizedSearch))
-
-        return matchesSearch ? [product] : []
-      })
-      .sort((left, right) =>
-        right.sold_quantity - left.sold_quantity || left.name.localeCompare(right.name, 'vi')
-      )
+    return parsed.data.products
+      .filter((product) => !query.categoryId || product.category_id === query.categoryId)
+      .filter((product) => !normalizedSearch || [
+        product.name,
+        product.code,
+        product.barcode ?? '',
+      ].some((value) => normalize(value).includes(normalizedSearch)))
+      .map(({ category_name, category_code, ...product }) => ({
+        ...product,
+        category: product.category_id && category_name && category_code
+          ? { id: product.category_id, name: category_name, code: category_code }
+          : null,
+      }))
       .slice(0, 9)
   } catch (error) {
     console.error('Lỗi lấy món hàng bán chạy:', error)
@@ -236,6 +214,68 @@ const cachedAllSaleProducts = createUserCache('sale-product-catalog', [
   CACHE_TAGS.CATEGORIES,
   CACHE_TAGS.SETTINGS,
 ], async (supabase, query: SaleProductQuery) => {
+  if (!query.search?.trim()) {
+    const fetchProductPage = (offset: number) => {
+      let productsQuery = supabase
+        .from('products')
+        .select(
+          'id, code, name, barcode, category_id, unit, sell_price, stock, category:categories(id, name, code)',
+          { count: 'exact' }
+        )
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
+        .order('id', { ascending: false })
+
+      if (query.categoryId) {
+        productsQuery = productsQuery.eq('category_id', query.categoryId)
+      }
+
+      return productsQuery.range(offset, offset + 999)
+    }
+
+    const parseProducts = (data: unknown): SaleCatalogProduct[] => {
+      const parsed = z.array(SaleCatalogTableRowSchema).safeParse(data)
+      if (!parsed.success) {
+        console.error('Dữ liệu hàng hóa khi bán không hợp lệ:', parsed.error)
+        throw new Error('Dữ liệu hàng hóa không đúng định dạng')
+      }
+
+      return parsed.data.map(({ category, ...product }) => {
+        const normalizedCategory = Array.isArray(category) ? category[0] : category
+        return { ...product, category: normalizedCategory ?? null }
+      })
+    }
+
+    const firstPage = await fetchProductPage(0)
+    if (firstPage.error) {
+      console.error('Lỗi lấy danh sách hàng hóa khi bán:', firstPage.error)
+      throw new Error('Không tải được danh sách hàng hóa')
+    }
+    if (firstPage.count === null) {
+      console.error('Không nhận được tổng số hàng hóa khi bán.')
+      throw new Error('Không tải được danh sách hàng hóa')
+    }
+
+    const totalCount = firstPage.count
+    const products = parseProducts(firstPage.data)
+    if (totalCount > 1000) {
+      const offsets = Array.from(
+        { length: Math.ceil(totalCount / 1000) - 1 },
+        (_, index) => (index + 1) * 1000
+      )
+      const remainingPages = await Promise.all(offsets.map(fetchProductPage))
+      for (const page of remainingPages) {
+        if (page.error) {
+          console.error('Lỗi lấy danh sách hàng hóa khi bán:', page.error)
+          throw new Error('Không tải được danh sách hàng hóa')
+        }
+        products.push(...parseProducts(page.data))
+      }
+    }
+
+    return { products, totalCount }
+  }
+
   const pageSize = 50
   const products: Awaited<ReturnType<typeof fetchSaleProductPage>>['products'] = []
   let totalCount = 0
