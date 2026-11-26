@@ -1,14 +1,28 @@
 import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import type { Database } from '@/lib/types/database'
 
 export async function createClient() {
-  const cookieStore = await cookies()
+  const [cookieStore, requestHeaders] = await Promise.all([cookies(), headers()])
+  const forwardedProtocol = requestHeaders
+    .get('x-forwarded-proto')
+    ?.split(',')[0]
+    ?.trim()
+    .toLowerCase()
+  const requestOrigin = requestHeaders.get('origin') || requestHeaders.get('referer')
+  const isHttps = forwardedProtocol
+    ? forwardedProtocol === 'https'
+    : requestOrigin?.startsWith('https://') ?? false
 
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
+      cookieOptions: {
+        secure: isHttps,
+        sameSite: 'lax',
+        path: '/',
+      },
       cookies: {
         getAll() {
           return cookieStore.getAll()

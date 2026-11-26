@@ -11,9 +11,11 @@ export function formatMoney(amount: number): string {
  * "12.500" → 12500, "12500" → 12500
  */
 export function parseMoney(value: string): number {
-  const cleaned = value.replace(/[^0-9-]/g, '')
-  const num = parseInt(cleaned, 10)
-  return isNaN(num) ? 0 : num
+  const cleaned = value.trim().replace(/[.,\sđ₫]/gi, '')
+  if (!/^-?\d+$/.test(cleaned)) return 0
+
+  const amount = Number(cleaned)
+  return Number.isSafeInteger(amount) ? amount : 0
 }
 
 /**

@@ -30,9 +30,7 @@ export function calculateSuggestedPrice(
  */
 export function roundUpToStep(value: number, step: number): number {
   if (step <= 0) return value
-  const remainder = value % step
-  if (remainder === 0) return value
-  return value + (step - remainder)
+  return Math.ceil(value / step) * step
 }
 
 /**

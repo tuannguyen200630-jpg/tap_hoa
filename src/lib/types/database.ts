@@ -9,6 +9,36 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      invoice_sequences: {
+        Row: {
+          date_key: string
+          current_val: number
+        }
+        Insert: {
+          date_key: string
+          current_val?: number
+        }
+        Update: {
+          date_key?: string
+          current_val?: number
+        }
+        Relationships: []
+      }
+      purchase_sequences: {
+        Row: {
+          date_key: string
+          current_val: number
+        }
+        Insert: {
+          date_key: string
+          current_val?: number
+        }
+        Update: {
+          date_key?: string
+          current_val?: number
+        }
+        Relationships: []
+      }
       categories: {
         Row: {
           id: string
@@ -34,6 +64,7 @@ export type Database = {
           created_at?: string
           updated_at?: string
         }
+        Relationships: []
       }
       products: {
         Row: {
@@ -99,6 +130,15 @@ export type Database = {
           created_at?: string
           updated_at?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: 'products_category_id_fkey'
+            columns: ['category_id']
+            isOneToOne: false
+            referencedRelation: 'categories'
+            referencedColumns: ['id']
+          }
+        ]
       }
       suppliers: {
         Row: {
@@ -131,6 +171,7 @@ export type Database = {
           created_at?: string
           updated_at?: string
         }
+        Relationships: []
       }
       customers: {
         Row: {
@@ -163,6 +204,7 @@ export type Database = {
           created_at?: string
           updated_at?: string
         }
+        Relationships: []
       }
       purchases: {
         Row: {
@@ -201,6 +243,15 @@ export type Database = {
           created_at?: string
           updated_at?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: 'purchases_supplier_id_fkey'
+            columns: ['supplier_id']
+            isOneToOne: false
+            referencedRelation: 'suppliers'
+            referencedColumns: ['id']
+          }
+        ]
       }
       purchase_items: {
         Row: {
@@ -239,6 +290,22 @@ export type Database = {
           expiry_date?: string | null
           created_at?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: 'purchase_items_purchase_id_fkey'
+            columns: ['purchase_id']
+            isOneToOne: false
+            referencedRelation: 'purchases'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'purchase_items_product_id_fkey'
+            columns: ['product_id']
+            isOneToOne: false
+            referencedRelation: 'products'
+            referencedColumns: ['id']
+          }
+        ]
       }
       sales: {
         Row: {
@@ -292,6 +359,15 @@ export type Database = {
           created_at?: string
           updated_at?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: 'sales_customer_id_fkey'
+            columns: ['customer_id']
+            isOneToOne: false
+            referencedRelation: 'customers'
+            referencedColumns: ['id']
+          }
+        ]
       }
       sale_items: {
         Row: {
@@ -333,6 +409,22 @@ export type Database = {
           subtotal?: number
           created_at?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: 'sale_items_sale_id_fkey'
+            columns: ['sale_id']
+            isOneToOne: false
+            referencedRelation: 'sales'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'sale_items_product_id_fkey'
+            columns: ['product_id']
+            isOneToOne: false
+            referencedRelation: 'products'
+            referencedColumns: ['id']
+          }
+        ]
       }
       stock_movements: {
         Row: {
@@ -371,6 +463,15 @@ export type Database = {
           note?: string | null
           created_at?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: 'stock_movements_product_id_fkey'
+            columns: ['product_id']
+            isOneToOne: false
+            referencedRelation: 'products'
+            referencedColumns: ['id']
+          }
+        ]
       }
       price_history: {
         Row: {
@@ -381,6 +482,7 @@ export type Database = {
           old_price: number
           new_price: number
           changed_by: string | null
+          changed_by_name: string | null
           created_at: string
         }
         Insert: {
@@ -391,6 +493,7 @@ export type Database = {
           old_price: number
           new_price: number
           changed_by?: string | null
+          changed_by_name?: string | null
           created_at?: string
         }
         Update: {
@@ -401,8 +504,18 @@ export type Database = {
           old_price?: number
           new_price?: number
           changed_by?: string | null
+          changed_by_name?: string | null
           created_at?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: 'price_history_product_id_fkey'
+            columns: ['product_id']
+            isOneToOne: false
+            referencedRelation: 'products'
+            referencedColumns: ['id']
+          }
+        ]
       }
       payments: {
         Row: {
@@ -432,6 +545,7 @@ export type Database = {
           note?: string | null
           created_at?: string
         }
+        Relationships: []
       }
       settings: {
         Row: {
@@ -470,12 +584,83 @@ export type Database = {
           receipt_footer?: string | null
           updated_at?: string
         }
+        Relationships: []
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      get_next_product_code: {
+        Args: {
+          p_category_id: string
+        }
+        Returns: string
+      }
+      create_product: {
+        Args: {
+          p_category_id: string
+          p_name: string
+          p_barcode: string | null
+          p_unit: string
+          p_price_mode: 'auto' | 'fixed'
+          p_cost_price: number
+          p_sell_price: number
+          p_initial_stock: number
+          p_min_stock: number
+          p_expiry_date: string | null
+          p_image_url: string | null
+        }
+        Returns: Json
+      }
+      update_product: {
+        Args: {
+          p_product_id: string
+          p_name: string
+          p_barcode: string | null
+          p_category_id: string
+          p_unit: string
+          p_price_mode: 'auto' | 'fixed'
+          p_cost_price: number
+          p_sell_price: number
+          p_min_stock: number
+          p_expiry_date: string | null
+          p_image_url?: string | null
+        }
+        Returns: Json
+      }
+      list_products_page: {
+        Args: {
+          p_search?: string | null
+          p_category_id?: string | null
+          p_filter?: string
+          p_page?: number
+          p_page_size?: number
+        }
+        Returns: Json
+      }
+      get_store_report: {
+        Args: {
+          p_from_date: string
+          p_to_date: string
+        }
+        Returns: Json
+      }
+      get_favorite_products: {
+        Args: {
+          p_limit?: number
+        }
+        Returns: Json
+      }
+      list_sales_page: {
+        Args: {
+          p_date: string
+          p_search?: string | null
+          p_page?: number
+          p_page_size?: number
+        }
+        Returns: Json
+      }
       create_sale: {
         Args: {
           p_customer_id: string | null
@@ -508,6 +693,7 @@ export type Database = {
           p_product_id: string
           p_new_price: number
           p_new_cost: number
+          p_old_cost: number
           p_is_accepted_suggested: boolean
         }
         Returns: Json
@@ -527,6 +713,15 @@ export type Database = {
           p_amount: number
           p_payment_type: 'pay_debt' | 'add_debt'
           p_note: string | null
+        }
+        Returns: Json
+      }
+      list_debt_contacts: {
+        Args: {
+          p_target_type: 'customer' | 'supplier'
+          p_search?: string | null
+          p_page?: number
+          p_page_size?: number
         }
         Returns: Json
       }

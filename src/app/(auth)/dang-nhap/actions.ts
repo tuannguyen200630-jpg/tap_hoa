@@ -3,13 +3,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
-export async function login(formData: FormData) {
+export async function login(formData: FormData): Promise<void> {
   const supabase = await createClient()
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
+  const email = formData.get('email')
+  const password = formData.get('password')
 
-  if (!email || !password) {
-    return { error: 'Vui lòng nhập email và mật khẩu' }
+  if (typeof email !== 'string' || typeof password !== 'string' || !email || !password) {
+    redirect('/dang-nhap?error=missing')
   }
 
   const { error } = await supabase.auth.signInWithPassword({
@@ -18,7 +18,12 @@ export async function login(formData: FormData) {
   })
 
   if (error) {
-    return { error: 'Email hoặc mật khẩu không đúng. Vui lòng thử lại.' }
+    redirect('/dang-nhap?error=credentials')
+  }
+
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+  if (userError || !user) {
+    redirect('/dang-nhap?error=verification')
   }
 
   redirect('/ban-hang')

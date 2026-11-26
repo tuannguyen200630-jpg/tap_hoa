@@ -1,8 +1,39 @@
-export default function BanHangPage() {
+import { getCategories } from '../hang-hoa/actions'
+import {
+  getAllSaleProducts,
+  getFavoriteProducts,
+  getSaleCustomers,
+  getSellOutSetting,
+} from './actions'
+import { SalesTerminal } from './sales-terminal'
+
+export default async function BanHangPage() {
+  const [products, categories, favorites, customers, allowSellOut] = await Promise.all([
+    getAllSaleProducts(),
+    getCategories(),
+    getFavoriteProducts(),
+    getSaleCustomers(),
+    getSellOutSetting(),
+  ])
+  const initialProducts = products.products.map((product) => ({
+    id: product.id,
+    code: product.code,
+    name: product.name,
+    barcode: product.barcode,
+    category_id: product.category_id,
+    unit: product.unit,
+    sell_price: product.sell_price,
+    stock: Number(product.stock),
+    category: product.category,
+  }))
+
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold">Bán hàng</h1>
-      <p className="text-lg text-gray-500 mt-4">Trang bán hàng sẽ được xây dựng ở giai đoạn sau.</p>
-    </div>
+    <SalesTerminal
+      categories={categories.map(({ id, name }) => ({ id, name }))}
+      initialProducts={initialProducts}
+      favoriteProducts={favorites}
+      initialCustomers={customers}
+      allowSellOut={allowSellOut}
+    />
   )
 }

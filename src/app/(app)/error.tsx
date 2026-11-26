@@ -14,14 +14,16 @@ export default function Error({
   }, [error])
 
   return (
-    <div className="p-6 text-center">
-      <h2 className="text-xl font-bold text-red-600 mb-4">Đã xảy ra lỗi</h2>
-      <p className="text-lg mb-6">Có sự cố khi tải trang. Vui lòng thử lại.</p>
+    <div className="flex min-h-[65vh] flex-col items-center justify-center px-5 max-sm:px-3 py-10 text-center">
+      <h2 className="mb-4 max-sm:mb-3 text-2xl max-sm:text-lg font-bold text-red-700">Trang chưa mở được</h2>
+      <p className="mb-6 max-sm:mb-3 max-w-lg text-lg max-sm:text-sm">
+        Có sự cố khi tải trang. Vui lòng thử lại; nếu vẫn chưa được, hãy kiểm tra kết nối internet.
+      </p>
       <button
         onClick={reset}
-        className="bg-blue-600 text-white px-6 py-3 rounded-lg text-lg min-h-[48px] cursor-pointer"
+        className="min-h-12 cursor-pointer rounded-lg bg-blue-700 px-6 max-sm:px-3 py-3 max-sm:py-2 text-lg max-sm:text-sm font-semibold text-white"
       >
-        Thử lại
+        Tải lại trang
       </button>
     </div>
   )

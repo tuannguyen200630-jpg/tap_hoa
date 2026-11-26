@@ -1,8 +1,27 @@
-export default function HoaDonPage() {
+import { connection } from 'next/server'
+import { getSalesForDate } from './actions'
+import { InvoiceList } from './invoice-list'
+
+function getTodayInVietnam(): string {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(new Date())
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]))
+  return `${values.year}-${values.month}-${values.day}`
+}
+
+export default async function HoaDonPage() {
+  await connection()
+  const today = getTodayInVietnam()
+  const initialPage = await getSalesForDate({ date: today })
+
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold">Hóa đơn</h1>
-      <p className="text-lg text-gray-500 mt-4">Trang hóa đơn sẽ được xây dựng ở giai đoạn sau.</p>
-    </div>
+    <InvoiceList
+      initialDate={today}
+      initialSales={initialPage.sales}
+    />
   )
 }

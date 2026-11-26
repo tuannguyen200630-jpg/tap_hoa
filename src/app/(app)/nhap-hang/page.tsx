@@ -1,8 +1,17 @@
-export default function NhapHangPage() {
+import { getCategories } from '../hang-hoa/actions'
+import { getActiveProducts, getSuppliers } from './actions'
+import { PurchaseForm } from './purchase-form'
+
+export default async function NhapHangPage() {
+  const [products, suppliers, categories] = await Promise.all([
+    getActiveProducts(),
+    getSuppliers(),
+    getCategories(),
+  ])
+
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold">Nhập hàng</h1>
-      <p className="text-lg text-gray-500 mt-4">Trang nhập hàng sẽ được xây dựng ở giai đoạn sau.</p>
+    <div className="max-w-7xl mx-auto p-4 max-sm:p-3 sm:p-6 lg:p-8">
+      <PurchaseForm products={products} suppliers={suppliers} categories={categories} />
     </div>
   )
 }

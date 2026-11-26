@@ -16,9 +16,9 @@ const buttonVariants = cva(
         warning: 'bg-yellow-500 text-white hover:bg-yellow-600 active:bg-yellow-700',
       },
       size: {
-        default: 'h-12 px-5 py-3 text-lg',
-        sm: 'h-10 px-4 py-2 text-base',
-        lg: 'h-14 px-8 py-4 text-xl',
+        default: 'h-12 px-5 max-sm:px-3 py-3 max-sm:py-2 text-base sm:text-lg',
+        sm: 'h-12 px-4 max-sm:px-3 py-3 max-sm:py-2 text-sm sm:text-base',
+        lg: 'h-14 px-8 max-sm:px-3 py-4 max-sm:py-2 text-base sm:text-lg',
         icon: 'h-12 w-12',
       },
     },

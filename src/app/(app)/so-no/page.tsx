@@ -1,8 +1,11 @@
-export default function SoNoPage() {
-  return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold">Sổ nợ</h1>
-      <p className="text-lg text-gray-500 mt-4">Trang sổ nợ sẽ được xây dựng ở giai đoạn sau.</p>
-    </div>
-  )
+import { getAllDebtContacts } from './actions'
+import { DebtLedger } from './debt-ledger'
+
+export default async function SoNoPage() {
+  const [customers, suppliers] = await Promise.all([
+    getAllDebtContacts({ targetType: 'customer' }),
+    getAllDebtContacts({ targetType: 'supplier' }),
+  ])
+
+  return <DebtLedger initialCustomers={customers} initialSuppliers={suppliers} />
 }

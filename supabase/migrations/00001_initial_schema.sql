@@ -7,6 +7,17 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "unaccent";
 CREATE EXTENSION IF NOT EXISTS "pg_trgm";
 
+CREATE OR REPLACE FUNCTION immutable_unaccent(value text)
+RETURNS text
+LANGUAGE sql
+IMMUTABLE
+STRICT
+PARALLEL SAFE
+SET search_path = public, extensions, pg_temp
+AS $$
+    SELECT unaccent(value);
+$$;
+
 -- 2. BẢNG DÃY SỐ SINH MÃ HÓA ĐƠN AN TOÀN ĐỒNG THỜI
 CREATE TABLE IF NOT EXISTS invoice_sequences (
     date_key text PRIMARY KEY,
@@ -215,10 +226,10 @@ CREATE INDEX IF NOT EXISTS idx_price_history_prod_time ON price_history(product_
 CREATE INDEX IF NOT EXISTS idx_payments_target ON payments(target_type, target_id, created_at DESC);
 
 -- Hỗ trợ tìm kiếm tiếng Việt không dấu (GIN pg_trgm + unaccent)
-CREATE INDEX IF NOT EXISTS idx_products_search_unaccent ON products USING gin(unaccent(lower(name)) gin_trgm_ops);
-CREATE INDEX IF NOT EXISTS idx_categories_search_unaccent ON categories USING gin(unaccent(lower(name)) gin_trgm_ops);
-CREATE INDEX IF NOT EXISTS idx_customers_search_unaccent ON customers USING gin(unaccent(lower(name)) gin_trgm_ops);
-CREATE INDEX IF NOT EXISTS idx_suppliers_search_unaccent ON suppliers USING gin(unaccent(lower(name)) gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_products_search_unaccent ON products USING gin(immutable_unaccent(lower(name)) gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_categories_search_unaccent ON categories USING gin(immutable_unaccent(lower(name)) gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_customers_search_unaccent ON customers USING gin(immutable_unaccent(lower(name)) gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_suppliers_search_unaccent ON suppliers USING gin(immutable_unaccent(lower(name)) gin_trgm_ops);
 
 -- 16. ROW LEVEL SECURITY (RLS)
 ALTER TABLE invoice_sequences ENABLE ROW LEVEL SECURITY;
@@ -250,9 +261,12 @@ BEGIN
 END $$;
 
 -- Chặn hoàn toàn role anon
-REVOKE ALL ON ALL TABLES IN SCHEMA public FROM anon;
-REVOKE ALL ON ALL SEQUENCES IN SCHEMA public FROM anon;
-REVOKE ALL ON ALL FUNCTIONS IN SCHEMA public FROM anon;
+REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM PUBLIC, anon;
+REVOKE ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public FROM PUBLIC, anon;
+REVOKE ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public FROM PUBLIC, anon;
+GRANT USAGE ON SCHEMA public TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO authenticated;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO authenticated;
 
 -- 17. DATABASE RPCs (SECURITY INVOKER)
 
@@ -822,3 +836,6 @@ BEGIN
     RETURN jsonb_build_object('success', true, 'old_debt', v_cur_debt, 'new_debt', v_new_debt);
 END;
 $$;
+
+REVOKE ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public FROM PUBLIC, anon;
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO authenticated;

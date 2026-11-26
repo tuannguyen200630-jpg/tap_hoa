@@ -1,13 +1,39 @@
 import { Suspense } from 'react'
 import { createClient } from '@/lib/supabase/server'
+import { CACHE_TAGS, createUserCache } from '@/lib/cache'
 import { Sidebar } from '@/components/nav/sidebar'
+import { FontSizeSync } from '@/components/ui/font-size-sync'
 
-async function SidebarWithUser() {
+export const dynamic = 'force-dynamic'
+
+const getCachedShellSettings = createUserCache('app-shell-settings', [
+  CACHE_TAGS.SETTINGS,
+], async (supabase) => {
+  const { data, error } = await supabase
+    .from('settings')
+    .select('store_name, font_size')
+    .eq('id', 'default')
+    .maybeSingle()
+  if (error) {
+    console.error('Lỗi lấy tên và cỡ chữ cửa hàng:', error)
+    throw new Error('Không tải được thông tin giao diện cửa hàng.')
+  }
+  return data
+})
+
+async function AppShell({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   let user: { email?: string | null; name?: string | null } | null = null
+  let storeName = 'Tạp Hóa'
+  let fontSize: 'medium' | 'large' | 'xlarge' = 'medium'
 
   try {
     const supabase = await createClient()
-    const { data } = await supabase.auth.getUser()
+    const { data, error } = await supabase.auth.getUser()
+    if (error) throw error
     if (data?.user) {
       user = {
         email: data.user.email ?? null,
@@ -15,6 +41,19 @@ async function SidebarWithUser() {
           data.user.user_metadata?.full_name ||
           data.user.user_metadata?.store_name ||
           null,
+      }
+
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+      if (sessionError || !session || session.user.id !== data.user.id) {
+        throw new Error('Phiên đăng nhập không hợp lệ.')
+      }
+      const settings = await getCachedShellSettings({
+        userId: data.user.id,
+        accessToken: session.access_token,
+      })
+      if (settings) {
+        storeName = settings.store_name
+        fontSize = settings.font_size
       }
     }
   } catch (error: unknown) {
@@ -30,7 +69,16 @@ async function SidebarWithUser() {
     console.error('Lỗi lấy thông tin người dùng:', error)
   }
 
-  return <Sidebar user={user} />
+  return (
+    <FontSizeSync fontSize={fontSize}>
+      <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
+        <Sidebar user={user} storeName={storeName} />
+        <main className="mx-auto w-full min-w-0 max-w-full flex-1 px-3 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-3 lg:max-w-7xl lg:px-8 lg:pb-8 lg:pt-6">
+          {children}
+        </main>
+      </div>
+    </FontSizeSync>
+  )
 }
 
 export default function AppLayout({
@@ -39,13 +87,16 @@ export default function AppLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row text-[18px]">
-      <Suspense fallback={<Sidebar user={null} />}>
-        <SidebarWithUser />
-      </Suspense>
-      <main className="flex-1 min-w-0 pb-24 md:pb-8 pt-4 md:pt-6 px-4 md:px-8 max-w-7xl w-full mx-auto">
-        {children}
-      </main>
-    </div>
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen flex-col items-center justify-center gap-6 max-sm:gap-2 p-6 max-sm:p-3" role="status" aria-label="Đang tải cửa hàng">
+          <p className="text-sm font-semibold leading-snug text-gray-700">Đang mở cửa hàng, vui lòng chờ một chút…</p>
+          <div className="h-10 max-w-48 animate-pulse rounded bg-gray-200" />
+          <div className="mt-6 max-sm:mt-3 h-48 animate-pulse rounded-xl bg-gray-200" />
+        </div>
+      }
+    >
+      <AppShell>{children}</AppShell>
+    </Suspense>
   )
 }
