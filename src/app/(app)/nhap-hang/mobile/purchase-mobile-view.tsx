@@ -92,8 +92,11 @@ function HoldRepeatButton({
 }) {
   const singleStepRef = useRef(onSingleStep)
   const holdStepRef = useRef(onHoldStep)
-  singleStepRef.current = onSingleStep
-  holdStepRef.current = onHoldStep
+
+  useEffect(() => {
+    singleStepRef.current = onSingleStep
+    holdStepRef.current = onHoldStep
+  }, [onSingleStep, onHoldStep])
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const didHoldRef = useRef(false)
