@@ -1,6 +1,6 @@
 'use client'
 
-import type { RefObject } from 'react'
+import { useEffect, useRef, type PointerEvent, type ReactNode, type RefObject } from 'react'
 import { AlertTriangle, CheckCircle2, Plus, Printer, Trash2, UserRound, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -10,6 +10,86 @@ import { cn } from '@/lib/utils'
 import { formatQuantity, paymentLabels } from '../shared/sales-format'
 import { ReceiptPrint } from '../shared/receipt-print'
 import type { SaleDisplayProduct, useSalesTerminal } from '../use-sales-terminal'
+
+function HoldRepeatButton({
+  onSingleStep,
+  onHoldStep,
+  className,
+  ariaLabel,
+  children,
+}: {
+  onSingleStep: () => void
+  onHoldStep: () => void
+  className?: string
+  ariaLabel: string
+  children: ReactNode
+}) {
+  const singleStepRef = useRef(onSingleStep)
+  const holdStepRef = useRef(onHoldStep)
+  singleStepRef.current = onSingleStep
+  holdStepRef.current = onHoldStep
+
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const didHoldRef = useRef(false)
+  const isPressingRef = useRef(false)
+
+  const clearTimers = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+    }
+  }
+
+  useEffect(() => clearTimers, [])
+
+  const handlePointerDown = (e: PointerEvent<HTMLButtonElement>) => {
+    if (e.button !== 0) return
+    isPressingRef.current = true
+    didHoldRef.current = false
+    clearTimers()
+
+    intervalRef.current = setInterval(() => {
+      didHoldRef.current = true
+      holdStepRef.current()
+    }, 500)
+  }
+
+  const handlePointerEnd = () => {
+    if (!isPressingRef.current) return
+    isPressingRef.current = false
+    clearTimers()
+    if (!didHoldRef.current) {
+      singleStepRef.current()
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      aria-label={ariaLabel}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerEnd}
+      onPointerLeave={() => {
+        isPressingRef.current = false
+        clearTimers()
+      }}
+      onPointerCancel={() => {
+        isPressingRef.current = false
+        clearTimers()
+      }}
+      onContextMenu={(e) => e.preventDefault()}
+      onKeyDown={(e) => {
+        if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) {
+          e.preventDefault()
+          singleStepRef.current()
+        }
+      }}
+      className={`select-none touch-manipulation ${className ?? ''}`}
+    >
+      {children}
+    </button>
+  )
+}
 
 export function SalesMobileView({
   model,
@@ -295,41 +375,47 @@ export function SalesMobileView({
                             : 'Số lượng còn không đủ; cài đặt hiện không cho phép bán vượt.'}
                         </p>
                       )}
-
-                      <div className="mt-3 grid grid-cols-2 gap-3 max-sm:gap-2">
-                        <label className="text-lg max-sm:text-sm font-medium text-gray-700">
+                      <div className="mt-2 grid grid-cols-[124px_minmax(0,1fr)] gap-2 sm:grid-cols-2">
+                        <label className="text-xs font-medium text-gray-700 sm:text-sm">
                           Số lượng ({line.product.unit})
-                          <div className="mt-1 flex items-center gap-2">
-                            <button
-                              type="button"
-                              aria-label={`Giảm ${line.product.name}`}
-                              onClick={() => {
+<div className="mt-1 flex items-center gap-1">
+                            <HoldRepeatButton
+                              ariaLabel={`Giảm ${line.product.name}`}
+                              onSingleStep={() => {
                                 if (quantity <= 1) removeLine(line.product.id)
-                                else updateLineQuantity(line.product.id, String(quantity - 1))
+                                else updateLineQuantity(line.product.id, String(Number((quantity - 1).toFixed(3))))
                               }}
-                              className="min-h-[48px] min-w-[48px] rounded-lg border border-gray-300 text-2xl max-sm:text-lg font-bold hover:bg-gray-100"
+                              onHoldStep={() => {
+                                const nextQty = Math.max(1, Number((quantity - 10).toFixed(3)))
+                                updateLineQuantity(line.product.id, String(nextQty))
+                              }}
+                              className="flex h-9 w-8 shrink-0 items-center justify-center rounded-lg border border-gray-300 text-base font-bold hover:bg-gray-100 sm:h-11 sm:w-11"
                             >
                               −
-                            </button>
+                            </HoldRepeatButton>
                             <Input
                               type="text"
                               inputMode="decimal"
                               value={line.quantityInput}
                               onChange={(event) => updateLineQuantity(line.product.id, event.target.value)}
                               aria-label={`Số lượng ${line.product.name}`}
-                              className="min-w-0 px-2 text-center text-lg max-sm:text-sm font-bold"
+                              className="h-9 min-w-0 flex-1 px-1 text-center text-sm font-bold sm:h-11"
                             />
-                            <button
-                              type="button"
-                              aria-label={`Tăng ${line.product.name}`}
-                              onClick={() => updateLineQuantity(line.product.id, String(quantity + 1))}
-                              className="min-h-[48px] min-w-[48px] rounded-lg border border-gray-300 text-2xl max-sm:text-lg font-bold hover:bg-gray-100"
+                            <HoldRepeatButton
+                              ariaLabel={`Tăng ${line.product.name}`}
+                              onSingleStep={() =>
+                                updateLineQuantity(line.product.id, String(Number((quantity + 1).toFixed(3))))
+                              }
+                              onHoldStep={() =>
+                                updateLineQuantity(line.product.id, String(Number((quantity + 10).toFixed(3))))
+                              }
+                              className="flex h-9 w-8 shrink-0 items-center justify-center rounded-lg border border-gray-300 text-base font-bold hover:bg-gray-100 sm:h-11 sm:w-11"
                             >
                               +
-                            </button>
+                            </HoldRepeatButton>
                           </div>
                         </label>
-                        <label className="text-lg max-sm:text-sm font-medium text-gray-700">
+                        <label className="min-w-0 text-xs font-medium text-gray-700 sm:text-sm">
                           Giá bán riêng (đ)
                           <Input
                             type="text"
@@ -337,7 +423,7 @@ export function SalesMobileView({
                             value={formatMoneyInput(line.unitPrice)}
                             onChange={(event) => updateLinePrice(line.product.id, event.target.value)}
                             aria-label={`Giá bán riêng ${line.product.name}`}
-                            className="mt-1 text-lg max-sm:text-sm font-bold"
+                            className="mt-1 h-9 px-2 text-sm font-bold sm:h-11"
                           />
                         </label>
                       </div>
@@ -350,7 +436,6 @@ export function SalesMobileView({
                 })}
               </div>
             )}
-
             <div className="space-y-3 border-t border-gray-200 pt-4 max-sm:pt-3">
               <div className="rounded-xl bg-blue-50 p-4 max-sm:p-3 text-right">
                 <p className="text-lg max-sm:text-sm font-semibold text-blue-900">Tổng tiền (Khách cần trả)</p>

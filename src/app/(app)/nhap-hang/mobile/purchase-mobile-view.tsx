@@ -1,6 +1,6 @@
 'use client'
 
-import type { RefObject } from 'react'
+import { useEffect, useRef, useState, type RefObject } from 'react'
 import Link from 'next/link'
 import { formatMoney, parseMoney, formatMoneyInput } from '@/lib/money'
 import { Button } from '@/components/ui/button'
@@ -24,6 +24,138 @@ import type { PurchaseProduct } from '../actions'
 import type { usePurchaseForm } from '../use-purchase-form'
 import { PurchaseModals } from '../shared/purchase-modals'
 
+function ExpandableProductName({ name }: { name: string }) {
+  const [expanded, setExpanded] = useState(false)
+  const [isTruncated, setIsTruncated] = useState(false)
+  const textRef = useRef<HTMLSpanElement | null>(null)
+
+  useEffect(() => {
+    if (expanded) return
+    const el = textRef.current
+    if (!el) return
+
+    const checkTruncation = () => {
+      setIsTruncated(el.scrollHeight > el.clientHeight + 1)
+    }
+
+    checkTruncation()
+    const observer = new ResizeObserver(checkTruncation)
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [name, expanded])
+
+  return (
+    <div className="relative w-full min-w-0">
+      <span
+        ref={textRef}
+        className={`break-words text-sm font-bold leading-5 text-gray-900 sm:text-base ${
+          expanded ? 'block' : 'line-clamp-2'
+        }`}
+      >
+        {name}
+        {expanded && isTruncated && (
+          <button
+            type="button"
+            onClick={() => setExpanded(false)}
+            className="ml-1.5 inline text-xs font-semibold text-blue-600 hover:underline"
+          >
+            Thu gọn
+          </button>
+        )}
+      </span>
+
+      {!expanded && isTruncated && (
+        <button
+          type="button"
+          onClick={() => setExpanded(true)}
+          className="absolute bottom-0 right-0 bg-gradient-to-l from-white via-white via-80% to-transparent pl-3 text-xs font-semibold leading-5 text-blue-600 hover:underline"
+        >
+          ...thêm
+        </button>
+      )}
+    </div>
+  )
+}
+
+function HoldRepeatButton({
+  onSingleStep,
+  onHoldStep,
+  className,
+  ariaLabel,
+  children,
+}: {
+  onSingleStep: () => void
+  onHoldStep: () => void
+  className?: string
+  ariaLabel: string
+  children: React.ReactNode
+}) {
+  const singleStepRef = useRef(onSingleStep)
+  const holdStepRef = useRef(onHoldStep)
+  singleStepRef.current = onSingleStep
+  holdStepRef.current = onHoldStep
+
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const didHoldRef = useRef(false)
+  const isPressingRef = useRef(false)
+
+  const clearTimers = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+    }
+  }
+
+  useEffect(() => clearTimers, [])
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (e.button !== 0) return
+    isPressingRef.current = true
+    didHoldRef.current = false
+    clearTimers()
+
+    intervalRef.current = setInterval(() => {
+      didHoldRef.current = true
+      holdStepRef.current()
+    }, 500)
+  }
+
+  const handlePointerEnd = () => {
+    if (!isPressingRef.current) return
+    isPressingRef.current = false
+    clearTimers()
+    if (!didHoldRef.current) {
+      singleStepRef.current()
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      aria-label={ariaLabel}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerEnd}
+      onPointerLeave={() => {
+        isPressingRef.current = false
+        clearTimers()
+      }}
+      onPointerCancel={() => {
+        isPressingRef.current = false
+        clearTimers()
+      }}
+      onContextMenu={(e) => e.preventDefault()}
+      onKeyDown={(e) => {
+        if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) {
+          e.preventDefault()
+          singleStepRef.current()
+        }
+      }}
+      className={`select-none touch-manipulation ${className ?? ''}`}
+    >
+      {children}
+    </button>
+  )
+}
 
 export function PurchaseMobileView({
   model,
@@ -36,7 +168,8 @@ export function PurchaseMobileView({
   allProductsSentinelRef: RefObject<HTMLDivElement | null>
   lowStockSentinelRef: RefObject<HTMLDivElement | null>
 }) {
-  const { suppliers, cart, search, setSearch, selectedSupplier, setSelectedSupplier, paidAmount, setPaidAmount, note, setNote, payFull, setPayFull, selectedCategory, setSelectedCategory, feedback, expandedCartItems, setExpandedCartItems, isCartOpen, setIsCartOpen, showPriceModal, successInfo, setSuccessInfo, categories, formError, setFormError, isPending, getPurchaseQuantity, totalAmount, debtAmount, filteredProducts, lowStockProducts, allProductsVisibleCount, lowStockVisibleCount, visibleProducts, visibleLowStockProducts, addToCart, updateCartItem, roundQuantity, decreaseCartQuantity, increaseCartQuantity, handleQuantityBlur, removeFromCart, handleSubmit, openQuickAdd } = model
+  const { suppliers, cart, search, setSearch, selectedSupplier, setSelectedSupplier, paidAmount, setPaidAmount, note, setNote, payFull, setPayFull, selectedCategory, setSelectedCategory, expandedCartItems, setExpandedCartItems, isCartOpen, setIsCartOpen, showPriceModal, successInfo, setSuccessInfo, categories, formError, setFormError, isPending, getPurchaseQuantity, totalAmount, debtAmount, filteredProducts, lowStockProducts, allProductsVisibleCount, lowStockVisibleCount, visibleProducts, visibleLowStockProducts, addToCart, updateCartItem, roundQuantity, decreaseCartQuantity, increaseCartQuantity, handleQuantityBlur, removeFromCart, handleSubmit, openQuickAdd } = model
+  const [isExtraInfoOpen, setIsExtraInfoOpen] = useState(false)
 
   const renderProductCard = (product: PurchaseProduct, lowStock = false) => {
     const selectedItem = cart.find((item) => item.product.id === product.id)
@@ -99,7 +232,7 @@ export function PurchaseMobileView({
             Chưa chọn món. Chọn thẻ bên dưới để thêm ngay.
           </p>
         ) : (
-          <div className="divide-y divide-gray-100">
+            <div className="max-h-[42vh] divide-y divide-gray-100 overflow-y-auto pr-1">
             {cart.map((item, index) => {
               const subtotal = Math.round(item.costPrice * getPurchaseQuantity(item))
               const costDiff = item.costPrice - item.product.last_cost
@@ -110,22 +243,20 @@ export function PurchaseMobileView({
 
               return (
                 <div key={item.product.id} className="space-y-2 border-b border-gray-100 p-3 last:border-b-0 sm:p-4">
-                  <div className="flex min-w-0 items-center justify-between gap-2">
-                    <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
-                      <span className="min-w-0 break-words text-lg max-sm:text-sm font-bold leading-tight text-gray-900">
-                        {item.product.name}
-                      </span>
+                  <div className="flex min-w-0 items-start justify-between gap-2">
+                    <div className="flex min-w-0 flex-1 flex-col items-start gap-1">
+                      <ExpandableProductName name={item.product.name} />
                       <Badge
                         variant={item.product.price_mode === 'auto' ? 'default' : 'outline'}
-                        className="px-2 py-0.5 text-xs leading-4"
+                        className="shrink-0 whitespace-nowrap px-2 py-0.5 text-xs leading-4"
                       >
                         {item.product.price_mode === 'auto' ? 'Tự đề xuất giá' : 'Giá cố định'}
                       </Badge>
                     </div>
-                    <div className="flex shrink-0 items-center gap-1">
-                      <span className="text-right">
+                    <div className="flex shrink-0 items-start justify-end gap-1">
+                      <span className="min-w-0 text-right">
                         <span className="block text-xs font-medium text-gray-500">Thành tiền</span>
-                        <span className="block whitespace-nowrap text-lg max-sm:text-sm font-bold text-gray-900 sm:text-xl">
+                        <span className="block whitespace-nowrap text-sm font-bold tabular-nums text-gray-900 sm:text-lg">
                           {formatMoney(subtotal)}
                         </span>
                       </span>
@@ -134,27 +265,33 @@ export function PurchaseMobileView({
                         onClick={() => removeFromCart(index)}
                         aria-label={`Xóa ${item.product.name} khỏi phiếu nhập`}
                         title="Xóa khỏi phiếu nhập"
-                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg p-2 text-red-500 transition-colors hover:bg-red-50 hover:text-red-600"
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-red-500 transition-colors hover:bg-red-50 hover:text-red-600 sm:h-10 sm:w-10"
                       >
-                        <Trash2 className="h-5 w-5" />
+                        <Trash2 className="h-4 w-4 sm:h-5 sm:w-5" />
                       </button>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 items-end gap-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
+                  <div className="grid grid-cols-[124px_minmax(0,1fr)] items-end gap-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
                     <div className="min-w-0">
-                      <label className="mb-1 block text-sm font-semibold leading-tight text-gray-700">
+                      <label className="mb-1 block text-xs font-semibold leading-tight text-gray-700 sm:text-sm">
                         {item.isBulk ? 'Số thùng' : `Số lượng (${item.product.unit})`}
                       </label>
-                      <div className="flex min-w-0 items-center gap-1">
-                        <button
-                          type="button"
-                          aria-label={`Giảm số lượng ${item.product.name}`}
-                          onClick={() => decreaseCartQuantity(index)}
-                          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-700 transition-colors hover:bg-gray-200"
+<div className="flex min-w-0 items-center gap-1">
+                        <HoldRepeatButton
+                          ariaLabel={`Giảm số lượng ${item.product.name}`}
+                          onSingleStep={() => decreaseCartQuantity(index)}
+                          onHoldStep={() =>
+                            updateCartItem(index, {
+                              quantity: item.isBulk
+                                ? Math.max(1, Math.floor(item.quantity - 10))
+                                : Math.max(1, roundQuantity(item.quantity - 10)),
+                            })
+                          }
+                          className="flex h-9 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-700 transition-colors hover:bg-gray-200 sm:h-11 sm:w-11"
                         >
-                          <Minus className="h-5 w-5" />
-                        </button>
+                          <Minus className="h-4 w-4" />
+                        </HoldRepeatButton>
                         <Input
                           type="number"
                           inputMode={item.isBulk ? 'numeric' : 'decimal'}
@@ -176,21 +313,27 @@ export function PurchaseMobileView({
                           }}
                           onBlur={(e) => handleQuantityBlur(index, e.target.value)}
                           aria-label={item.isBulk ? 'Số thùng' : `Số lượng (${item.product.unit})`}
-                          className="h-11 min-w-0 px-1 text-center text-lg max-sm:text-sm font-bold"
+                          className="h-9 min-w-0 flex-1 appearance-none px-1 text-center text-sm font-bold sm:h-11 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                         />
-                        <button
-                          type="button"
-                          aria-label={`Tăng số lượng ${item.product.name}`}
-                          onClick={() => increaseCartQuantity(index)}
-                          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-700 transition-colors hover:bg-gray-200"
+                        <HoldRepeatButton
+                          ariaLabel={`Tăng số lượng ${item.product.name}`}
+                          onSingleStep={() => increaseCartQuantity(index)}
+                          onHoldStep={() =>
+                            updateCartItem(index, {
+                              quantity: item.isBulk
+                                ? Math.floor(item.quantity) + 10
+                                : roundQuantity(item.quantity + 10),
+                            })
+                          }
+                          className="flex h-9 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-700 transition-colors hover:bg-gray-200 sm:h-11 sm:w-11"
                         >
-                          <Plus className="h-5 w-5" />
-                        </button>
+                          <Plus className="h-4 w-4" />
+                        </HoldRepeatButton>
                       </div>
                     </div>
 
                     <div className="min-w-0">
-                      <label className="mb-1 block text-sm font-semibold leading-tight text-gray-700">
+                      <label className="mb-1 block text-xs font-semibold leading-tight text-gray-700 sm:text-sm">
                         Giá nhập mỗi {item.product.unit} (đ)
                       </label>
                       <Input
@@ -205,7 +348,7 @@ export function PurchaseMobileView({
                           })
                         }
                         aria-label={`Giá nhập mỗi ${item.product.unit}`}
-                        className="h-11 px-2 text-base font-bold sm:text-lg"
+                        className="h-9 px-2 text-sm font-bold sm:h-11 sm:text-base"
                       />
                       {hasDiff && (
                         <div
@@ -235,7 +378,7 @@ export function PurchaseMobileView({
                           [item.product.id]: !isOptionsExpanded,
                         }))
                       }
-                      className="col-span-2 flex min-h-11 min-w-0 items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3 text-base font-semibold text-gray-800 transition-colors hover:bg-gray-50 sm:col-span-1 sm:min-w-44"
+                      className="col-span-2 flex h-9 min-w-0 items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-2.5 text-xs font-semibold text-gray-800 transition-colors hover:bg-gray-50 sm:col-span-1 sm:h-11 sm:min-w-44 sm:text-sm"
                     >
                       <span className="whitespace-nowrap">Thùng / Hạn SD</span>
                       <span className="flex min-w-0 items-center gap-1.5">
@@ -266,10 +409,10 @@ export function PurchaseMobileView({
                   {isOptionsExpanded && (
                     <div
                       id={`${idPrefix}-purchase-options-${item.product.id}`}
-                      className="grid grid-cols-1 gap-3 max-sm:gap-2 rounded-lg bg-gray-50 p-3 sm:grid-cols-2"
+                      className="grid grid-cols-1 gap-2.5 rounded-lg bg-gray-50 p-2.5 sm:grid-cols-2 sm:gap-3 sm:p-3"
                     >
                       <div className="min-w-0">
-                        <label className="flex min-h-11 cursor-pointer select-none items-center gap-2">
+                        <label className="flex min-h-9 cursor-pointer select-none items-center gap-2 sm:min-h-11">
                           <input
                             type="checkbox"
                             checked={item.isBulk}
@@ -288,17 +431,17 @@ export function PurchaseMobileView({
                                 [item.product.id]: true,
                               }))
                             }}
-                            className="h-5 w-5 shrink-0 rounded accent-blue-600"
+                            className="h-4 w-4 shrink-0 rounded accent-blue-600 sm:h-5 sm:w-5"
                           />
-                          <span className="text-base font-medium leading-tight text-gray-800">
-                            Nhập theo thùng (tự tính giá mỗi {item.product.unit})
+                          <span className="text-xs font-semibold leading-tight text-gray-800 sm:text-sm">
+                            Nhập theo thùng
                           </span>
                         </label>
 
-                        {item.isBulk && (
-                          <div className="mt-2 grid grid-cols-2 gap-2">
+{item.isBulk && (
+                          <div className="mt-2 grid grid-cols-[minmax(0,1fr)_124px] items-end gap-2 sm:grid-cols-2">
                             <div className="min-w-0">
-                              <label className="mb-1 block text-sm font-semibold leading-tight text-gray-700">
+                              <label className="mb-1 block text-xs font-semibold leading-tight text-gray-700 sm:text-sm">
                                 Giá cả thùng (đ)
                               </label>
                               <Input
@@ -314,31 +457,81 @@ export function PurchaseMobileView({
                                   })
                                 }}
                                 aria-label="Giá cả thùng"
-                                className="h-11 px-2 text-base font-bold"
+                                className="h-9 px-2 text-sm font-bold sm:h-11 sm:text-base"
                               />
                             </div>
+
                             <div className="min-w-0">
-                              <label className="mb-1 block text-sm font-semibold leading-tight text-gray-700">
+                              <label className="mb-1 block text-xs font-semibold leading-tight text-gray-700 sm:text-sm">
                                 Số {item.product.unit} trong thùng
                               </label>
-                              <Input
-                                type="number"
-                                inputMode="numeric"
-                                min="1"
-                                value={item.unitsPerBulk}
-                                onChange={(e) => {
-                                  const u = Math.max(1, Math.floor(Number(e.target.value) || 1))
-                                  updateCartItem(index, {
-                                    unitsPerBulk: u,
-                                    bulkPrice: item.bulkPriceEdited ? item.bulkPrice : item.costPrice * u,
-                                    isBulk: true,
-                                  })
-                                }}
-                                aria-label={`Số ${item.product.unit} trong thùng`}
-                                className="h-11 px-2 text-base font-bold"
-                              />
+                              <div className="flex min-w-0 items-center gap-1">
+                                <HoldRepeatButton
+                                  ariaLabel={`Giảm số ${item.product.unit} trong thùng`}
+                                  onSingleStep={() => {
+                                    const u = Math.max(1, item.unitsPerBulk - 1)
+                                    updateCartItem(index, {
+                                      unitsPerBulk: u,
+                                      bulkPrice: item.bulkPriceEdited ? item.bulkPrice : item.costPrice * u,
+                                      isBulk: true,
+                                    })
+                                  }}
+                                  onHoldStep={() => {
+                                    const u = Math.max(1, item.unitsPerBulk - 10)
+                                    updateCartItem(index, {
+                                      unitsPerBulk: u,
+                                      bulkPrice: item.bulkPriceEdited ? item.bulkPrice : item.costPrice * u,
+                                      isBulk: true,
+                                    })
+                                  }}
+                                  className="flex h-9 w-8 shrink-0 items-center justify-center rounded-lg bg-white border border-gray-300 text-gray-700 transition-colors hover:bg-gray-100 sm:h-11 sm:w-11"
+                                >
+                                  <Minus className="h-4 w-4" />
+                                </HoldRepeatButton>
+
+                                <Input
+                                  type="number"
+                                  inputMode="numeric"
+                                  min="1"
+                                  value={item.unitsPerBulk}
+                                  onChange={(e) => {
+                                    const u = Math.max(1, Math.floor(Number(e.target.value) || 1))
+                                    updateCartItem(index, {
+                                      unitsPerBulk: u,
+                                      bulkPrice: item.bulkPriceEdited ? item.bulkPrice : item.costPrice * u,
+                                      isBulk: true,
+                                    })
+                                  }}
+                                  aria-label={`Số ${item.product.unit} trong thùng`}
+                                  className="h-9 min-w-0 flex-1 appearance-none px-1 text-center text-sm font-bold sm:h-11 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                                />
+
+                                <HoldRepeatButton
+                                  ariaLabel={`Tăng số ${item.product.unit} trong thùng`}
+                                  onSingleStep={() => {
+                                    const u = item.unitsPerBulk + 1
+                                    updateCartItem(index, {
+                                      unitsPerBulk: u,
+                                      bulkPrice: item.bulkPriceEdited ? item.bulkPrice : item.costPrice * u,
+                                      isBulk: true,
+                                    })
+                                  }}
+                                  onHoldStep={() => {
+                                    const u = item.unitsPerBulk + 10
+                                    updateCartItem(index, {
+                                      unitsPerBulk: u,
+                                      bulkPrice: item.bulkPriceEdited ? item.bulkPrice : item.costPrice * u,
+                                      isBulk: true,
+                                    })
+                                  }}
+                                  className="flex h-9 w-8 shrink-0 items-center justify-center rounded-lg bg-white border border-gray-300 text-gray-700 transition-colors hover:bg-gray-100 sm:h-11 sm:w-11"
+                                >
+                                  <Plus className="h-4 w-4" />
+                                </HoldRepeatButton>
+                              </div>
                             </div>
-                            <div className="col-span-2 rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-800">
+
+                            <div className="col-span-2 rounded-lg bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-blue-800 sm:text-sm">
                               → Giá mỗi {item.product.unit}:{' '}
                               <strong>{formatMoney(item.costPrice)}</strong>
                             </div>
@@ -347,7 +540,7 @@ export function PurchaseMobileView({
                       </div>
 
                       <div className="min-w-0">
-                        <label className="mb-1 block text-sm font-semibold text-gray-700">
+                        <label className="mb-1 block text-xs font-semibold text-gray-700 sm:text-sm">
                           Hạn sử dụng (không bắt buộc)
                         </label>
                         <Input
@@ -363,7 +556,7 @@ export function PurchaseMobileView({
                             }
                           }}
                           aria-label="Hạn sử dụng (không bắt buộc)"
-                          className="h-11"
+                          className="h-9 text-sm sm:h-11"
                         />
                       </div>
                     </div>
@@ -377,99 +570,131 @@ export function PurchaseMobileView({
     </div>
   )
 
-  const renderPurchaseInformation = (idPrefix: string) => (
-    <div className="min-w-0 space-y-4 max-sm:space-y-3 rounded-2xl border border-gray-100 bg-white p-4 max-sm:p-3 shadow-sm sm:p-5">
-      <h3 className="text-lg max-sm:text-sm font-bold text-gray-900">Thông tin phiếu nhập</h3>
+  const renderPurchaseInformation = (idPrefix: string) => {
+    const hasExtraInfo = Boolean(selectedSupplier) || Boolean(note.trim())
 
-      <div className="min-w-0">
-        <label htmlFor={`${idPrefix}-supplier`} className="mb-1 block text-base font-semibold text-gray-700">
-          Nhà cung cấp (không bắt buộc)
-        </label>
-        <select
-          id={`${idPrefix}-supplier`}
-          value={selectedSupplier}
-          onChange={(e) => setSelectedSupplier(e.target.value)}
-          className="min-h-12 w-full min-w-0 max-w-full rounded-xl border-2 border-gray-300 bg-white px-3 text-lg max-sm:text-sm focus:border-blue-500"
-        >
-          <option value="">-- Không chọn --</option>
-          {suppliers.map((supplier) => (
-            <option key={supplier.id} value={supplier.id}>
-              {supplier.name}
-              {supplier.phone ? ` (${supplier.phone})` : ''}
-              {supplier.debt > 0 ? ` • Nợ: ${formatMoney(supplier.debt)}` : ''}
-            </option>
-          ))}
-        </select>
-      </div>
+    return (
+      <div className="min-w-0 space-y-3 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm sm:p-4">
+        <h3 className="text-sm font-bold text-gray-900 sm:text-base">Thông tin phiếu nhập</h3>
 
-      <fieldset className="min-w-0">
-        <legend className="mb-1.5 block text-base font-semibold text-gray-700">Thanh toán</legend>
-        <div className="grid grid-cols-2 gap-2">
-          <button
-            type="button"
-            onClick={() => setPayFull(true)}
-            aria-pressed={payFull}
-            className={`min-h-12 rounded-xl border-2 px-3 text-left text-base transition-all ${
-              payFull
-                ? 'border-blue-600 bg-blue-50 text-blue-900'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-          >
-            <span className="block font-bold">Trả ngay</span>
-            <span className="mt-0.5 block text-sm text-gray-500">Thanh toán hết</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setPayFull(false)}
-            aria-pressed={!payFull}
-            className={`min-h-12 rounded-xl border-2 px-3 text-left text-base transition-all ${
-              !payFull
-                ? 'border-blue-600 bg-blue-50 text-blue-900'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-          >
-            <span className="block font-bold">Ghi nợ</span>
-            <span className="mt-0.5 block text-sm text-gray-500">Trả một phần / sau</span>
-          </button>
-        </div>
-
-        {!payFull && (
-          <div className="mt-3 min-w-0">
-            <label htmlFor={`${idPrefix}-paid-amount`} className="mb-1 block text-base font-semibold text-gray-700">
-              Số tiền trả trước (đ)
-            </label>
-            <Input
-              id={`${idPrefix}-paid-amount`}
-              type="text"
-              inputMode="numeric"
-              value={formatMoneyInput(paidAmount)}
-              onChange={(e) => setPaidAmount(parseMoney(e.target.value))}
-              className="h-12 min-w-0 text-lg max-sm:text-sm font-bold"
-            />
-            {debtAmount > 0 && (
-              <p className="mt-1 text-base font-medium text-red-600">
-                Nợ nhà cung cấp: {formatMoney(debtAmount)}
-              </p>
-            )}
+        <fieldset className="min-w-0">
+          <legend className="mb-1.5 block text-xs font-semibold text-gray-700 sm:text-sm">Thanh toán</legend>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => setPayFull(true)}
+              aria-pressed={payFull}
+              className={`min-h-11 rounded-xl border-2 px-2.5 py-1.5 text-left text-sm transition-all ${
+                payFull
+                  ? 'border-blue-600 bg-blue-50 text-blue-900'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <span className="block font-bold">Trả ngay</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setPayFull(false)}
+              aria-pressed={!payFull}
+              className={`min-h-11 rounded-xl border-2 px-2.5 py-1.5 text-left text-sm transition-all ${
+                !payFull
+                  ? 'border-blue-600 bg-blue-50 text-blue-900'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <span className="block font-bold">Ghi nợ</span>
+            </button>
           </div>
-        )}
-      </fieldset>
 
-      <div className="min-w-0">
-        <label htmlFor={`${idPrefix}-note`} className="mb-1 block text-base font-semibold text-gray-700">
-          Ghi chú (không bắt buộc)
-        </label>
-        <textarea
-          id={`${idPrefix}-note`}
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-          rows={2}
-          className="w-full min-w-0 max-w-full resize-none rounded-xl border-2 border-gray-300 p-3 text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-          placeholder="Ghi chú thêm nếu cần..."
-        />
+          {!payFull && (
+            <div className="mt-2.5 min-w-0">
+              <label htmlFor={`${idPrefix}-paid-amount`} className="mb-1 block text-xs font-semibold text-gray-700 sm:text-sm">
+                Số tiền trả trước (đ)
+              </label>
+              <Input
+                id={`${idPrefix}-paid-amount`}
+                type="text"
+                inputMode="numeric"
+                value={formatMoneyInput(paidAmount)}
+                onChange={(e) => setPaidAmount(parseMoney(e.target.value))}
+                className="h-10 min-w-0 text-sm font-bold"
+              />
+              {debtAmount > 0 && (
+                <p className="mt-1 text-xs font-medium text-red-600">
+                  Nợ nhà cung cấp: {formatMoney(debtAmount)}
+                </p>
+              )}
+            </div>
+          )}
+        </fieldset>
+
+        <div className="min-w-0">
+          <button
+            type="button"
+            aria-expanded={isExtraInfoOpen}
+            aria-controls={`${idPrefix}-extra-info`}
+            onClick={() => setIsExtraInfoOpen((prev) => !prev)}
+            className="flex h-9 w-full items-center justify-between gap-2 rounded-lg border border-gray-200 bg-gray-50 px-2.5 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-100 sm:text-sm"
+          >
+            <span className="flex items-center gap-1.5">
+              <span>Thêm</span>
+              <span className="font-normal text-gray-400">(Nhà cung cấp, ghi chú)</span>
+              {hasExtraInfo && (
+                <span className="h-2 w-2 rounded-full bg-green-600" aria-hidden="true" />
+              )}
+            </span>
+            <ChevronDown
+              className={`h-4 w-4 shrink-0 text-gray-500 transition-transform ${
+                isExtraInfoOpen ? 'rotate-180' : ''
+              }`}
+            />
+          </button>
+
+          {isExtraInfoOpen && (
+            <div
+              id={`${idPrefix}-extra-info`}
+              className="mt-2 space-y-2.5 rounded-lg border border-gray-200 bg-gray-50/70 p-2.5"
+            >
+              <div className="min-w-0">
+                <label htmlFor={`${idPrefix}-supplier`} className="mb-1 block text-xs font-semibold text-gray-700">
+                  Nhà cung cấp (không bắt buộc)
+                </label>
+                <select
+                  id={`${idPrefix}-supplier`}
+                  value={selectedSupplier}
+                  onChange={(e) => setSelectedSupplier(e.target.value)}
+                  className="h-10 w-full min-w-0 max-w-full rounded-lg border border-gray-300 bg-white px-2.5 text-sm focus:border-blue-500"
+                >
+                  <option value="">-- Không chọn --</option>
+                  {suppliers.map((supplier) => (
+                    <option key={supplier.id} value={supplier.id}>
+                      {supplier.name}
+                      {supplier.phone ? ` (${supplier.phone})` : ''}
+                      {supplier.debt > 0 ? ` • Nợ: ${formatMoney(supplier.debt)}` : ''}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="min-w-0">
+                <label htmlFor={`${idPrefix}-note`} className="mb-1 block text-xs font-semibold text-gray-700">
+                  Ghi chú (không bắt buộc)
+                </label>
+                <textarea
+                  id={`${idPrefix}-note`}
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  rows={2}
+                  className="w-full min-w-0 max-w-full resize-none rounded-lg border border-gray-300 bg-white p-2 text-sm focus:border-blue-500 focus:outline-none"
+                  placeholder="Ghi chú thêm nếu cần..."
+                />
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 
   const renderPurchaseSummary = () => (
     <div className="space-y-3 rounded-2xl bg-blue-600 p-4 max-sm:p-3 text-white shadow-md sm:p-5">
@@ -505,12 +730,12 @@ export function PurchaseMobileView({
     </div>
   )
 
-  const renderPurchaseHistoryLink = () => (
+const renderPurchaseHistoryLink = () => (
     <Link
       href="/nhap-hang/lich-su"
-      className="flex min-h-[52px] items-center justify-center gap-3 max-sm:gap-2 rounded-2xl border-2 border-blue-600 bg-white px-5 max-sm:px-3 text-lg max-sm:text-sm font-bold text-blue-700 shadow-sm transition-colors hover:bg-blue-50"
+      className="inline-flex h-9 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl border border-blue-600 bg-white px-2.5 text-xs font-semibold text-blue-700 shadow-sm transition-colors hover:bg-blue-50 sm:h-10 sm:px-3.5 sm:text-sm"
     >
-      <History className="h-6 w-6" />
+      <History className="h-4 w-4 shrink-0" />
       Lịch sử nhập hàng
     </Link>
   )
@@ -518,10 +743,12 @@ export function PurchaseMobileView({
   return (
     <div className="min-w-0 max-w-full space-y-6 max-sm:space-y-3 pb-40 lg:pb-6">
       {/* Header */}
-      
+      <div className="flex items-center justify-between gap-2">
         <h1 className="text-2xl max-sm:text-lg sm:text-3xl font-bold text-gray-900 flex items-center gap-3 max-sm:gap-2">
           Nhập hàng
         </h1>
+        {renderPurchaseHistoryLink()}
+      </div>
 
 
       {/* Lỗi form */}
@@ -618,12 +845,6 @@ export function PurchaseMobileView({
               </select>
             </div>
 
-            {feedback && (
-              <p className="mt-3 rounded-xl bg-green-50 px-3 py-2 text-lg max-sm:text-sm font-semibold text-green-800" role="status">
-                {feedback}
-              </p>
-            )}
-
             {lowStockProducts.length > 0 && (
               <section className="mt-4 max-sm:mt-3 space-y-3" aria-label="Hàng gần hết">
                 <h3 className="text-xl max-sm:text-base font-bold text-gray-900">Hàng gần hết</h3>
@@ -682,8 +903,8 @@ export function PurchaseMobileView({
                   Các món cần nhập ({cart.length} món)
                 </h3>
               </div>
-              <div className="divide-y divide-gray-100">
-                {cart.map((item, index) => {
+              <div className="max-h-[45vh] divide-y divide-gray-100 overflow-y-auto">
+            {cart.map((item, index) => {
                   const subtotal = Math.round(item.costPrice * getPurchaseQuantity(item))
                   const costDiff = item.costPrice - item.product.last_cost
                   const hasDiff = costDiff !== 0
@@ -814,7 +1035,7 @@ export function PurchaseMobileView({
                             className="w-5 h-5 rounded accent-blue-600"
                           />
                           <span className="text-sm font-medium text-gray-700">
-                            Nhập theo thùng (tự tính giá mỗi {item.product.unit})
+                            Nhập theo thùng 
                           </span>
                         </label>
 
@@ -910,7 +1131,6 @@ export function PurchaseMobileView({
           {renderSelectedItems('desktop')}
           {renderPurchaseInformation('desktop')}
           {renderPurchaseSummary()}
-          {renderPurchaseHistoryLink()}
         </aside>
       </div>
 
@@ -951,7 +1171,6 @@ export function PurchaseMobileView({
           {renderSelectedItems('mobile')}
           {renderPurchaseInformation('mobile')}
           {renderPurchaseSummary()}
-          {renderPurchaseHistoryLink()}
         </div>
       </section>
 
