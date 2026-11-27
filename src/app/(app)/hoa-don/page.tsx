@@ -1,6 +1,7 @@
 import { connection } from 'next/server'
 import { getSalesForDate } from './actions'
 import { InvoiceList } from './invoice-list'
+import { getInitialIsDesktop } from '@/lib/device'
 
 function getTodayInVietnam(): string {
   const parts = new Intl.DateTimeFormat('en-CA', {
@@ -16,12 +17,16 @@ function getTodayInVietnam(): string {
 export default async function HoaDonPage() {
   await connection()
   const today = getTodayInVietnam()
-  const initialPage = await getSalesForDate({ date: today })
+  const [initialPage, initialIsDesktop] = await Promise.all([
+    getSalesForDate({ date: today }),
+    getInitialIsDesktop(),
+  ])
 
   return (
     <InvoiceList
       initialDate={today}
       initialSales={initialPage.sales}
+      initialIsDesktop={initialIsDesktop}
     />
   )
 }

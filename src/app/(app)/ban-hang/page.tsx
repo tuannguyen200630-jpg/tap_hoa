@@ -6,14 +6,16 @@ import {
   getSellOutSetting,
 } from './actions'
 import { SalesTerminal } from './sales-terminal'
+import { getInitialIsDesktop } from '@/lib/device'
 
 export default async function BanHangPage() {
-  const [products, categories, favorites, customers, allowSellOut] = await Promise.all([
+  const [products, categories, favorites, customers, allowSellOut, initialIsDesktop] = await Promise.all([
     getAllSaleProducts(),
     getCategories(),
     getFavoriteProducts(),
     getSaleCustomers(),
     getSellOutSetting(),
+    getInitialIsDesktop(),
   ])
   const initialProducts = products.products.map((product) => ({
     id: product.id,
@@ -34,6 +36,7 @@ export default async function BanHangPage() {
       favoriteProducts={favorites}
       initialCustomers={customers}
       allowSellOut={allowSellOut}
+      initialIsDesktop={initialIsDesktop}
     />
   )
 }

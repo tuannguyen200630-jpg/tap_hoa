@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import { CACHE_TAGS, createUserCache, getAuthContext } from '@/lib/cache'
 import { Sidebar } from '@/components/nav/sidebar'
 import { FontSizeSync } from '@/components/ui/font-size-sync'
+import { getInitialIsDesktop } from '@/lib/device'
 
 export const dynamic = 'force-dynamic'
 
@@ -51,11 +52,13 @@ async function AppShell({
     console.error('Lỗi lấy thông tin người dùng:', error)
   }
 
+  const initialIsDesktop = await getInitialIsDesktop()
+
   return (
     <FontSizeSync fontSize={fontSize}>
       <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
-        <Sidebar user={user} storeName={storeName} />
-        <main className="mx-auto w-full min-w-0 max-w-full flex-1 px-3 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-3 lg:max-w-7xl lg:px-8 lg:pb-8 lg:pt-6">
+        <Sidebar user={user} storeName={storeName} initialIsDesktop={initialIsDesktop} />
+        <main className="mx-auto w-full min-w-0 max-w-full flex-1 px-1.5 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-3 lg:max-w-7xl lg:px-8 lg:pb-8 lg:pt-6">
           {children}
         </main>
       </div>
