@@ -10,12 +10,12 @@ export function SidebarMobileView({ model }: { model: ReturnType<typeof useSideb
 
   return (
     <>
-      <header className="lg:hidden sticky top-0 z-40 bg-white border-b border-gray-200 px-4 max-sm:px-3 min-h-16 py-2 flex items-center shadow-xs">
+      <header className="lg:hidden sticky top-0 z-40 bg-white border-b border-gray-300 px-4 max-sm:px-3 min-h-16 py-2 flex items-center shadow-xs">
         <Link
           href="/ban-hang"
           className="flex min-w-0 items-center gap-2.5 min-h-[48px] focus:outline-none"
         >
-          <div className="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-xs">
+          <div className="w-10 h-10 rounded-lg bg-blue-800 flex items-center justify-center text-white shadow-xs">
             <Store className="w-6 h-6" />
           </div>
           <div className="min-w-0">
@@ -28,7 +28,7 @@ export function SidebarMobileView({ model }: { model: ReturnType<typeof useSideb
 
       <nav
         aria-label="Thanh điều hướng dưới"
-        className="lg:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-white pb-[env(safe-area-inset-bottom)] shadow-lg"
+        className="lg:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-gray-300 bg-white pb-[env(safe-area-inset-bottom)] shadow-lg"
       >
         <div className="grid h-16 grid-cols-5 items-center px-1">
           {mainNavItems.map((item) => {
@@ -43,8 +43,8 @@ export function SidebarMobileView({ model }: { model: ReturnType<typeof useSideb
                 className={cn(
                   'flex h-full min-h-[48px] min-w-0 flex-col items-center justify-center rounded-lg px-0.5 py-1.5 text-center transition-colors',
                   isActive
-                    ? 'text-blue-600 font-bold bg-blue-50/70'
-                    : 'text-gray-600 hover:text-gray-900 active:bg-gray-100'
+                    ? 'text-blue-950 font-bold bg-blue-100'
+                    : 'text-gray-700 hover:text-gray-900 active:bg-gray-100'
                 )}
               >
                 <Icon className={cn('h-5 w-5 shrink-0', isActive ? 'stroke-[2.5]' : 'stroke-[1.75]')} />
@@ -61,7 +61,7 @@ export function SidebarMobileView({ model }: { model: ReturnType<typeof useSideb
             aria-expanded={isMobileMenuOpen}
             className={cn(
               'flex h-full min-h-[48px] min-w-0 flex-col items-center justify-center rounded-lg px-0.5 py-1.5 text-center',
-              isMobileMenuOpen || isMoreActive ? 'bg-blue-50/70 text-blue-700' : 'text-gray-600'
+              isMobileMenuOpen || isMoreActive ? 'bg-blue-100 text-blue-950' : 'text-gray-700'
             )}
           >
             <MoreHorizontal className="h-5 w-5" />
@@ -87,7 +87,7 @@ export function SidebarMobileView({ model }: { model: ReturnType<typeof useSideb
             <div className="mb-4 max-sm:mb-3 flex items-center justify-between">
               <div>
                 <h2 id="mobile-more-title" className="text-2xl max-sm:text-lg font-bold text-gray-950">Thêm chức năng</h2>
-                <p className="text-base text-gray-600">{displayName}</p>
+                <p className="text-base text-gray-900">{displayName}</p>
               </div>
               <button
                 type="button"
@@ -109,7 +109,7 @@ export function SidebarMobileView({ model }: { model: ReturnType<typeof useSideb
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={cn(
                       'flex min-h-[88px] flex-col items-center justify-center gap-2 rounded-2xl border-2 text-lg max-sm:text-sm font-semibold',
-                      isActive ? 'border-blue-600 bg-blue-50 text-blue-800' : 'border-gray-200 text-gray-800'
+                      isActive ? 'border-blue-700 bg-blue-50 text-blue-950' : 'border-gray-300 text-gray-900'
                     )}
                   >
                     <Icon className="h-7 w-7" />
@@ -122,7 +122,7 @@ export function SidebarMobileView({ model }: { model: ReturnType<typeof useSideb
               type="button"
               onClick={handleLogout}
               disabled={isLoggingOut}
-              className="mt-4 max-sm:mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-red-200 text-lg max-sm:text-sm font-semibold text-red-700 disabled:opacity-50"
+              className="mt-4 max-sm:mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-red-300 text-lg max-sm:text-sm font-semibold text-red-800 disabled:opacity-100 disabled:bg-gray-200 disabled:text-gray-900 disabled:border-gray-400"
             >
               <LogOut className="h-5 w-5" />
               {isLoggingOut ? 'Đang đăng xuất...' : 'Đăng xuất'}

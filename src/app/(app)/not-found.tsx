@@ -9,7 +9,7 @@ export default function NotFound() {
       </p>
       <Link
         href="/ban-hang"
-        className="inline-flex min-h-12 items-center justify-center rounded-lg bg-blue-700 px-6 max-sm:px-3 py-3 max-sm:py-2 text-lg max-sm:text-sm font-semibold text-white"
+        className="inline-flex min-h-12 items-center justify-center rounded-lg bg-blue-800 px-6 max-sm:px-3 py-3 max-sm:py-2 text-lg max-sm:text-sm font-semibold text-white"
       >
         Về màn hình bán hàng
       </Link>

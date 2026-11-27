@@ -14,7 +14,7 @@ export function PurchaseHistoryDesktopView({ model }: { model: ReturnType<typeof
       <header className="space-y-3">
         <Link
           href="/nhap-hang"
-          className="flex min-h-[48px] w-fit items-center gap-2 rounded-xl border-2 border-gray-300 bg-white px-4 max-sm:px-3 text-lg max-sm:text-sm font-bold text-gray-800 hover:bg-gray-50"
+          className="flex min-h-[48px] w-fit items-center gap-2 rounded-xl border-2 border-gray-300 bg-white px-4 max-sm:px-3 text-lg max-sm:text-sm font-bold text-gray-900 hover:bg-gray-100"
         >
           <ArrowLeft className="h-5 w-5" />
           Quay lại nhập hàng
@@ -23,18 +23,18 @@ export function PurchaseHistoryDesktopView({ model }: { model: ReturnType<typeof
       </header>
 
       <section className="grid grid-cols-2 gap-3 max-sm:gap-2">
-        <div className="rounded-2xl border border-blue-100 bg-blue-50 p-4 max-sm:p-3">
-          <p className="text-base font-semibold text-blue-800">Số phiếu nhập</p>
+        <div className="rounded-2xl border border-blue-700 bg-blue-50 p-4 max-sm:p-3">
+          <p className="text-base font-semibold text-blue-950">Số phiếu nhập</p>
           <p className="mt-1 text-2xl max-sm:text-lg font-bold text-blue-950">{totalCount}</p>
         </div>
-        <div className="rounded-2xl border border-green-100 bg-green-50 p-4 max-sm:p-3">
-          <p className="text-base font-semibold text-green-800">Tổng tiền nhập hàng</p>
+        <div className="rounded-2xl border border-emerald-400 bg-emerald-100 p-4 max-sm:p-3">
+          <p className="text-base font-semibold text-green-900">Tổng tiền nhập hàng</p>
           <p className="mt-1 whitespace-nowrap text-base font-bold text-green-950 sm:text-xl">{formatMoney(totalAmount)}</p>
         </div>
       </section>
 
-      <section className="space-y-3 rounded-2xl border border-gray-200 bg-white p-4 max-sm:p-3 shadow-sm">
-        <label className="block text-xs font-medium leading-snug text-gray-800 sm:text-base">
+      <section className="space-y-3 rounded-2xl border border-gray-300 bg-white p-4 max-sm:p-3 shadow-sm">
+        <label className="block text-xs font-medium leading-snug text-gray-900 sm:text-base">
           Tìm kiếm phiếu nhập
           <Input
             value={search}
@@ -45,7 +45,7 @@ export function PurchaseHistoryDesktopView({ model }: { model: ReturnType<typeof
         </label>
 
         <div>
-          <p className="mb-2 text-lg max-sm:text-sm font-semibold text-gray-800">Thời gian</p>
+          <p className="mb-2 text-lg max-sm:text-sm font-semibold text-gray-900">Thời gian</p>
           <div className="flex flex-wrap gap-2">
             {([
               ['all', 'Tất cả'],
@@ -59,8 +59,8 @@ export function PurchaseHistoryDesktopView({ model }: { model: ReturnType<typeof
                 onClick={() => choosePeriod(value)}
                 className={`min-h-[48px] rounded-xl border-2 px-4 max-sm:px-3 text-lg max-sm:text-sm font-semibold ${
                   period === value && !fromDate && !toDate
-                    ? 'border-blue-600 bg-blue-50 text-blue-800'
-                    : 'border-gray-300 bg-white text-gray-800'
+                    ? 'border-blue-700 bg-blue-50 text-blue-950'
+                    : 'border-gray-300 bg-white text-gray-900'
                 }`}
               >
                 {label}
@@ -70,7 +70,7 @@ export function PurchaseHistoryDesktopView({ model }: { model: ReturnType<typeof
         </div>
 
         <div className="grid grid-cols-2 gap-3 max-sm:gap-2">
-          <label className="text-base font-semibold text-gray-800">
+          <label className="text-base font-semibold text-gray-900">
             Từ ngày
             <Input
               type="date"
@@ -82,7 +82,7 @@ export function PurchaseHistoryDesktopView({ model }: { model: ReturnType<typeof
               className="mt-1 h-12 text-base"
             />
           </label>
-          <label className="text-base font-semibold text-gray-800">
+          <label className="text-base font-semibold text-gray-900">
             Đến ngày
             <Input
               type="date"
@@ -97,7 +97,7 @@ export function PurchaseHistoryDesktopView({ model }: { model: ReturnType<typeof
         </div>
 
         <div className="grid gap-3 max-sm:gap-2 sm:grid-cols-2">
-          <label className="text-lg max-sm:text-sm font-semibold text-gray-800">
+          <label className="text-lg max-sm:text-sm font-semibold text-gray-900">
             Nhà cung cấp
             <select
               value={supplierId}
@@ -112,7 +112,7 @@ export function PurchaseHistoryDesktopView({ model }: { model: ReturnType<typeof
           </label>
 
           <div>
-            <p className="mb-1 text-lg max-sm:text-sm font-semibold text-gray-800">Hình thức thanh toán</p>
+            <p className="mb-1 text-lg max-sm:text-sm font-semibold text-gray-900">Hình thức thanh toán</p>
             <div className="flex flex-wrap gap-2">
               {([
                 ['all', 'Tất cả'],
@@ -125,8 +125,8 @@ export function PurchaseHistoryDesktopView({ model }: { model: ReturnType<typeof
                   onClick={() => setPayment(value)}
                   className={`min-h-[48px] rounded-xl border-2 px-4 max-sm:px-3 text-lg max-sm:text-sm font-semibold ${
                     payment === value
-                      ? 'border-blue-600 bg-blue-50 text-blue-800'
-                      : 'border-gray-300 bg-white text-gray-800'
+                      ? 'border-blue-700 bg-blue-50 text-blue-950'
+                      : 'border-gray-300 bg-white text-gray-900'
                   }`}
                 >
                   {label}
@@ -138,10 +138,10 @@ export function PurchaseHistoryDesktopView({ model }: { model: ReturnType<typeof
       </section>
 
       {filteredPurchases.length === 0 ? (
-        <div className="rounded-2xl border border-gray-200 bg-white p-10 text-center">
-          <ReceiptText className="mx-auto mb-3 h-14 w-14 text-gray-400" />
+        <div className="rounded-2xl border border-gray-300 bg-white p-10 text-center">
+          <ReceiptText className="mx-auto mb-3 h-14 w-14 text-gray-900" />
           <h2 className="text-2xl max-sm:text-lg font-bold text-gray-900">Không tìm thấy phiếu nhập</h2>
-          <p className="mt-2 text-lg max-sm:text-sm text-gray-600">Hãy thay đổi bộ lọc hoặc từ khóa tìm kiếm.</p>
+          <p className="mt-2 text-lg max-sm:text-sm text-gray-900">Hãy thay đổi bộ lọc hoặc từ khóa tìm kiếm.</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -151,7 +151,7 @@ export function PurchaseHistoryDesktopView({ model }: { model: ReturnType<typeof
             return (
               <article
                 key={purchase.id}
-                className="rounded-2xl border border-gray-200 bg-white p-4 max-sm:p-3 shadow-sm"
+                className="rounded-2xl border border-gray-300 bg-white p-4 max-sm:p-3 shadow-sm"
               >
                 <button
                   type="button"
@@ -165,28 +165,28 @@ export function PurchaseHistoryDesktopView({ model }: { model: ReturnType<typeof
                         <h2 className="text-xl max-sm:text-base font-bold text-gray-900">{purchase.code}</h2>
                         <span className={`rounded-full px-3 py-1 text-lg max-sm:text-sm font-semibold ${
                           isDebt
-                            ? 'bg-orange-100 text-orange-800'
-                            : 'bg-green-100 text-green-800'
+                            ? 'bg-amber-100 text-amber-950'
+                            : 'bg-emerald-100 text-green-900'
                         }`}>
                           {isDebt ? 'Ghi nợ' : 'Trả ngay'}
                         </span>
                       </div>
-                      <p className="text-lg max-sm:text-sm text-gray-700">{formatDateTime(purchase.created_at)}</p>
-                      <p className="text-lg max-sm:text-sm text-gray-700">
+                      <p className="text-lg max-sm:text-sm text-gray-900">{formatDateTime(purchase.created_at)}</p>
+                      <p className="text-lg max-sm:text-sm text-gray-900">
                         {purchase.supplier?.name || 'Không chọn nhà cung cấp'} · {itemCount} mặt hàng
                       </p>
                     </div>
                     <div className="sm:text-right">
-                      <p className="text-sm font-semibold text-gray-600">Tổng tiền phiếu nhập</p>
-                      <p className="whitespace-nowrap text-base font-bold text-blue-800 sm:text-xl">{formatMoney(purchase.total_amount)}</p>
+                      <p className="text-sm font-semibold text-gray-900">Tổng tiền phiếu nhập</p>
+                      <p className="whitespace-nowrap text-base font-bold text-blue-950 sm:text-xl">{formatMoney(purchase.total_amount)}</p>
                       {isDebt && (
-                        <p className="mt-1 text-base font-semibold text-orange-700">
+                        <p className="mt-1 text-base font-semibold text-amber-950">
                           Còn nợ {formatMoney(purchase.debt_amount)}
                         </p>
                       )}
                     </div>
                   </div>
-                  <span className="mt-3 flex min-h-[48px] items-center justify-center rounded-xl bg-blue-600 px-4 max-sm:px-3 text-lg max-sm:text-sm font-bold text-white sm:ml-auto sm:w-fit">
+                  <span className="mt-3 flex min-h-[48px] items-center justify-center rounded-xl bg-blue-800 px-4 max-sm:px-3 text-lg max-sm:text-sm font-bold text-white sm:ml-auto sm:w-fit">
                     Xem chi tiết
                   </span>
                 </button>
@@ -194,7 +194,7 @@ export function PurchaseHistoryDesktopView({ model }: { model: ReturnType<typeof
             )
           })}
           {totalCount > visibleCount && (
-            <div ref={sentinelRef} className="min-h-10 text-center text-lg max-sm:text-sm text-gray-600" aria-live="polite">
+            <div ref={sentinelRef} className="min-h-10 text-center text-lg max-sm:text-sm text-gray-900" aria-live="polite">
               Cuộn để xem thêm phiếu nhập...
             </div>
           )}
@@ -209,7 +209,7 @@ export function PurchaseHistoryDesktopView({ model }: { model: ReturnType<typeof
           aria-label="Chi tiết phiếu nhập"
         >
           <div className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-t-2xl bg-white sm:rounded-2xl">
-            <div className="sticky top-0 flex min-h-16 items-center justify-between border-b border-gray-200 bg-white px-4 max-sm:px-3">
+            <div className="sticky top-0 flex min-h-16 items-center justify-between border-b border-gray-300 bg-white px-4 max-sm:px-3">
               <h2 className="text-xl max-sm:text-base font-bold text-gray-900">Chi tiết phiếu nhập</h2>
               <button
                 type="button"
@@ -222,12 +222,12 @@ export function PurchaseHistoryDesktopView({ model }: { model: ReturnType<typeof
             </div>
 
             {detailsLoading ? (
-              <p className="p-6 max-sm:p-3 text-lg max-sm:text-sm text-gray-700">Đang tải chi tiết...</p>
+              <p className="p-6 max-sm:p-3 text-lg max-sm:text-sm text-gray-900">Đang tải chi tiết...</p>
             ) : detailsError ? (
-              <p className="p-6 max-sm:p-3 text-lg max-sm:text-sm text-red-700" role="alert">{detailsError}</p>
+              <p className="p-6 max-sm:p-3 text-lg max-sm:text-sm text-red-800" role="alert">{detailsError}</p>
             ) : details ? (
               <div className="space-y-4 max-sm:space-y-3 p-4 max-sm:p-3 sm:p-6">
-                <div className="grid gap-3 max-sm:gap-2 rounded-xl bg-gray-50 p-4 max-sm:p-3 sm:grid-cols-2">
+                <div className="grid gap-3 max-sm:gap-2 rounded-xl bg-gray-100 p-4 max-sm:p-3 sm:grid-cols-2">
                   <p className="text-lg max-sm:text-sm"><strong>Mã phiếu:</strong> {details.code}</p>
                   <p className="text-lg max-sm:text-sm"><strong>Ngày giờ:</strong> {formatDateTime(details.created_at)}</p>
                   <p className="text-lg max-sm:text-sm">
@@ -236,7 +236,7 @@ export function PurchaseHistoryDesktopView({ model }: { model: ReturnType<typeof
                   </p>
                   <p className="text-lg max-sm:text-sm">
                     <strong>Hình thức:</strong>{' '}
-                    <span className={details.debt_amount > 0 ? 'font-bold text-orange-700' : 'font-bold text-green-700'}>
+                    <span className={details.debt_amount > 0 ? 'font-bold text-amber-950' : 'font-bold text-green-900'}>
                       {details.debt_amount > 0 ? 'Ghi nợ' : 'Trả ngay'}
                     </span>
                   </p>
@@ -247,20 +247,20 @@ export function PurchaseHistoryDesktopView({ model }: { model: ReturnType<typeof
 
                 <div className="space-y-2">
                   {details.items.map((item, index: number) => (
-                    <div key={item.id || index} className="rounded-xl border border-gray-200 p-3">
+                    <div key={item.id || index} className="rounded-xl border border-gray-300 p-3">
                       <div className="flex items-start justify-between gap-3 max-sm:gap-2">
                         <div>
                           <p className="text-lg max-sm:text-sm font-bold text-gray-900">{item.product_name}</p>
-                          <p className="mt-1 text-base text-gray-700">
+                          <p className="mt-1 text-base text-gray-900">
                             {formatQuantity(Number(item.quantity))} {item.unit} × {formatMoney(Number(item.cost_price))}
                           </p>
                           {item.expiry_date && (
-                            <p className="mt-1 text-base text-gray-700">
+                            <p className="mt-1 text-base text-gray-900">
                               Hạn sử dụng: {new Intl.DateTimeFormat('vi-VN').format(new Date(`${item.expiry_date}T12:00:00+07:00`))}
                             </p>
                           )}
                         </div>
-                        <p className="whitespace-nowrap text-lg max-sm:text-sm font-bold text-blue-800">
+                        <p className="whitespace-nowrap text-lg max-sm:text-sm font-bold text-blue-950">
                           {formatMoney(Number(item.subtotal))}
                         </p>
                       </div>
@@ -268,7 +268,7 @@ export function PurchaseHistoryDesktopView({ model }: { model: ReturnType<typeof
                   ))}
                 </div>
 
-                <div className="flex justify-between rounded-xl bg-blue-600 p-4 max-sm:p-3 text-white">
+                <div className="flex justify-between rounded-xl bg-blue-800 p-4 max-sm:p-3 text-white">
                   <span className="text-xl max-sm:text-base font-semibold">Tổng cộng</span>
                   <span className="whitespace-nowrap text-base font-bold sm:text-xl">{formatMoney(details.total_amount)}</span>
                 </div>

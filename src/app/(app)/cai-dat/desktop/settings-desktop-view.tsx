@@ -9,7 +9,7 @@ export function SettingsDesktopView({ model }: { model: SettingsFormModel }) {
     <section className="space-y-6 max-sm:space-y-3">
       <header>
         <h1 className="text-3xl max-sm:text-lg font-bold text-gray-950">Cài đặt</h1>
-        <p className="mt-1 text-sm leading-snug text-gray-700">Điều chỉnh thông tin và cách cửa hàng hoạt động.</p>
+        <p className="mt-1 text-sm leading-snug text-gray-900">Điều chỉnh thông tin và cách cửa hàng hoạt động.</p>
       </header>
 
       <form onSubmit={submitSettings} className="space-y-5 max-sm:space-y-3 rounded-xl border border-gray-300 bg-white p-5 max-sm:p-3">
@@ -82,7 +82,7 @@ export function SettingsDesktopView({ model }: { model: SettingsFormModel }) {
             })}
             className="mt-1 min-h-12 w-full rounded-lg border border-gray-400 px-3 py-2 font-normal sm:max-w-xs"
           />
-          <span className="mt-1 block text-sm font-normal leading-snug text-gray-700">Số lượng mặc định là 5.</span>
+          <span className="mt-1 block text-sm font-normal leading-snug text-gray-900">Số lượng mặc định là 5.</span>
         </label>
 
         <label className="flex min-h-12 items-center gap-3 max-sm:gap-2 rounded-lg border border-gray-300 p-3">
@@ -99,11 +99,11 @@ export function SettingsDesktopView({ model }: { model: SettingsFormModel }) {
         </label>
 
         {settingsError && <p role="alert" className="text-red-800">{settingsError}</p>}
-        {settingsNotice && <p role="status" className="text-green-800">{settingsNotice}</p>}
+        {settingsNotice && <p role="status" className="text-green-900">{settingsNotice}</p>}
         <button
           type="submit"
           disabled={isSavingSettings}
-          className="rounded-lg bg-blue-700 px-5 max-sm:px-3 py-3 max-sm:py-2 font-semibold text-white disabled:opacity-60"
+          className="rounded-lg bg-blue-800 px-5 max-sm:px-3 py-3 max-sm:py-2 font-semibold text-white disabled:opacity-100 disabled:bg-gray-200 disabled:text-gray-900 disabled:border-gray-400"
         >
           {isSavingSettings ? 'Đang lưu…' : 'Lưu cài đặt'}
         </button>
@@ -136,11 +136,11 @@ export function SettingsDesktopView({ model }: { model: SettingsFormModel }) {
           />
         </label>
         {passwordError && <p role="alert" className="text-red-800">{passwordError}</p>}
-        {passwordNotice && <p role="status" className="text-green-800">{passwordNotice}</p>}
+        {passwordNotice && <p role="status" className="text-green-900">{passwordNotice}</p>}
         <button
           type="submit"
           disabled={isSavingPassword}
-          className="rounded-lg bg-blue-700 px-5 max-sm:px-3 py-3 max-sm:py-2 font-semibold text-white disabled:opacity-60"
+          className="rounded-lg bg-blue-800 px-5 max-sm:px-3 py-3 max-sm:py-2 font-semibold text-white disabled:opacity-100 disabled:bg-gray-200 disabled:text-gray-900 disabled:border-gray-400"
         >
           {isSavingPassword ? 'Đang đổi…' : 'Đổi mật khẩu'}
         </button>
@@ -148,12 +148,12 @@ export function SettingsDesktopView({ model }: { model: SettingsFormModel }) {
 
       <section className="space-y-3 rounded-xl border border-gray-300 bg-white p-5 max-sm:p-3">
         <h2 className="text-2xl max-sm:text-lg font-bold text-gray-950">Sao lưu dữ liệu</h2>
-        <p className="text-sm leading-snug text-gray-700">
+        <p className="text-sm leading-snug text-gray-900">
           Tải tệp sao lưu để lưu giữ thông tin cửa hàng. Có thể mở tệp bằng Excel.
         </p>
         <a
           href="/api/cai-dat/sao-luu"
-          className="inline-flex items-center justify-center rounded-lg bg-green-700 px-5 max-sm:px-3 py-3 max-sm:py-2 font-semibold text-white hover:bg-green-800"
+          className="inline-flex items-center justify-center rounded-lg bg-green-800 px-5 max-sm:px-3 py-3 max-sm:py-2 font-semibold text-white hover:bg-green-800"
         >
           Tải toàn bộ dữ liệu
         </a>

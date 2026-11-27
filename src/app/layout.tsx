@@ -29,7 +29,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   viewportFit: 'cover',
-  themeColor: '#2563eb',
+  themeColor: '#1d4ed8',
 }
 
 export default function RootLayout({
@@ -39,7 +39,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi" className={font.variable} data-font-size="medium">
-      <body className="font-sans antialiased bg-gray-50 text-gray-900">
+      <body className="font-sans antialiased bg-gray-100 text-gray-900">
         <OfflineNotice />
         {children}
       </body>

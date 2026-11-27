@@ -14,15 +14,15 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
         <button
           type="button"
           onClick={openNewContact}
-          className="col-start-2 row-start-1 shrink-0 whitespace-nowrap rounded-lg bg-blue-700 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-800 sm:px-5 sm:py-3 sm:text-base"
+          className="col-start-2 row-start-1 shrink-0 whitespace-nowrap rounded-lg bg-blue-800 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-900 sm:px-5 sm:py-3 sm:text-base"
         >
           {targetType === 'customer' ? '+ Thêm khách hàng' : '+ Thêm nhà cung cấp'}
         </button>
-        <p className="col-span-2 row-start-2 text-xs text-gray-600 sm:text-base">Theo dõi các khoản khách còn nợ và khoản cần trả nhà cung cấp.</p>
+        <p className="col-span-2 row-start-2 text-xs text-gray-900 sm:text-base">Theo dõi các khoản khách còn nợ và khoản cần trả nhà cung cấp.</p>
       </header>
 
       {notice && (
-        <div role="status" className="rounded-lg border border-green-300 bg-green-50 p-4 max-sm:p-3 text-green-900">
+        <div role="status" className="rounded-lg border border-emerald-400 bg-emerald-100 p-4 max-sm:p-3 text-green-900">
           {notice}
         </div>
       )}
@@ -35,8 +35,8 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
           onClick={() => changeTarget('customer')}
           className={`whitespace-nowrap rounded-lg border-2 px-2 py-2 text-center text-xs font-semibold ${
             targetType === 'customer'
-              ? 'border-blue-700 bg-blue-50 text-blue-900'
-              : 'border-gray-300 bg-white text-gray-800'
+              ? 'border-blue-700 bg-blue-50 text-blue-950'
+              : 'border-gray-300 bg-white text-gray-900'
           }`}
         >
           Khách nợ mình
@@ -48,15 +48,15 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
           onClick={() => changeTarget('supplier')}
           className={`whitespace-nowrap rounded-lg border-2 px-2 py-2 text-center text-xs font-semibold ${
             targetType === 'supplier'
-              ? 'border-blue-700 bg-blue-50 text-blue-900'
-              : 'border-gray-300 bg-white text-gray-800'
+              ? 'border-blue-700 bg-blue-50 text-blue-950'
+              : 'border-gray-300 bg-white text-gray-900'
           }`}
         >
           Mình nợ nhà cung cấp
         </button>
       </div>
 
-      <div className="flex items-center justify-between gap-2 rounded-xl border border-blue-200 bg-blue-50 p-3">
+      <div className="flex items-center justify-between gap-2 rounded-xl border border-blue-700 bg-blue-50 p-3">
         <p className="text-xs font-medium text-blue-950">
           {targetType === 'customer' ? 'Tổng khách hàng đang nợ' : 'Tổng tiền cần trả nhà cung cấp'}
         </p>
@@ -73,7 +73,7 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
           placeholder="Tìm tên, số điện thoại, địa chỉ hoặc ghi chú"
           className="min-h-12 w-full rounded-lg border border-gray-400 bg-white px-3 py-2 text-sm text-gray-900"
         />
-        {isLoading && <p className="self-center text-gray-700" role="status">Đang tải danh sách…</p>}
+        {isLoading && <p className="self-center text-gray-900" role="status">Đang tải danh sách…</p>}
       </div>
 
       {listError && (
@@ -94,7 +94,7 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
           <h2 className="text-xl max-sm:text-base font-semibold text-gray-900">
             {search ? 'Không tìm thấy người phù hợp' : `Chưa có ${targetTitle(targetType)} nào`}
           </h2>
-          <p className="mt-2 text-gray-700">
+          <p className="mt-2 text-gray-900">
             {search
               ? 'Hãy thử tên hoặc số điện thoại khác.'
               : 'Thêm thông tin liên hệ để dễ chọn khi bán hàng hoặc nhập hàng.'}
@@ -103,7 +103,7 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
             <button
               type="button"
               onClick={openNewContact}
-              className="mt-4 max-sm:mt-3 rounded-lg bg-blue-700 px-5 max-sm:px-3 py-3 max-sm:py-2 font-semibold text-white hover:bg-blue-800"
+              className="mt-4 max-sm:mt-3 rounded-lg bg-blue-800 px-5 max-sm:px-3 py-3 max-sm:py-2 font-semibold text-white hover:bg-blue-900"
             >
               {targetType === 'customer' ? 'Thêm khách hàng đầu tiên' : 'Thêm nhà cung cấp đầu tiên'}
             </button>
@@ -118,13 +118,13 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
               <div className="flex flex-col gap-4 max-sm:gap-2 lg:flex-row lg:items-center lg:justify-between">
                 <div className="min-w-0">
                   <h2 className="break-words text-sm font-bold text-gray-950 sm:text-base">{contact.name}</h2>
-                  {contact.phone && <p className="mt-1 text-xs text-gray-800 sm:text-sm">Điện thoại: {contact.phone}</p>}
-                  {contact.address && <p className="mt-1 hidden break-words text-xs text-gray-700 md:block">Địa chỉ: {contact.address}</p>}
-                  {contact.note && <p className="mt-1 hidden break-words text-xs text-gray-700 md:block">Ghi chú: {contact.note}</p>}
+                  {contact.phone && <p className="mt-1 text-xs text-gray-900 sm:text-sm">Điện thoại: {contact.phone}</p>}
+                  {contact.address && <p className="mt-1 hidden break-words text-xs text-gray-900 md:block">Địa chỉ: {contact.address}</p>}
+                  {contact.note && <p className="mt-1 hidden break-words text-xs text-gray-900 md:block">Ghi chú: {contact.note}</p>}
                 </div>
                 <div className="flex flex-col gap-3 max-sm:gap-2 sm:flex-row sm:items-center">
                   <div className="sm:min-w-48 sm:text-right">
-                    <p className="text-xs text-gray-700">{targetType === 'customer' ? 'Còn nợ' : 'Cần trả'}</p>
+                    <p className="text-xs text-gray-900">{targetType === 'customer' ? 'Còn nợ' : 'Cần trả'}</p>
                     <p className="whitespace-nowrap text-base font-bold text-gray-950 sm:text-2xl">
                       {contact.debt > 0 ? formatMoney(contact.debt) : 'Không có công nợ'}
                     </p>
@@ -134,7 +134,7 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
                       <button
                         type="button"
                         onClick={() => openPayment(contact)}
-                        className="rounded-lg bg-green-700 px-4 py-2 text-xs font-semibold text-white hover:bg-green-800"
+                        className="rounded-lg bg-green-800 px-4 py-2 text-xs font-semibold text-white hover:bg-green-800"
                       >
                         {targetType === 'customer' ? 'Thu nợ' : 'Trả nợ'}
                       </button>
@@ -142,7 +142,7 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
                     <button
                       type="button"
                       onClick={() => openHistory(contact)}
-                      className="rounded-lg border border-blue-700 px-4 py-2 text-xs font-semibold text-blue-800 hover:bg-blue-50"
+                      className="rounded-lg border border-blue-700 px-4 py-2 text-xs font-semibold text-blue-950 hover:bg-blue-50"
                     >
                       Xem lịch sử
                     </button>
@@ -159,7 +159,7 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
             </article>
           ))}
           {filteredContacts.length > visibleCount && (
-            <div ref={sentinelRef} className="min-h-10 text-center text-lg max-sm:text-sm text-gray-600" aria-live="polite">
+            <div ref={sentinelRef} className="min-h-10 text-center text-lg max-sm:text-sm text-gray-900" aria-live="polite">
               Cuộn để xem thêm liên hệ...
             </div>
           )}
@@ -179,7 +179,7 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
             </h2>
             <form className="mt-4 max-sm:mt-3 space-y-4 max-sm:space-y-3" onSubmit={submitContact}>
               <label className="block font-semibold text-gray-900">
-                Tên <span className="text-red-700">*</span>
+                Tên <span className="text-red-800">*</span>
                 <input
                   required
                   maxLength={150}
@@ -230,7 +230,7 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
                 <button
                   type="submit"
                   disabled={isSavingContact}
-                  className="rounded-lg bg-blue-700 px-5 max-sm:px-3 py-3 max-sm:py-2 font-semibold text-white disabled:opacity-60"
+                  className="rounded-lg bg-blue-800 px-5 max-sm:px-3 py-3 max-sm:py-2 font-semibold text-white disabled:opacity-100 disabled:bg-gray-200 disabled:text-gray-900 disabled:border-gray-400"
                 >
                   {isSavingContact ? 'Đang lưu…' : 'Lưu thông tin'}
                 </button>
@@ -251,7 +251,7 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
             <h2 id="payment-dialog-title" className="text-2xl max-sm:text-lg font-bold text-gray-950">
               {targetType === 'customer' ? 'Thu nợ khách hàng' : 'Trả nợ nhà cung cấp'}
             </h2>
-            <p className="mt-2 text-gray-800">{paymentContact.name}</p>
+            <p className="mt-2 text-gray-900">{paymentContact.name}</p>
             <p className="font-semibold text-gray-950">
               Số nợ hiện tại: {formatMoney(paymentContact.debt)}
             </p>
@@ -269,7 +269,7 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
               <button
                 type="button"
                 onClick={() => setPaymentToFullDebt(paymentContact.debt)}
-                className="rounded-lg border border-blue-700 px-4 max-sm:px-3 py-3 max-sm:py-2 font-semibold text-blue-800 hover:bg-blue-50"
+                className="rounded-lg border border-blue-700 px-4 max-sm:px-3 py-3 max-sm:py-2 font-semibold text-blue-950 hover:bg-blue-50"
               >
                 Trả toàn bộ {formatMoney(paymentContact.debt)}
               </button>
@@ -298,7 +298,7 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
                 <button
                   type="submit"
                   disabled={isSavingPayment || paymentValue <= 0 || paymentValue > paymentContact.debt}
-                  className="rounded-lg bg-green-700 px-5 max-sm:px-3 py-3 max-sm:py-2 font-semibold text-white disabled:opacity-60"
+                  className="rounded-lg bg-green-800 px-5 max-sm:px-3 py-3 max-sm:py-2 font-semibold text-white disabled:opacity-100 disabled:bg-gray-200 disabled:text-gray-900 disabled:border-gray-400"
                 >
                   {isSavingPayment ? 'Đang ghi nhận…' : 'Xác nhận'}
                 </button>
@@ -321,7 +321,7 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
                 <h2 id="history-dialog-title" className="text-2xl max-sm:text-lg font-bold text-gray-950">
                   Lịch sử của {historyContact.name}
                 </h2>
-                <p className="mt-1 text-gray-800">
+                <p className="mt-1 text-gray-900">
                   {targetType === 'customer' ? 'Khách còn nợ' : 'Còn cần trả'}: {formatMoney(historyContact.debt)}
                 </p>
               </div>
@@ -335,7 +335,7 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
             </div>
 
             {historyError && <p role="alert" className="mt-4 max-sm:mt-3 text-red-800">{historyError}</p>}
-            {isLoadingHistory && <p role="status" className="mt-4 max-sm:mt-3 text-gray-700">Đang tải lịch sử…</p>}
+            {isLoadingHistory && <p role="status" className="mt-4 max-sm:mt-3 text-gray-900">Đang tải lịch sử…</p>}
             {history && !isLoadingHistory && (
               <div className="mt-5 max-sm:mt-3 space-y-6 max-sm:space-y-3">
                 <section>
@@ -343,7 +343,7 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
                     {targetType === 'customer' ? 'Nợ phát sinh từ hóa đơn bán' : 'Nợ phát sinh từ phiếu nhập'}
                   </h3>
                   {history.origins.length === 0 ? (
-                    <p className="mt-2 text-gray-700">Chưa có khoản nợ phát sinh từ giao dịch.</p>
+                    <p className="mt-2 text-gray-900">Chưa có khoản nợ phát sinh từ giao dịch.</p>
                   ) : (
                     <ul className="mt-3 space-y-3">
                       {history.origins.map((origin) => (
@@ -377,7 +377,7 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
                 <section>
                   <h3 className="text-xl max-sm:text-base font-bold text-gray-950">Lịch sử thu, trả và điều chỉnh nợ</h3>
                   {history.payments.length === 0 ? (
-                    <p className="mt-2 text-gray-700">Chưa có lần thu hoặc trả nợ nào.</p>
+                    <p className="mt-2 text-gray-900">Chưa có lần thu hoặc trả nợ nào.</p>
                   ) : (
                     <ul className="mt-3 space-y-3">
                       {history.payments.map((payment) => (
@@ -391,7 +391,7 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
                             <span>{formatDateTime(payment.createdAt)}</span>
                           </div>
                           <p className="mt-1 font-semibold">{formatMoney(payment.amount)}</p>
-                          {payment.note && <p className="mt-1 text-gray-700">Ghi chú: {payment.note}</p>}
+                          {payment.note && <p className="mt-1 text-gray-900">Ghi chú: {payment.note}</p>}
                         </li>
                       ))}
                     </ul>
@@ -428,13 +428,13 @@ function HistoryPagination({
   const pageCount = Math.max(1, Math.ceil(count / 20))
   return (
     <nav className="mt-3 flex flex-wrap items-center justify-between gap-3 max-sm:gap-2" aria-label="Chuyển trang lịch sử">
-      <p className="text-gray-700">Trang {page} / {pageCount}</p>
+      <p className="text-gray-900">Trang {page} / {pageCount}</p>
       <div className="flex gap-2">
         <button
           type="button"
           disabled={page <= 1 || loading}
           onClick={() => onChange(page - 1)}
-          className="rounded-lg border border-gray-400 px-4 max-sm:px-3 py-3 max-sm:py-2 font-semibold disabled:opacity-50"
+          className="rounded-lg border border-gray-400 px-4 max-sm:px-3 py-3 max-sm:py-2 font-semibold disabled:opacity-100 disabled:bg-gray-200 disabled:text-gray-900 disabled:border-gray-400"
         >
           Trang trước
         </button>
@@ -442,7 +442,7 @@ function HistoryPagination({
           type="button"
           disabled={page >= pageCount || loading}
           onClick={() => onChange(page + 1)}
-          className="rounded-lg border border-gray-400 px-4 max-sm:px-3 py-3 max-sm:py-2 font-semibold disabled:opacity-50"
+          className="rounded-lg border border-gray-400 px-4 max-sm:px-3 py-3 max-sm:py-2 font-semibold disabled:opacity-100 disabled:bg-gray-200 disabled:text-gray-900 disabled:border-gray-400"
         >
           Trang sau
         </button>

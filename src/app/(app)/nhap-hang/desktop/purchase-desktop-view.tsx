@@ -52,13 +52,13 @@ export function PurchaseDesktopView({
         style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 120px' }}
         className={`relative flex min-h-[104px] min-w-0 max-w-full flex-col items-start justify-between rounded-xl border-2 p-2.5 text-left transition duration-150 active:scale-[0.98] ${
           selectedQuantity > 0
-            ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-200'
-            : 'border-gray-200 bg-white hover:border-blue-500 hover:bg-blue-50'
+            ? 'border-blue-700 bg-blue-50 ring-2 ring-blue-600/30'
+            : 'border-gray-300 bg-white hover:border-blue-700 hover:bg-blue-50'
         }`}
       >
         {selectedQuantity > 0 && (
           <span
-            className="absolute right-2 top-2 inline-flex min-h-7 min-w-7 items-center justify-center rounded-full bg-blue-700 px-2 text-xs font-bold text-white"
+            className="absolute right-2 top-2 inline-flex min-h-7 min-w-7 items-center justify-center rounded-full bg-blue-800 px-2 text-xs font-bold text-white"
             aria-label={`Đã chọn ${selectedQuantity}`}
           >
             {selectedQuantity}
@@ -70,15 +70,15 @@ export function PurchaseDesktopView({
           {product.name}
         </span>
         {lowStock && (
-          <span className="max-w-full truncate whitespace-nowrap rounded-full bg-orange-100 px-2 py-0.5 text-xs font-bold text-orange-800">
+          <span className="max-w-full truncate whitespace-nowrap rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-950">
             Còn: {Number(product.stock)} {product.unit}
           </span>
         )}
-        <span className="max-w-full truncate whitespace-nowrap text-xs text-gray-600">
+        <span className="max-w-full truncate whitespace-nowrap text-xs text-gray-900">
           Giá cũ: {formatMoney(product.last_cost)}
         </span>
         {!lowStock && (
-          <span className="max-w-full truncate whitespace-nowrap text-xs text-gray-600">
+          <span className="max-w-full truncate whitespace-nowrap text-xs text-gray-900">
             Còn: {Number(product.stock)} {product.unit}
           </span>
         )}
@@ -88,18 +88,18 @@ export function PurchaseDesktopView({
 
   const renderSelectedItems = (idPrefix: string) => (
     <div className="min-w-0 max-w-full">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="bg-blue-50 px-4 max-sm:px-3 py-2 border-b border-blue-100">
-          <h3 className="font-bold text-blue-900 text-lg max-sm:text-sm">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-300 overflow-hidden">
+        <div className="bg-blue-50 px-4 max-sm:px-3 py-2 border-b border-blue-700">
+          <h3 className="font-bold text-blue-950 text-lg max-sm:text-sm">
             Các món cần nhập ({cart.length} món)
           </h3>
         </div>
         {cart.length === 0 ? (
-          <p className="px-4 max-sm:px-3 py-2 text-base text-gray-500">
+          <p className="px-4 max-sm:px-3 py-2 text-base text-gray-900">
             Chưa chọn món. Chọn thẻ bên dưới để thêm ngay.
           </p>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-gray-300">
             {cart.map((item, index) => {
               const subtotal = Math.round(item.costPrice * getPurchaseQuantity(item))
               const costDiff = item.costPrice - item.product.last_cost
@@ -109,7 +109,7 @@ export function PurchaseDesktopView({
               const hasOptionalSetting = item.isBulk || Boolean(item.expiryDate)
 
               return (
-                <div key={item.product.id} className="space-y-2 border-b border-gray-100 p-3 last:border-b-0 sm:p-4">
+                <div key={item.product.id} className="space-y-2 border-b border-gray-300 p-3 last:border-b-0 sm:p-4">
                   <div className="flex min-w-0 items-center justify-between gap-2">
                     <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
                       <span className="min-w-0 break-words text-lg max-sm:text-sm font-bold leading-tight text-gray-900">
@@ -124,7 +124,7 @@ export function PurchaseDesktopView({
                     </div>
                     <div className="flex shrink-0 items-center gap-1">
                       <span className="text-right">
-                        <span className="block text-xs font-medium text-gray-500">Thành tiền</span>
+                        <span className="block text-xs font-medium text-gray-900">Thành tiền</span>
                         <span className="block whitespace-nowrap text-lg max-sm:text-sm font-bold text-gray-900 sm:text-xl">
                           {formatMoney(subtotal)}
                         </span>
@@ -134,7 +134,7 @@ export function PurchaseDesktopView({
                         onClick={() => removeFromCart(index)}
                         aria-label={`Xóa ${item.product.name} khỏi phiếu nhập`}
                         title="Xóa khỏi phiếu nhập"
-                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg p-2 text-red-500 transition-colors hover:bg-red-50 hover:text-red-600"
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg p-2 text-red-800 transition-colors hover:bg-red-50 hover:text-red-800"
                       >
                         <Trash2 className="h-5 w-5" />
                       </button>
@@ -143,7 +143,7 @@ export function PurchaseDesktopView({
 
                   <div className="grid grid-cols-2 items-end gap-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
                     <div className="min-w-0">
-                      <label className="mb-1 block text-sm font-semibold leading-tight text-gray-700">
+                      <label className="mb-1 block text-sm font-semibold leading-tight text-gray-900">
                         {item.isBulk ? 'Số thùng' : `Số lượng (${item.product.unit})`}
                       </label>
                       <div className="flex min-w-0 items-center gap-1">
@@ -151,7 +151,7 @@ export function PurchaseDesktopView({
                           type="button"
                           aria-label={`Giảm số lượng ${item.product.name}`}
                           onClick={() => decreaseCartQuantity(index)}
-                          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-700 transition-colors hover:bg-gray-200"
+                          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-900 transition-colors hover:bg-gray-200"
                         >
                           <Minus className="h-5 w-5" />
                         </button>
@@ -182,7 +182,7 @@ export function PurchaseDesktopView({
                           type="button"
                           aria-label={`Tăng số lượng ${item.product.name}`}
                           onClick={() => increaseCartQuantity(index)}
-                          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-700 transition-colors hover:bg-gray-200"
+                          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-900 transition-colors hover:bg-gray-200"
                         >
                           <Plus className="h-5 w-5" />
                         </button>
@@ -190,7 +190,7 @@ export function PurchaseDesktopView({
                     </div>
 
                     <div className="min-w-0">
-                      <label className="mb-1 block text-sm font-semibold leading-tight text-gray-700">
+                      <label className="mb-1 block text-sm font-semibold leading-tight text-gray-900">
                         Giá nhập mỗi {item.product.unit} (đ)
                       </label>
                       <Input
@@ -210,7 +210,7 @@ export function PurchaseDesktopView({
                       {hasDiff && (
                         <div
                           className={`mt-1 flex items-center gap-1 text-xs font-medium leading-tight ${
-                            costDiff > 0 ? 'text-red-600' : 'text-green-600'
+                            costDiff > 0 ? 'text-red-800' : 'text-green-900'
                           }`}
                         >
                           {costDiff > 0 ? (
@@ -235,17 +235,17 @@ export function PurchaseDesktopView({
                           [item.product.id]: !isOptionsExpanded,
                         }))
                       }
-                      className="col-span-2 flex min-h-11 min-w-0 items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3 text-base font-semibold text-gray-800 transition-colors hover:bg-gray-50 sm:col-span-1 sm:min-w-44"
+                      className="col-span-2 flex min-h-11 min-w-0 items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3 text-base font-semibold text-gray-900 transition-colors hover:bg-gray-100 sm:col-span-1 sm:min-w-44"
                     >
                       <span className="whitespace-nowrap">Thùng / Hạn SD</span>
                       <span className="flex min-w-0 items-center gap-1.5">
                         <span
                           className={`h-2.5 w-2.5 shrink-0 rounded-full ${
-                            hasOptionalSetting ? 'bg-green-600' : 'bg-gray-300'
+                            hasOptionalSetting ? 'bg-green-800' : 'bg-gray-300'
                           }`}
                           aria-hidden="true"
                         />
-                        <span className="truncate text-xs font-medium text-gray-600">
+                        <span className="truncate text-xs font-medium text-gray-900">
                           {item.isBulk && item.expiryDate
                             ? 'Theo thùng · Có HSD'
                             : item.isBulk
@@ -266,7 +266,7 @@ export function PurchaseDesktopView({
                   {isOptionsExpanded && (
                     <div
                       id={`${idPrefix}-purchase-options-${item.product.id}`}
-                      className="grid grid-cols-1 gap-3 max-sm:gap-2 rounded-lg bg-gray-50 p-3 sm:grid-cols-2"
+                      className="grid grid-cols-1 gap-3 max-sm:gap-2 rounded-lg bg-gray-100 p-3 sm:grid-cols-2"
                     >
                       <div className="min-w-0">
                         <label className="flex min-h-11 cursor-pointer select-none items-center gap-2">
@@ -290,7 +290,7 @@ export function PurchaseDesktopView({
                             }}
                             className="h-5 w-5 shrink-0 rounded accent-blue-600"
                           />
-                          <span className="text-base font-medium leading-tight text-gray-800">
+                          <span className="text-base font-medium leading-tight text-gray-900">
                             Nhập theo thùng (tự tính giá mỗi {item.product.unit})
                           </span>
                         </label>
@@ -298,7 +298,7 @@ export function PurchaseDesktopView({
                         {item.isBulk && (
                           <div className="mt-2 grid grid-cols-2 gap-2">
                             <div className="min-w-0">
-                              <label className="mb-1 block text-sm font-semibold leading-tight text-gray-700">
+                              <label className="mb-1 block text-sm font-semibold leading-tight text-gray-900">
                                 Giá cả thùng (đ)
                               </label>
                               <Input
@@ -318,7 +318,7 @@ export function PurchaseDesktopView({
                               />
                             </div>
                             <div className="min-w-0">
-                              <label className="mb-1 block text-sm font-semibold leading-tight text-gray-700">
+                              <label className="mb-1 block text-sm font-semibold leading-tight text-gray-900">
                                 Số {item.product.unit} trong thùng
                               </label>
                               <Input
@@ -338,7 +338,7 @@ export function PurchaseDesktopView({
                                 className="h-11 px-2 text-base font-bold"
                               />
                             </div>
-                            <div className="col-span-2 rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-800">
+                            <div className="col-span-2 rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-950">
                               → Giá mỗi {item.product.unit}:{' '}
                               <strong>{formatMoney(item.costPrice)}</strong>
                             </div>
@@ -347,7 +347,7 @@ export function PurchaseDesktopView({
                       </div>
 
                       <div className="min-w-0">
-                        <label className="mb-1 block text-sm font-semibold text-gray-700">
+                        <label className="mb-1 block text-sm font-semibold text-gray-900">
                           Hạn sử dụng (không bắt buộc)
                         </label>
                         <Input
@@ -378,18 +378,18 @@ export function PurchaseDesktopView({
   )
 
   const renderPurchaseInformation = (idPrefix: string) => (
-    <div className="min-w-0 space-y-4 max-sm:space-y-3 rounded-2xl border border-gray-100 bg-white p-4 max-sm:p-3 shadow-sm sm:p-5">
+    <div className="min-w-0 space-y-4 max-sm:space-y-3 rounded-2xl border border-gray-300 bg-white p-4 max-sm:p-3 shadow-sm sm:p-5">
       <h3 className="text-lg max-sm:text-sm font-bold text-gray-900">Thông tin phiếu nhập</h3>
 
       <div className="min-w-0">
-        <label htmlFor={`${idPrefix}-supplier`} className="mb-1 block text-base font-semibold text-gray-700">
+        <label htmlFor={`${idPrefix}-supplier`} className="mb-1 block text-base font-semibold text-gray-900">
           Nhà cung cấp (không bắt buộc)
         </label>
         <select
           id={`${idPrefix}-supplier`}
           value={selectedSupplier}
           onChange={(e) => setSelectedSupplier(e.target.value)}
-          className="min-h-12 w-full min-w-0 max-w-full rounded-xl border-2 border-gray-300 bg-white px-3 text-lg max-sm:text-sm focus:border-blue-500"
+          className="min-h-12 w-full min-w-0 max-w-full rounded-xl border-2 border-gray-300 bg-white px-3 text-lg max-sm:text-sm focus:border-blue-700"
         >
           <option value="">-- Không chọn --</option>
           {suppliers.map((supplier) => (
@@ -403,7 +403,7 @@ export function PurchaseDesktopView({
       </div>
 
       <fieldset className="min-w-0">
-        <legend className="mb-1.5 block text-base font-semibold text-gray-700">Thanh toán</legend>
+        <legend className="mb-1.5 block text-base font-semibold text-gray-900">Thanh toán</legend>
         <div className="grid grid-cols-2 gap-2">
           <button
             type="button"
@@ -411,12 +411,12 @@ export function PurchaseDesktopView({
             aria-pressed={payFull}
             className={`min-h-12 rounded-xl border-2 px-3 text-left text-base transition-all ${
               payFull
-                ? 'border-blue-600 bg-blue-50 text-blue-900'
-                : 'border-gray-200 hover:border-gray-300'
+                ? 'border-blue-700 bg-blue-50 text-blue-950'
+                : 'border-gray-300 hover:border-gray-300'
             }`}
           >
             <span className="block font-bold">Trả ngay</span>
-            <span className="mt-0.5 block text-sm text-gray-500">Thanh toán hết</span>
+            <span className="mt-0.5 block text-sm text-gray-900">Thanh toán hết</span>
           </button>
           <button
             type="button"
@@ -424,18 +424,18 @@ export function PurchaseDesktopView({
             aria-pressed={!payFull}
             className={`min-h-12 rounded-xl border-2 px-3 text-left text-base transition-all ${
               !payFull
-                ? 'border-blue-600 bg-blue-50 text-blue-900'
-                : 'border-gray-200 hover:border-gray-300'
+                ? 'border-blue-700 bg-blue-50 text-blue-950'
+                : 'border-gray-300 hover:border-gray-300'
             }`}
           >
             <span className="block font-bold">Ghi nợ</span>
-            <span className="mt-0.5 block text-sm text-gray-500">Trả một phần / sau</span>
+            <span className="mt-0.5 block text-sm text-gray-900">Trả một phần / sau</span>
           </button>
         </div>
 
         {!payFull && (
           <div className="mt-3 min-w-0">
-            <label htmlFor={`${idPrefix}-paid-amount`} className="mb-1 block text-base font-semibold text-gray-700">
+            <label htmlFor={`${idPrefix}-paid-amount`} className="mb-1 block text-base font-semibold text-gray-900">
               Số tiền trả trước (đ)
             </label>
             <Input
@@ -447,7 +447,7 @@ export function PurchaseDesktopView({
               className="h-12 min-w-0 text-lg max-sm:text-sm font-bold"
             />
             {debtAmount > 0 && (
-              <p className="mt-1 text-base font-medium text-red-600">
+              <p className="mt-1 text-base font-medium text-red-800">
                 Nợ nhà cung cấp: {formatMoney(debtAmount)}
               </p>
             )}
@@ -456,7 +456,7 @@ export function PurchaseDesktopView({
       </fieldset>
 
       <div className="min-w-0">
-        <label htmlFor={`${idPrefix}-note`} className="mb-1 block text-base font-semibold text-gray-700">
+        <label htmlFor={`${idPrefix}-note`} className="mb-1 block text-base font-semibold text-gray-900">
           Ghi chú (không bắt buộc)
         </label>
         <textarea
@@ -464,7 +464,7 @@ export function PurchaseDesktopView({
           value={note}
           onChange={(e) => setNote(e.target.value)}
           rows={2}
-          className="w-full min-w-0 max-w-full resize-none rounded-xl border-2 border-gray-300 p-3 text-base focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+          className="w-full min-w-0 max-w-full resize-none rounded-xl border-2 border-gray-300 p-3 text-base focus:border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600/30"
           placeholder="Ghi chú thêm nếu cần..."
         />
       </div>
@@ -472,7 +472,7 @@ export function PurchaseDesktopView({
   )
 
   const renderPurchaseSummary = () => (
-    <div className="space-y-3 rounded-2xl bg-blue-600 p-4 max-sm:p-3 text-white shadow-md sm:p-5">
+    <div className="space-y-3 rounded-2xl bg-blue-800 p-4 max-sm:p-3 text-white shadow-md sm:p-5">
       <div className="flex items-center justify-between gap-2 text-lg max-sm:text-sm">
         <span>Tổng hàng:</span>
         <span className="font-semibold">{cart.length} món</span>
@@ -483,14 +483,14 @@ export function PurchaseDesktopView({
           {cart.reduce((sum, item) => sum + getPurchaseQuantity(item), 0)}
         </span>
       </div>
-      <div className="mt-2 border-t border-blue-500 pt-3">
+      <div className="mt-2 border-t border-blue-700 pt-3">
         <div className="flex items-center justify-between gap-2">
           <span className="text-xl max-sm:text-base font-semibold">Tổng tiền:</span>
           <span className="whitespace-nowrap text-base font-bold sm:text-xl">{formatMoney(totalAmount)}</span>
         </div>
       </div>
       {!payFull && debtAmount > 0 && (
-        <div className="flex items-center justify-between gap-2 text-base text-yellow-200">
+        <div className="flex items-center justify-between gap-2 text-base text-amber-950">
           <span>Nợ nhà cung cấp:</span>
           <span className="font-bold">{formatMoney(debtAmount)}</span>
         </div>
@@ -498,7 +498,7 @@ export function PurchaseDesktopView({
       <Button
         onClick={handleSubmit}
         disabled={isPending || cart.length === 0}
-        className="mt-2 min-h-14 w-full rounded-xl bg-white text-xl max-sm:text-base font-bold text-blue-700 shadow-md hover:bg-blue-50"
+        className="mt-2 min-h-14 w-full rounded-xl bg-white text-xl max-sm:text-base font-bold text-blue-950 shadow-md hover:bg-blue-50"
       >
         {isPending ? 'Đang xử lý...' : 'Lưu phiếu nhập'}
       </Button>
@@ -508,7 +508,7 @@ export function PurchaseDesktopView({
   const renderPurchaseHistoryLink = () => (
     <Link
       href="/nhap-hang/lich-su"
-      className="flex min-h-[52px] items-center justify-center gap-3 max-sm:gap-2 rounded-2xl border-2 border-blue-600 bg-white px-5 max-sm:px-3 text-lg max-sm:text-sm font-bold text-blue-700 shadow-sm transition-colors hover:bg-blue-50"
+      className="flex min-h-[52px] items-center justify-center gap-3 max-sm:gap-2 rounded-2xl border-2 border-blue-700 bg-white px-5 max-sm:px-3 text-lg max-sm:text-sm font-bold text-blue-950 shadow-sm transition-colors hover:bg-blue-50"
     >
       <History className="h-6 w-6" />
       Lịch sử nhập hàng
@@ -526,10 +526,10 @@ export function PurchaseDesktopView({
 
       {/* Lỗi form */}
       {formError && (
-        <div className="bg-red-50 border-2 border-red-200 text-red-700 p-4 max-sm:p-3 rounded-xl text-base flex items-center gap-2">
-          <AlertTriangle className="w-5 h-5 shrink-0 text-red-500" />
+        <div className="bg-red-50 border-2 border-red-300 text-red-800 p-4 max-sm:p-3 rounded-xl text-base flex items-center gap-2">
+          <AlertTriangle className="w-5 h-5 shrink-0 text-red-800" />
           <span>{formError}</span>
-          <button onClick={() => setFormError('')} className="ml-auto text-red-400 hover:text-red-600">
+          <button onClick={() => setFormError('')} className="ml-auto text-red-800 hover:text-red-800">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -537,14 +537,14 @@ export function PurchaseDesktopView({
 
       {/* Thông báo nhập thành công */}
       {successInfo && !showPriceModal && (
-        <div className="bg-green-50 border-2 border-green-300 p-5 max-sm:p-3 rounded-2xl shadow-sm">
+        <div className="bg-emerald-100 border-2 border-emerald-400 p-5 max-sm:p-3 rounded-2xl shadow-sm">
           <div className="flex items-center gap-3 max-sm:gap-2 mb-3">
-            <CheckCircle className="w-8 h-8 text-green-600" />
+            <CheckCircle className="w-8 h-8 text-green-900" />
             <div>
-              <div className="text-xl max-sm:text-base font-bold text-green-800">
+              <div className="text-xl max-sm:text-base font-bold text-green-900">
                 Nhập hàng thành công!
               </div>
-              <div className="text-green-700 text-base">
+              <div className="text-green-900 text-base">
                 Phiếu nhập: <strong>{successInfo.code}</strong>
               </div>
             </div>
@@ -555,7 +555,7 @@ export function PurchaseDesktopView({
             </div>
             {successInfo.debt > 0 && (
               <div>
-                Còn nợ nhà cung cấp: <strong className="text-red-600">{formatMoney(successInfo.debt)}</strong>
+                Còn nợ nhà cung cấp: <strong className="text-red-800">{formatMoney(successInfo.debt)}</strong>
               </div>
             )}
           </div>
@@ -575,7 +575,7 @@ export function PurchaseDesktopView({
            ———————————————————————————————————— */}
         <div className="min-w-0 max-w-full space-y-4 max-sm:space-y-3">
           {/* Tìm hàng */}
-          <div className="min-w-0 max-w-full rounded-2xl border border-gray-100 bg-white p-3 shadow-sm sm:p-5">
+          <div className="min-w-0 max-w-full rounded-2xl border border-gray-300 bg-white p-3 shadow-sm sm:p-5">
             <div className="mb-3 flex min-w-0 items-center justify-between gap-2">
               <h2 className="min-w-0 text-base font-bold text-gray-900">Chọn hàng nhập</h2>
               
@@ -588,28 +588,28 @@ export function PurchaseDesktopView({
                   setSearch(e.target.value)
                 }}
                 placeholder="Gõ tên hoặc mã hàng..."
-                className="h-12 min-w-0 border-2 border-gray-200 px-3 py-2 pr-10 text-sm focus:border-blue-500"
+                className="h-12 min-w-0 border-2 border-gray-300 px-3 py-2 pr-10 text-sm focus:border-blue-700"
               />
               {search && (
                 <button
                   onClick={() => {
                     setSearch('')
                   }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-900 hover:text-gray-900 p-1"
                 >
                   <X className="w-5 h-5" />
                 </button>
               )}
             </div>
             <div className="mt-3 min-w-0 max-w-full" aria-label="Lọc theo nhóm hàng">
-              <label htmlFor="purchase-category" className="mb-1 block text-sm font-semibold text-gray-800 sm:text-base">
+              <label htmlFor="purchase-category" className="mb-1 block text-sm font-semibold text-gray-900 sm:text-base">
                 Nhóm hàng
               </label>
               <select
                 id="purchase-category"
                 value={selectedCategory}
                 onChange={(event) => setSelectedCategory(event.target.value)}
-                className="h-12 min-h-[48px] w-full min-w-0 max-w-full rounded-xl border-2 border-gray-300 bg-white px-3 text-sm text-gray-900 focus:border-blue-500 sm:text-base"
+                className="h-12 min-h-[48px] w-full min-w-0 max-w-full rounded-xl border-2 border-gray-300 bg-white px-3 text-sm text-gray-900 focus:border-blue-700 sm:text-base"
               >
                 <option value="all">Tất cả nhóm</option>
                 {categories.map((category) => (
@@ -619,7 +619,7 @@ export function PurchaseDesktopView({
             </div>
 
             {feedback && (
-              <p className="mt-3 rounded-xl bg-green-50 px-3 py-2 text-lg max-sm:text-sm font-semibold text-green-800" role="status">
+              <p className="mt-3 rounded-xl bg-emerald-100 px-3 py-2 text-lg max-sm:text-sm font-semibold text-green-900" role="status">
                 {feedback}
               </p>
             )}
@@ -631,7 +631,7 @@ export function PurchaseDesktopView({
                   {visibleLowStockProducts.map((product) => renderProductCard(product, true))}
                 </div>
                 {lowStockProducts.length > lowStockVisibleCount && (
-                  <div ref={lowStockSentinelRef} className="min-h-10 text-center text-lg max-sm:text-sm text-gray-600">
+                  <div ref={lowStockSentinelRef} className="min-h-10 text-center text-lg max-sm:text-sm text-gray-900">
                     Cuộn để xem thêm hàng gần hết...
                   </div>
                 )}
@@ -641,7 +641,7 @@ export function PurchaseDesktopView({
             <section className="mt-4 max-sm:mt-3 space-y-3" aria-label="Tất cả món hàng">
               <div className="flex items-center justify-between gap-2">
                 <h3 className="whitespace-nowrap text-base font-bold text-gray-900">Tất cả món hàng</h3>
-                <span className="whitespace-nowrap text-xs text-gray-600">{filteredProducts.length} món</span>
+                <span className="whitespace-nowrap text-xs text-gray-900">{filteredProducts.length} món</span>
               </div>
               {visibleProducts.length > 0 ? (
                 <div className="grid min-w-0 max-w-full grid-cols-2 gap-3 max-sm:gap-2 sm:grid-cols-3">
@@ -649,15 +649,15 @@ export function PurchaseDesktopView({
                 </div>
               ) : (
                 <div className="rounded-xl border-2 border-dashed border-gray-300 p-7 text-center">
-                  <PackageIcon className="mx-auto mb-2 h-10 w-10 text-gray-300" />
-                  <p className="text-lg max-sm:text-sm font-semibold text-gray-700">
+                  <PackageIcon className="mx-auto mb-2 h-10 w-10 text-gray-900" />
+                  <p className="text-lg max-sm:text-sm font-semibold text-gray-900">
                     {search.trim() ? 'Không tìm thấy món hàng phù hợp' : 'Chưa có món hàng để hiển thị'}
                   </p>
                   {search.trim() && (
                     <Button
                       variant="outline"
                       size="sm"
-                      className="mt-3 min-h-[48px] text-green-700 border-green-300 hover:bg-green-50"
+                      className="mt-3 min-h-[48px] text-green-900 border-emerald-400 hover:bg-emerald-100"
                       onClick={openQuickAdd}
                     >
                       <Plus className="mr-1 h-4 w-4" />
@@ -667,7 +667,7 @@ export function PurchaseDesktopView({
                 </div>
               )}
               {visibleProducts.length > 0 && (
-                <div ref={allProductsSentinelRef} className="min-h-10 text-center text-lg max-sm:text-sm text-gray-600" aria-live="polite">
+                <div ref={allProductsSentinelRef} className="min-h-10 text-center text-lg max-sm:text-sm text-gray-900" aria-live="polite">
                   {allProductsVisibleCount < filteredProducts.length ? 'Cuộn để tải thêm món...' : ''}
                 </div>
               )}
@@ -676,13 +676,13 @@ export function PurchaseDesktopView({
 
           {/* Danh sách hàng đã chọn */}
           {false && cart.length > 0 && (
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="bg-blue-50 px-5 max-sm:px-3 py-3 max-sm:py-2 border-b border-blue-100">
-                <h3 className="font-bold text-blue-900 text-lg max-sm:text-sm">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-300 overflow-hidden">
+              <div className="bg-blue-50 px-5 max-sm:px-3 py-3 max-sm:py-2 border-b border-blue-700">
+                <h3 className="font-bold text-blue-950 text-lg max-sm:text-sm">
                   Các món cần nhập ({cart.length} món)
                 </h3>
               </div>
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-gray-300">
                 {cart.map((item, index) => {
                   const subtotal = Math.round(item.costPrice * getPurchaseQuantity(item))
                   const costDiff = item.costPrice - item.product.last_cost
@@ -695,10 +695,10 @@ export function PurchaseDesktopView({
                         <div>
                           <div className="font-bold text-gray-900 text-lg max-sm:text-sm">{item.product.name}</div>
                           <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                            <span className="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-xs font-mono font-bold">
+                            <span className="bg-gray-100 text-gray-900 px-2 py-0.5 rounded text-xs font-mono font-bold">
                               {item.product.code}
                             </span>
-                            <span className="text-gray-500 text-sm">ĐVT: {item.product.unit}</span>
+                            <span className="text-gray-900 text-sm">ĐVT: {item.product.unit}</span>
                             <Badge variant={item.product.price_mode === 'auto' ? 'default' : 'outline'}>
                               {item.product.price_mode === 'auto' ? 'Tự đề xuất giá' : 'Giá cố định'}
                             </Badge>
@@ -706,7 +706,7 @@ export function PurchaseDesktopView({
                         </div>
                         <button
                           onClick={() => removeFromCart(index)}
-                          className="text-red-400 hover:text-red-600 p-2 hover:bg-red-50 rounded-lg transition-colors"
+                          className="text-red-800 hover:text-red-800 p-2 hover:bg-red-50 rounded-lg transition-colors"
                           title="Xóa khỏi phiếu nhập"
                         >
                           <Trash2 className="w-5 h-5" />
@@ -717,14 +717,14 @@ export function PurchaseDesktopView({
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-sm:gap-2">
                         {/* Số lượng */}
                         <div>
-                          <label className="block text-sm font-semibold text-gray-700 mb-1">
+                          <label className="block text-sm font-semibold text-gray-900 mb-1">
                             Số {item.isBulk ? 'thùng' : `lượng (${item.product.unit})`}
                           </label>
                           <div className="flex items-center gap-2">
                             <button
                               type="button"
                               onClick={() => decreaseCartQuantity(index)}
-                              className="w-12 h-12 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-700 transition-colors"
+                              className="w-12 h-12 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-900 transition-colors"
                             >
                               <Minus className="w-5 h-5" />
                             </button>
@@ -753,7 +753,7 @@ export function PurchaseDesktopView({
                             <button
                               type="button"
                               onClick={() => increaseCartQuantity(index)}
-                              className="w-12 h-12 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-700 transition-colors"
+                              className="w-12 h-12 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-900 transition-colors"
                             >
                               <Plus className="w-5 h-5" />
                             </button>
@@ -762,7 +762,7 @@ export function PurchaseDesktopView({
 
                         {/* Giá nhập */}
                         <div>
-                          <label className="block text-sm font-semibold text-gray-700 mb-1">
+                          <label className="block text-sm font-semibold text-gray-900 mb-1">
                             Giá nhập mỗi {item.product.unit} (đ)
                           </label>
                           <Input
@@ -780,7 +780,7 @@ export function PurchaseDesktopView({
                           {hasDiff && (
                             <div
                               className={`text-sm mt-1 flex items-center gap-1 font-medium ${
-                                costDiff > 0 ? 'text-red-600' : 'text-green-600'
+                                costDiff > 0 ? 'text-red-800' : 'text-green-900'
                               }`}
                             >
                               {costDiff > 0 ? (
@@ -795,7 +795,7 @@ export function PurchaseDesktopView({
                       </div>
 
                       {/* Dòng 3: Nhập theo thùng (toggle) */}
-                      <div className="bg-gray-50 rounded-xl p-3">
+                      <div className="bg-gray-100 rounded-xl p-3">
                         <label className="flex items-center gap-2 cursor-pointer select-none">
                           <input
                             type="checkbox"
@@ -813,7 +813,7 @@ export function PurchaseDesktopView({
                             }}
                             className="w-5 h-5 rounded accent-blue-600"
                           />
-                          <span className="text-sm font-medium text-gray-700">
+                          <span className="text-sm font-medium text-gray-900">
                             Nhập theo thùng (tự tính giá mỗi {item.product.unit})
                           </span>
                         </label>
@@ -821,7 +821,7 @@ export function PurchaseDesktopView({
                         {item.isBulk && (
                           <div className="grid grid-cols-2 gap-3 max-sm:gap-2 mt-3">
                             <div>
-                              <label className="block text-xs font-semibold text-gray-600 mb-1">
+                              <label className="block text-xs font-semibold text-gray-900 mb-1">
                                 Giá cả thùng (đ)
                               </label>
                               <Input
@@ -840,7 +840,7 @@ export function PurchaseDesktopView({
                               />
                             </div>
                             <div>
-                              <label className="block text-xs font-semibold text-gray-600 mb-1">
+                              <label className="block text-xs font-semibold text-gray-900 mb-1">
                                 Số {item.product.unit} trong thùng
                               </label>
                               <Input
@@ -859,7 +859,7 @@ export function PurchaseDesktopView({
                                 className="text-base font-bold h-11"
                               />
                             </div>
-                            <div className="col-span-2 text-sm text-blue-700 bg-blue-50 px-3 py-2 rounded-lg">
+                            <div className="col-span-2 text-sm text-blue-950 bg-blue-50 px-3 py-2 rounded-lg">
                               → Giá mỗi {item.product.unit}:{' '}
                               <strong>{formatMoney(item.costPrice)}</strong>
                             </div>
@@ -869,7 +869,7 @@ export function PurchaseDesktopView({
 
                       {/* Dòng 4: Hạn dùng (không bắt buộc) */}
                       <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        <label className="block text-sm font-semibold text-gray-900 mb-1">
                           Hạn sử dụng (không bắt buộc)
                         </label>
                         <Input
@@ -883,8 +883,8 @@ export function PurchaseDesktopView({
                       </div>
 
                       {/* Thành tiền */}
-                      <div className="flex justify-end items-center pt-1 border-t border-gray-100 text-base">
-                        <span className="text-gray-500 mr-2">Thành tiền:</span>
+                      <div className="flex justify-end items-center pt-1 border-t border-gray-300 text-base">
+                        <span className="text-gray-900 mr-2">Thành tiền:</span>
                         <span className="text-xl max-sm:text-base font-bold text-gray-900">{formatMoney(subtotal)}</span>
                       </div>
                     </div>
@@ -896,10 +896,10 @@ export function PurchaseDesktopView({
 
           {/* Trạng thái trống */}
           {false && cart.length === 0 && !successInfo && (
-            <div className="bg-white p-12 rounded-2xl shadow-sm border border-gray-100 text-center">
-              <PackagePlus className="w-16 h-16 text-gray-300 mx-auto mb-4 max-sm:mb-3" />
-              <h3 className="text-xl max-sm:text-base font-bold text-gray-700 mb-2">Chưa có món hàng nào</h3>
-              <p className="text-gray-500 text-base max-w-md mx-auto">
+            <div className="bg-white p-12 rounded-2xl shadow-sm border border-gray-300 text-center">
+              <PackagePlus className="w-16 h-16 text-gray-900 mx-auto mb-4 max-sm:mb-3" />
+              <h3 className="text-xl max-sm:text-base font-bold text-gray-900 mb-2">Chưa có món hàng nào</h3>
+              <p className="text-gray-900 text-base max-w-md mx-auto">
                 Dùng ô tìm kiếm phía trên để chọn hàng cần nhập, hoặc bấm &quot;Tạo hàng mới&quot; nếu chưa có trong danh sách.
               </p>
             </div>
@@ -923,7 +923,7 @@ export function PurchaseDesktopView({
         />
       )}
       <section
-        className={`fixed inset-x-0 bottom-0 z-[60] flex max-h-[90dvh] min-w-0 flex-col overflow-y-auto rounded-t-3xl bg-gray-50 px-3 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-3 shadow-2xl transition-[transform,visibility] duration-300 lg:hidden ${
+        className={`fixed inset-x-0 bottom-0 z-[60] flex max-h-[90dvh] min-w-0 flex-col overflow-y-auto rounded-t-3xl bg-gray-100 px-3 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-3 shadow-2xl transition-[transform,visibility] duration-300 lg:hidden ${
           isCartOpen ? 'visible translate-y-0' : 'invisible translate-y-full'
         }`}
         aria-label="Phiếu nhập"
@@ -944,7 +944,7 @@ export function PurchaseDesktopView({
         </div>
         <div className="min-w-0 space-y-4 max-sm:space-y-3">
           {formError && (
-            <p className="rounded-xl border-2 border-red-200 bg-red-50 p-3 text-base text-red-700" role="alert">
+            <p className="rounded-xl border-2 border-red-300 bg-red-50 p-3 text-base text-red-800" role="alert">
               {formError}
             </p>
           )}
@@ -959,14 +959,14 @@ export function PurchaseDesktopView({
         <button
           type="button"
           onClick={() => setIsCartOpen(true)}
-          className="flex w-full items-center justify-between gap-2 rounded-xl bg-blue-700 px-3 py-1.5 text-left text-white shadow-xl"
+          className="flex w-full items-center justify-between gap-2 rounded-xl bg-blue-800 px-3 py-1.5 text-left text-white shadow-xl"
           aria-label={`Xem phiếu nhập: ${cart.length} món, tổng ${formatMoney(totalAmount)}`}
           aria-expanded={isCartOpen}
         >
           <span className="min-w-0 whitespace-nowrap text-[13px] font-medium leading-none">
             Phiếu: {cart.length} món • {formatMoney(totalAmount)}
           </span>
-          <span className="inline-flex items-center justify-center h-7 !min-h-0 px-3 py-0 text-xs font-semibold rounded-lg whitespace-nowrap shrink-0 leading-none bg-white text-blue-800">
+          <span className="inline-flex items-center justify-center h-7 !min-h-0 px-3 py-0 text-xs font-semibold rounded-lg whitespace-nowrap shrink-0 leading-none bg-white text-blue-950">
             Xem phiếu
           </span>
         </button>

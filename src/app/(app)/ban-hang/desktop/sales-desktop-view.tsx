@@ -84,14 +84,14 @@ export function SalesDesktopView({
             className={cn(
               'relative flex min-h-[104px] min-w-0 max-w-full flex-col items-start justify-between rounded-xl border-2 p-2.5 text-left transition duration-150 active:scale-[0.98] focus-visible:outline-blue-600',
               selectedQuantity > 0
-                ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-200'
-                : 'border-gray-200 bg-white hover:border-blue-500 hover:bg-blue-50'
+                ? 'border-blue-700 bg-blue-50 ring-2 ring-blue-600/30'
+                : 'border-gray-300 bg-white hover:border-blue-700 hover:bg-blue-50'
             )}
             aria-label={`Thêm ${product.name}, giá ${formatMoney(product.sell_price)}`}
           >
             {selectedQuantity > 0 && (
               <span
-                className="absolute right-2 top-2 inline-flex min-h-7 min-w-7 items-center justify-center rounded-full bg-blue-700 px-2 text-xs font-bold text-white"
+                className="absolute right-2 top-2 inline-flex min-h-7 min-w-7 items-center justify-center rounded-full bg-blue-800 px-2 text-xs font-bold text-white"
                 aria-label={`Đã chọn ${formatQuantity(selectedQuantity)} ${product.unit}`}
               >
                 {formatQuantity(selectedQuantity)}
@@ -101,8 +101,8 @@ export function SalesDesktopView({
               'line-clamp-2 min-w-0 max-w-full text-sm font-semibold leading-tight text-gray-900',
               selectedQuantity > 0 && 'pr-10'
             )}>{product.name}</span>
-            <span className="min-w-0 max-w-full whitespace-nowrap text-sm font-bold text-blue-700">{formatMoney(product.sell_price)}</span>
-            <span className="w-full min-w-0 truncate whitespace-nowrap text-xs text-gray-600">
+            <span className="min-w-0 max-w-full whitespace-nowrap text-sm font-bold text-blue-950">{formatMoney(product.sell_price)}</span>
+            <span className="w-full min-w-0 truncate whitespace-nowrap text-xs text-gray-900">
               Còn: {formatQuantity(Number(product.stock))} {product.unit}
             </span>
           </button>
@@ -121,7 +121,7 @@ export function SalesDesktopView({
         </header>
 
         {lastReceipt && (
-          <div className="flex flex-col gap-3 max-sm:gap-2 rounded-xl border-2 border-green-300 bg-green-50 p-4 max-sm:p-3 sm:flex-row sm:items-center sm:justify-between" role="status">
+          <div className="flex flex-col gap-3 max-sm:gap-2 rounded-xl border-2 border-emerald-400 bg-emerald-100 p-4 max-sm:p-3 sm:flex-row sm:items-center sm:justify-between" role="status">
             <div className="flex items-start gap-3 max-sm:gap-2 text-green-900">
               <CheckCircle2 className="mt-1 h-6 w-6 shrink-0" />
               <div>
@@ -137,8 +137,8 @@ export function SalesDesktopView({
         )}
 
         <div className="grid min-w-0 max-w-full gap-5 max-sm:gap-2 xl:grid-cols-[minmax(0,1.15fr)_minmax(420px,0.85fr)]">
-          <section className="min-w-0 max-w-full space-y-3 rounded-2xl border border-gray-200 bg-white p-3 shadow-sm sm:space-y-4 sm:p-5" aria-label="Chọn hàng hóa">
-            <label htmlFor="sale-search" className="block text-sm font-semibold text-gray-800 sm:text-base">
+          <section className="min-w-0 max-w-full space-y-3 rounded-2xl border border-gray-300 bg-white p-3 shadow-sm sm:space-y-4 sm:p-5" aria-label="Chọn hàng hóa">
+            <label htmlFor="sale-search" className="block text-sm font-semibold text-gray-900 sm:text-base">
               Tìm món hàng
             </label>
             <div className="relative">
@@ -163,7 +163,7 @@ export function SalesDesktopView({
                     setSearch('')
                     setSearchError('')
                   }}
-                  className="absolute right-1 top-1/2 flex min-h-[48px] min-w-[48px] -translate-y-1/2 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100"
+                  className="absolute right-1 top-1/2 flex min-h-[48px] min-w-[48px] -translate-y-1/2 items-center justify-center rounded-lg text-gray-900 hover:bg-gray-100"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -171,14 +171,14 @@ export function SalesDesktopView({
             </div>
 
             <div className="min-w-0 max-w-full space-y-1">
-              <label htmlFor="sale-category" className="block text-sm font-semibold text-gray-800 sm:text-base">
+              <label htmlFor="sale-category" className="block text-sm font-semibold text-gray-900 sm:text-base">
                 Nhóm hàng
               </label>
               <select
                 id="sale-category"
                 value={selectedCategory}
                 onChange={(event) => setSelectedCategory(event.target.value)}
-                className="h-12 min-h-[48px] w-full min-w-0 max-w-full rounded-xl border-2 border-gray-300 bg-white px-3 text-sm text-gray-900 outline-none focus:border-blue-500 sm:text-base"
+                className="h-12 min-h-[48px] w-full min-w-0 max-w-full rounded-xl border-2 border-gray-300 bg-white px-3 text-sm text-gray-900 outline-none focus:border-blue-700 sm:text-base"
               >
                 <option value="all">Tất cả nhóm</option>
                 {categories.map((category) => (
@@ -202,20 +202,20 @@ export function SalesDesktopView({
               <section className="min-w-0 max-w-full space-y-3" aria-label="Tất cả món hàng">
                 <div className="flex items-center justify-between gap-2">
                   <h2 className="text-base font-bold text-gray-900 sm:text-lg">Tất cả món hàng</h2>
-                  <span className="whitespace-nowrap text-xs text-gray-600 sm:text-sm">{allProducts.length} món</span>
+                  <span className="whitespace-nowrap text-xs text-gray-900 sm:text-sm">{allProducts.length} món</span>
                 </div>
                 {visibleProducts.length > 0 ? renderProductGrid(visibleProducts) : (
                   <div className="rounded-xl border-2 border-dashed border-gray-300 p-7 text-center">
-                    <p className="text-lg max-sm:text-sm font-semibold text-gray-700">
+                    <p className="text-lg max-sm:text-sm font-semibold text-gray-900">
                       {initialProducts.length === 0 ? 'Chưa có món hàng để hiển thị' : 'Không tìm thấy món hàng phù hợp'}
                     </p>
-                    <p className="mt-1 text-lg max-sm:text-sm text-gray-600">
+                    <p className="mt-1 text-lg max-sm:text-sm text-gray-900">
                       {search.trim() ? 'Thử từ khóa khác hoặc chọn nhóm hàng khác.' : 'Hãy thêm hàng hóa trong mục Hàng hóa trước.'}
                     </p>
                   </div>
                 )}
                 {visibleProducts.length > 0 && allProducts.length > visibleCount && (
-                  <div ref={sentinelRef} className="min-h-10 text-center text-lg max-sm:text-sm text-gray-600" aria-live="polite">
+                  <div ref={sentinelRef} className="min-h-10 text-center text-lg max-sm:text-sm text-gray-900" aria-live="polite">
                     Cuộn để xem thêm món hàng...
                   </div>
                 )}
@@ -233,7 +233,7 @@ export function SalesDesktopView({
           )}
           <section
             className={cn(
-              'space-y-4 max-sm:space-y-3 rounded-2xl border border-gray-200 bg-white p-4 max-sm:p-3 shadow-sm sm:p-5',
+              'space-y-4 max-sm:space-y-3 rounded-2xl border border-gray-300 bg-white p-4 max-sm:p-3 shadow-sm sm:p-5',
               isCartOpen
                 ? 'fixed inset-x-0 top-[env(safe-area-inset-top)] z-[60] flex max-h-[calc(100dvh-env(safe-area-inset-top))] flex-col overflow-y-auto rounded-t-3xl pb-[calc(1rem+env(safe-area-inset-bottom))] md:static md:block md:max-h-none md:overflow-visible md:rounded-2xl'
                 : 'hidden md:block'
@@ -245,7 +245,7 @@ export function SalesDesktopView({
             <div className="flex items-center justify-between gap-2">
               <div>
                 <h2 className="text-lg font-bold text-gray-900">Giỏ hàng</h2>
-                <span className="text-sm text-gray-600">{cart.lines.length} món</span>
+                <span className="text-sm text-gray-900">{cart.lines.length} món</span>
               </div>
               <button
                 type="button"
@@ -259,8 +259,8 @@ export function SalesDesktopView({
 
             {cart.lines.length === 0 ? (
               <div className="rounded-xl border-2 border-dashed border-gray-300 p-6 max-sm:p-3 text-center">
-                <p className="text-lg max-sm:text-sm font-semibold text-gray-700">Giỏ hàng đang trống</p>
-                <p className="mt-1 text-lg max-sm:text-sm text-gray-600">Chọn món hàng ở bên trái để thêm vào giỏ.</p>
+                <p className="text-lg max-sm:text-sm font-semibold text-gray-900">Giỏ hàng đang trống</p>
+                <p className="mt-1 text-lg max-sm:text-sm text-gray-900">Chọn món hàng ở bên trái để thêm vào giỏ.</p>
               </div>
             ) : (
               <div className="max-h-[42vh] space-y-3 overflow-y-auto pr-1">
@@ -269,17 +269,17 @@ export function SalesDesktopView({
                   const lineSubtotal = Math.round(quantity * line.unitPrice)
                   const isOverStock = quantity > Number(line.product.stock)
                   return (
-                    <article key={line.product.id} className="rounded-xl border border-gray-200 p-3">
+                    <article key={line.product.id} className="rounded-xl border border-gray-300 p-3">
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0">
                           <h3 className="break-words text-lg max-sm:text-sm font-semibold text-gray-900">{line.product.name}</h3>
-                          <p className="text-lg max-sm:text-sm text-gray-600">{line.product.code} · Số lượng còn: {formatQuantity(Number(line.product.stock))} {line.product.unit}</p>
+                          <p className="text-lg max-sm:text-sm text-gray-900">{line.product.code} · Số lượng còn: {formatQuantity(Number(line.product.stock))} {line.product.unit}</p>
                         </div>
                         <button
                           type="button"
                           onClick={() => removeLine(line.product.id)}
                           aria-label={`Bỏ ${line.product.name} khỏi giỏ`}
-                          className="flex min-h-[48px] min-w-[48px] items-center justify-center rounded-lg text-red-700 hover:bg-red-50"
+                          className="flex min-h-[48px] min-w-[48px] items-center justify-center rounded-lg text-red-800 hover:bg-red-50"
                         >
                           <Trash2 className="h-5 w-5" />
                         </button>
@@ -287,7 +287,7 @@ export function SalesDesktopView({
 
                       {isOverStock && (
                         <p className={`mt-2 flex items-start gap-2 rounded-lg p-2 text-lg max-sm:text-sm ${
-                          allowSellOut ? 'bg-amber-50 text-amber-900' : 'bg-red-50 text-red-800'
+                          allowSellOut ? 'bg-amber-100 text-amber-950' : 'bg-red-50 text-red-800'
                         }`} role="status">
                           <AlertTriangle className="mt-1 h-5 w-5 shrink-0" />
                           {allowSellOut
@@ -297,7 +297,7 @@ export function SalesDesktopView({
                       )}
 
                       <div className="mt-3 grid grid-cols-2 gap-3 max-sm:gap-2">
-                        <label className="text-lg max-sm:text-sm font-medium text-gray-700">
+                        <label className="text-lg max-sm:text-sm font-medium text-gray-900">
                           Số lượng ({line.product.unit})
                           <div className="mt-1 flex items-center gap-2">
                             <button
@@ -329,7 +329,7 @@ export function SalesDesktopView({
                             </button>
                           </div>
                         </label>
-                        <label className="text-lg max-sm:text-sm font-medium text-gray-700">
+                        <label className="text-lg max-sm:text-sm font-medium text-gray-900">
                           Giá bán riêng (đ)
                           <Input
                             type="text"
@@ -342,7 +342,7 @@ export function SalesDesktopView({
                         </label>
                       </div>
                       <div className="mt-2 flex justify-between text-lg max-sm:text-sm">
-                        <span className="text-gray-600">Thành tiền</span>
+                        <span className="text-gray-900">Thành tiền</span>
                         <strong>{formatMoney(lineSubtotal)}</strong>
                       </div>
                     </article>
@@ -351,15 +351,15 @@ export function SalesDesktopView({
               </div>
             )}
 
-            <div className="space-y-3 border-t border-gray-200 pt-4 max-sm:pt-3">
+            <div className="space-y-3 border-t border-gray-300 pt-4 max-sm:pt-3">
               <div className="rounded-xl bg-blue-50 p-4 max-sm:p-3 text-right">
-                <p className="text-lg max-sm:text-sm font-semibold text-blue-900">Tổng tiền (Khách cần trả)</p>
-                <p className="whitespace-nowrap text-base font-bold leading-tight text-blue-900 sm:text-2xl">{formatMoney(total)}</p>
+                <p className="text-lg max-sm:text-sm font-semibold text-blue-950">Tổng tiền (Khách cần trả)</p>
+                <p className="whitespace-nowrap text-base font-bold leading-tight text-blue-950 sm:text-2xl">{formatMoney(total)}</p>
               </div>
             </div>
 
             <fieldset className="space-y-2">
-              <legend className="text-lg max-sm:text-sm font-semibold text-gray-800">Hình thức thanh toán</legend>
+              <legend className="text-lg max-sm:text-sm font-semibold text-gray-900">Hình thức thanh toán</legend>
               <div className="grid grid-cols-3 gap-2">
                 {(['cash', 'transfer', 'debt'] as const).map((method) => (
                   <button
@@ -372,8 +372,8 @@ export function SalesDesktopView({
                     aria-pressed={cart.paymentMethod === method}
                     className={`min-h-[52px] rounded-xl border-2 px-2 text-lg max-sm:text-sm font-semibold ${
                       cart.paymentMethod === method
-                        ? 'border-blue-600 bg-blue-600 text-white'
-                        : 'border-gray-300 bg-white text-gray-700'
+                        ? 'border-blue-700 bg-blue-800 text-white'
+                        : 'border-gray-300 bg-white text-gray-900'
                     }`}
                   >
                     {paymentLabels[method]}
@@ -383,8 +383,8 @@ export function SalesDesktopView({
             </fieldset>
 
             {cart.paymentMethod === 'debt' && (
-              <div className="space-y-2 rounded-xl border-2 border-amber-200 bg-amber-50 p-3">
-                <label htmlFor="sale-customer" className="block text-lg max-sm:text-sm font-semibold text-gray-800">Khách ghi nợ</label>
+              <div className="space-y-2 rounded-xl border-2 border-amber-400 bg-amber-100 p-3">
+                <label htmlFor="sale-customer" className="block text-lg max-sm:text-sm font-semibold text-gray-900">Khách ghi nợ</label>
                 <div className="flex gap-2">
                   <select
                     id="sale-customer"
@@ -412,13 +412,13 @@ export function SalesDesktopView({
                   </Button>
                 </div>
                 {selectedCustomer && (
-                  <p className="text-lg max-sm:text-sm text-amber-900">Khách hiện đang nợ: {formatMoney(selectedCustomer.debt)}</p>
+                  <p className="text-lg max-sm:text-sm text-amber-950">Khách hiện đang nợ: {formatMoney(selectedCustomer.debt)}</p>
                 )}
               </div>
             )}
 
             {exceedsStock && allowSellOut && (
-              <div className="flex gap-2 rounded-xl border-2 border-amber-300 bg-amber-50 p-3 text-lg max-sm:text-sm text-amber-950" role="status">
+              <div className="flex gap-2 rounded-xl border-2 border-amber-400 bg-amber-100 p-3 text-lg max-sm:text-sm text-amber-950" role="status">
                 <AlertTriangle className="mt-1 h-5 w-5 shrink-0" />
                 Số lượng bán vượt số lượng còn trong kho. Cửa hàng đã cho phép tiếp tục bán theo cài đặt.
               </div>
@@ -452,7 +452,7 @@ export function SalesDesktopView({
                 overIntegerAmountLimit ||
                 (exceedsStock && !allowSellOut)
               }
-              className="sticky bottom-0 z-10 min-h-[60px] w-full shrink-0 bg-blue-700 text-xl max-sm:text-base font-bold shadow-lg"
+              className="sticky bottom-0 z-10 min-h-[60px] w-full shrink-0 bg-blue-800 text-xl max-sm:text-base font-bold shadow-lg"
             >
               {isSubmitting ? 'Đang lưu hóa đơn...' : `Hoàn tất bán · ${formatMoney(total)}`}
             </Button>
@@ -463,13 +463,13 @@ export function SalesDesktopView({
           <button
             type="button"
             onClick={() => setIsCartOpen(true)}
-            className="flex w-full items-center justify-between gap-2 rounded-xl bg-blue-700 px-3 py-1.5 text-left text-white shadow-xl"
+            className="flex w-full items-center justify-between gap-2 rounded-xl bg-blue-800 px-3 py-1.5 text-left text-white shadow-xl"
             aria-label={`Xem giỏ hàng: ${cart.lines.length} món, tổng ${formatMoney(total)}`}
           >
             <span className="min-w-0 whitespace-nowrap text-[13px] font-medium leading-none">
               Giỏ: {cart.lines.length} món • {formatMoney(total)}
             </span>
-            <span className="inline-flex items-center justify-center h-7 !min-h-0 px-3 py-0 text-xs font-semibold rounded-lg whitespace-nowrap shrink-0 leading-none bg-white text-blue-800">
+            <span className="inline-flex items-center justify-center h-7 !min-h-0 px-3 py-0 text-xs font-semibold rounded-lg whitespace-nowrap shrink-0 leading-none bg-white text-blue-950">
               Xem giỏ
             </span>
           </button>

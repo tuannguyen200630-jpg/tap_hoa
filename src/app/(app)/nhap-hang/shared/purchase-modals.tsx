@@ -15,8 +15,8 @@ export function PurchaseModals({ model }: { model: ReturnType<typeof usePurchase
          ———————————————————————————————————— */}
       {showPriceModal && priceChanges.length > 0 && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 max-sm:p-3 bg-black/60 backdrop-blur-xs overflow-y-auto">
-          <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden my-8 border border-gray-200">
-            <div className="bg-amber-500 text-white p-5 max-sm:p-3">
+          <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden my-8 border border-gray-300">
+            <div className="bg-amber-900 text-white p-5 max-sm:p-3">
               <h2 className="text-2xl max-sm:text-lg font-bold flex items-center gap-3 max-sm:gap-2">
                 <AlertTriangle className="w-7 h-7" />
                 Giá nhập thay đổi — Xác nhận giá bán mới
@@ -39,24 +39,24 @@ export function PurchaseModals({ model }: { model: ReturnType<typeof usePurchase
                 return (
                   <div
                     key={pc.product_id}
-                    className="border-2 border-gray-200 rounded-2xl p-5 max-sm:p-3 space-y-4 max-sm:space-y-3"
+                    className="border-2 border-gray-300 rounded-2xl p-5 max-sm:p-3 space-y-4 max-sm:space-y-3"
                   >
                     <div className="flex items-start gap-3 max-sm:gap-2">
                       {isIncrease ? (
-                        <ArrowUpCircle className="w-8 h-8 text-red-500 shrink-0 mt-0.5" />
+                        <ArrowUpCircle className="w-8 h-8 text-red-800 shrink-0 mt-0.5" />
                       ) : (
-                        <ArrowDownCircle className="w-8 h-8 text-green-500 shrink-0 mt-0.5" />
+                        <ArrowDownCircle className="w-8 h-8 text-green-900 shrink-0 mt-0.5" />
                       )}
                       <div className="flex-1">
                         <h3 className="text-xl max-sm:text-base font-bold text-gray-900">{pc.product_name}</h3>
                         <div
                           className={`text-lg max-sm:text-sm font-semibold mt-1 ${
-                            isIncrease ? 'text-red-600' : 'text-green-600'
+                            isIncrease ? 'text-red-800' : 'text-green-900'
                           }`}
                         >
                           Giá nhập {isIncrease ? 'TĂNG' : 'GIẢM'}{' '}
                           {formatMoney(Math.abs(costDiff))}
-                          <span className="text-gray-500 font-normal text-base ml-2">
+                          <span className="text-gray-900 font-normal text-base ml-2">
                             ({formatMoney(pc.old_cost)} → {formatMoney(pc.new_cost)})
                           </span>
                         </div>
@@ -64,11 +64,11 @@ export function PurchaseModals({ model }: { model: ReturnType<typeof usePurchase
                     </div>
 
                     {/* Giá đề xuất */}
-                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 max-sm:p-3">
-                      <div className="text-sm text-blue-700 font-medium">Giá bán đề xuất mới:</div>
-                      <div className="whitespace-nowrap text-base font-bold text-blue-800 sm:text-lg">
+                    <div className="bg-blue-50 border border-blue-700 rounded-xl p-4 max-sm:p-3">
+                      <div className="text-sm text-blue-950 font-medium">Giá bán đề xuất mới:</div>
+                      <div className="whitespace-nowrap text-base font-bold text-blue-950 sm:text-lg">
                         {formatMoney(pc.suggested_price)}
-                        <span className="text-base font-normal text-gray-500 ml-2">
+                        <span className="text-base font-normal text-gray-900 ml-2">
                           (hiện tại: {formatMoney(pc.old_price)})
                         </span>
                       </div>
@@ -76,7 +76,7 @@ export function PurchaseModals({ model }: { model: ReturnType<typeof usePurchase
 
                     {/* Ô sửa giá */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1">
+                      <label className="block text-sm font-semibold text-gray-900 mb-1">
                         Giá bán mới (đ) — có thể sửa:
                       </label>
                       <Input
@@ -95,19 +95,19 @@ export function PurchaseModals({ model }: { model: ReturnType<typeof usePurchase
                             }))
                           }
                         }
-                        className="text-xl max-sm:text-base font-bold h-14 text-blue-700"
+                        className="text-xl max-sm:text-base font-bold h-14 text-blue-950"
                       />
                     </div>
 
                     {/* Cảnh báo bán lỗ */}
                     {needsLossConfirmation && (
                       <div className="bg-red-100 border-2 border-red-400 rounded-xl p-4 max-sm:p-3 flex items-start gap-3 max-sm:gap-2">
-                        <ShieldAlert className="w-7 h-7 text-red-600 shrink-0" />
+                        <ShieldAlert className="w-7 h-7 text-red-800 shrink-0" />
                         <div>
                           <div className="text-red-800 font-bold text-xl max-sm:text-base">
                             ⚠️ CẢNH BÁO: Giá bán thấp hơn hoặc bằng giá nhập!
                           </div>
-                          <div className="text-red-700 text-base mt-1">
+                          <div className="text-red-800 text-base mt-1">
                           {isBelowCost && <>Giá bán đang chọn {formatMoney(confirmedPrice)} không cao hơn giá nhập {formatMoney(pc.new_cost)}.</>}
                           {isBelowCost && oldPriceIsBelowCost && ' '}
                           {oldPriceIsBelowCost && <>Giữ giá cũ {formatMoney(pc.old_price)} cũng không cao hơn giá nhập mới.</>}
@@ -136,7 +136,7 @@ export function PurchaseModals({ model }: { model: ReturnType<typeof usePurchase
                       <Button
                         onClick={() => handleConfirmPrice(pc, confirmedPrice)}
                         disabled={isPending || (needsLossConfirmation && !lossConfirmed)}
-                        className="flex-1 h-14 text-lg max-sm:text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-xl"
+                        className="flex-1 h-14 text-lg max-sm:text-sm font-bold bg-blue-800 hover:bg-blue-900 text-white rounded-xl"
                       >
                         {isPending ? 'Đang lưu...' : 'Đồng ý đổi giá'}
                       </Button>
@@ -163,7 +163,7 @@ export function PurchaseModals({ model }: { model: ReturnType<typeof usePurchase
       {showQuickAdd && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-0 sm:items-center sm:p-4">
           <div className="flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl sm:max-h-[90dvh] sm:max-w-lg sm:rounded-2xl">
-            <header className="flex shrink-0 items-center justify-between bg-green-600 p-4 max-sm:p-3 text-white">
+            <header className="flex shrink-0 items-center justify-between bg-green-800 p-4 max-sm:p-3 text-white">
               <div>
                 <h2 className="text-xl max-sm:text-base font-bold">Tạo nhanh hàng hóa</h2>
                 <p className="text-green-100 text-sm mt-0.5">Tạo xong sẽ tự thêm vào phiếu nhập</p>
@@ -171,7 +171,7 @@ export function PurchaseModals({ model }: { model: ReturnType<typeof usePurchase
               <button
                 type="button"
                 onClick={() => setShowQuickAdd(false)}
-                className="flex min-h-12 min-w-12 items-center justify-center rounded-lg text-white/80 hover:bg-white/10 hover:text-white"
+                className="flex min-h-12 min-w-12 items-center justify-center rounded-lg text-white hover:bg-white/10 hover:text-white"
                 aria-label="Đóng cửa sổ tạo nhanh hàng hóa"
               >
                 <X className="h-6 w-6" />
@@ -181,13 +181,13 @@ export function PurchaseModals({ model }: { model: ReturnType<typeof usePurchase
             <form onSubmit={handleQuickAddSubmit} className="flex min-h-0 flex-1 flex-col">
               <div className="min-h-0 flex-1 space-y-4 max-sm:space-y-3 overflow-y-auto overscroll-contain scroll-smooth p-4 max-sm:p-3">
               {qaError && (
-                <div className="bg-red-50 border border-red-200 text-red-700 p-3 rounded-xl text-sm">
+                <div className="bg-red-50 border border-red-300 text-red-800 p-3 rounded-xl text-sm">
                   {qaError}
                 </div>
               )}
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                <label className="block text-sm font-semibold text-gray-900 mb-1">
                   Tên món hàng *
                 </label>
                 <Input
@@ -200,13 +200,13 @@ export function PurchaseModals({ model }: { model: ReturnType<typeof usePurchase
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                <label className="block text-sm font-semibold text-gray-900 mb-1">
                   Nhóm hàng *
                 </label>
                 <select
                   value={qaCategory}
                   onChange={(e) => setQaCategory(e.target.value)}
-                  className="w-full h-12 px-3 border-2 border-gray-300 rounded-xl text-base bg-white focus:border-blue-500"
+                  className="w-full h-12 px-3 border-2 border-gray-300 rounded-xl text-base bg-white focus:border-blue-700"
                   required
                 >
                   <option value="">-- Chọn nhóm --</option>
@@ -219,7 +219,7 @@ export function PurchaseModals({ model }: { model: ReturnType<typeof usePurchase
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                <label className="block text-sm font-semibold text-gray-900 mb-1">
                   Đơn vị tính
                 </label>
                 <Input
@@ -231,7 +231,7 @@ export function PurchaseModals({ model }: { model: ReturnType<typeof usePurchase
 
               <div className="grid grid-cols-2 gap-3 max-sm:gap-2">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
                     Giá nhập (đ)
                   </label>
                   <Input
@@ -243,7 +243,7 @@ export function PurchaseModals({ model }: { model: ReturnType<typeof usePurchase
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  <label className="block text-sm font-semibold text-gray-900 mb-1">
                     Giá bán (đ)
                   </label>
                   <Input
@@ -251,7 +251,7 @@ export function PurchaseModals({ model }: { model: ReturnType<typeof usePurchase
                     inputMode="numeric"
                     value={formatMoneyInput(qaSell)}
                     onChange={(e) => setQaSell(parseMoney(e.target.value))}
-                    className="font-bold text-blue-600"
+                    className="font-bold text-blue-950"
                   />
                 </div>
               </div>
@@ -260,8 +260,8 @@ export function PurchaseModals({ model }: { model: ReturnType<typeof usePurchase
                 <div
                   className={`p-3 rounded-xl text-center font-medium ${
                     qaSell > qaCost
-                      ? 'bg-green-50 border border-green-200 text-green-800'
-                      : 'bg-red-50 border border-red-200 text-red-800'
+                      ? 'bg-emerald-100 border border-emerald-400 text-green-900'
+                      : 'bg-red-50 border border-red-300 text-red-800'
                   }`}
                 >
                   Lãi mỗi {qaUnit}: {formatMoney(qaSell - qaCost)}
@@ -269,7 +269,7 @@ export function PurchaseModals({ model }: { model: ReturnType<typeof usePurchase
               )}
 
               </div>
-              <footer className="flex shrink-0 gap-2 border-t border-gray-100 bg-white p-3">
+              <footer className="flex shrink-0 gap-2 border-t border-gray-300 bg-white p-3">
                 <Button
                   type="button"
                   variant="outline"
@@ -281,7 +281,7 @@ export function PurchaseModals({ model }: { model: ReturnType<typeof usePurchase
                 <Button
                   type="submit"
                   disabled={isPending}
-                  className="min-h-12 flex-1 bg-green-600 px-4 max-sm:px-3 font-bold text-white hover:bg-green-700"
+                  className="min-h-12 flex-1 bg-green-800 px-4 max-sm:px-3 font-bold text-white hover:bg-green-900"
                 >
                   {isPending ? 'Đang tạo...' : 'Tạo và thêm vào phiếu'}
                 </Button>

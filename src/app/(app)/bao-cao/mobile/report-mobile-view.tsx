@@ -23,11 +23,11 @@ export function ReportMobileView({ model }: { model: ReportDashboardModel }) {
         <h1 className="min-w-0 text-lg font-bold text-gray-950 sm:text-3xl">Báo cáo</h1>
         <a
           href={exportUrl}
-          className="col-start-2 row-start-1 inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg bg-green-700 px-3 py-2 text-xs font-semibold text-white hover:bg-green-800 sm:px-5 sm:py-3 sm:text-base"
+          className="col-start-2 row-start-1 inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg bg-green-800 px-3 py-2 text-xs font-semibold text-white hover:bg-green-800 sm:px-5 sm:py-3 sm:text-base"
         >
           Tải báo cáo
         </a>
-        <p className="col-span-2 row-start-2 text-xs text-gray-600 sm:text-base">
+        <p className="col-span-2 row-start-2 text-xs text-gray-900 sm:text-base">
           Số liệu từ {formatReportDay(report.range.from)} đến {formatReportDay(report.range.to)}.
         </p>
       </header>
@@ -49,7 +49,7 @@ export function ReportMobileView({ model }: { model: ReportDashboardModel }) {
                 onClick={() => void loadReport(value)}
                 className={`whitespace-nowrap rounded-lg border px-2.5 py-2 text-xs font-medium sm:px-4 sm:py-3 sm:text-sm ${
                   period === value
-                    ? 'border-blue-700 bg-blue-50 text-blue-900'
+                    ? 'border-blue-700 bg-blue-50 text-blue-950'
                     : 'border-gray-400 bg-white text-gray-900'
                 }`}
               >
@@ -103,13 +103,13 @@ export function ReportMobileView({ model }: { model: ReportDashboardModel }) {
               type="button"
               disabled={isLoading || !customFrom || !customTo}
               onClick={() => void loadReport('custom', customFrom, customTo)}
-              className="min-h-11 rounded-lg bg-blue-700 px-3 py-2 text-xs font-semibold text-white disabled:opacity-60 sm:min-h-12 sm:px-5 sm:py-3 sm:text-base"
+              className="min-h-11 rounded-lg bg-blue-800 px-3 py-2 text-xs font-semibold text-white disabled:opacity-100 disabled:bg-gray-200 disabled:text-gray-900 disabled:border-gray-400 sm:min-h-12 sm:px-5 sm:py-3 sm:text-base"
             >
               Xem báo cáo
             </button>
           </div>
         )}
-        {isLoading && <p role="status" className="text-gray-700">Đang cập nhật số liệu…</p>}
+        {isLoading && <p role="status" className="text-gray-900">Đang cập nhật số liệu…</p>}
         {error && <p role="alert" className="text-red-800">{error}</p>}
       </section>
 
@@ -119,18 +119,18 @@ export function ReportMobileView({ model }: { model: ReportDashboardModel }) {
         <MetricCard title="Số hóa đơn" value={formatQuantity(report.summary.invoice_count)} />
       </section>
 
-      <section className="rounded-xl border border-blue-200 bg-blue-50 p-3 sm:p-5">
-        <h2 className="text-xs font-medium text-gray-600">Tổng giá trị hàng còn trong kho</h2>
+      <section className="rounded-xl border border-blue-700 bg-blue-50 p-3 sm:p-5">
+        <h2 className="text-xs font-medium text-gray-900">Tổng giá trị hàng còn trong kho</h2>
         <p className="mt-1 whitespace-nowrap text-base font-bold text-blue-950 sm:text-lg">{formatMoney(report.stock_value)}</p>
-        <p className="mt-1 text-xs text-gray-600">Ước tính theo số lượng hiện có và giá vốn bình quân.</p>
+        <p className="mt-1 text-xs text-gray-900">Ước tính theo số lượng hiện có và giá vốn bình quân.</p>
       </section>
 
       <div className="grid items-start gap-5 max-sm:gap-2 lg:grid-cols-2">
         <ReportList title="Hàng bán chạy" emptyText="Chưa có hàng nào được bán trong khoảng này." isExpanded={expandedLists["Hàng bán chạy"] ?? false} onToggle={() => toggleListExpanded("Hàng bán chạy")}>
           {report.top_products.map((product) => (
-            <li key={`${product.code}-${product.name}`} className="rounded-lg border border-gray-200 p-4 max-sm:p-3">
-              <p className="font-bold">{product.name} <span className="hidden font-normal text-gray-700 md:inline">({product.code})</span></p>
-              <p className="mt-1 text-gray-700">
+            <li key={`${product.code}-${product.name}`} className="rounded-lg border border-gray-300 p-4 max-sm:p-3">
+              <p className="font-bold">{product.name} <span className="hidden font-normal text-gray-900 md:inline">({product.code})</span></p>
+              <p className="mt-1 text-gray-900">
                 Đã bán {formatQuantity(product.quantity)} {product.unit} · Doanh thu {formatMoney(product.revenue)}
               </p>
             </li>
@@ -139,9 +139,9 @@ export function ReportMobileView({ model }: { model: ReportDashboardModel }) {
 
         <ReportList title="Hàng ít bán" emptyText="Chưa có hàng hóa đang bán để thống kê." isExpanded={expandedLists["Hàng ít bán"] ?? false} onToggle={() => toggleListExpanded("Hàng ít bán")}>
           {report.slow_products.map((product) => (
-            <li key={product.code} className="rounded-lg border border-gray-200 p-4 max-sm:p-3">
-              <p className="font-bold">{product.name} <span className="hidden font-normal text-gray-700 md:inline">({product.code})</span></p>
-              <p className="mt-1 text-gray-700">
+            <li key={product.code} className="rounded-lg border border-gray-300 p-4 max-sm:p-3">
+              <p className="font-bold">{product.name} <span className="hidden font-normal text-gray-900 md:inline">({product.code})</span></p>
+              <p className="mt-1 text-gray-900">
                 {product.quantity > 0
                   ? `Đã bán ${formatQuantity(product.quantity)} ${product.unit}`
                   : 'Chưa bán trong khoảng thời gian này'}
@@ -152,9 +152,9 @@ export function ReportMobileView({ model }: { model: ReportDashboardModel }) {
 
         <ReportList title="Hàng sắp hết" emptyText="Không có hàng nào dưới ngưỡng cảnh báo." isExpanded={expandedLists["Hàng sắp hết"] ?? false} onToggle={() => toggleListExpanded("Hàng sắp hết")}>
           {report.low_stock.map((product) => (
-            <li key={product.id} className="rounded-lg border border-gray-200 p-4 max-sm:p-3">
-              <p className="font-bold">{product.name} <span className="hidden font-normal text-gray-700 md:inline">({product.code})</span></p>
-              <p className="mt-1 text-gray-700">
+            <li key={product.id} className="rounded-lg border border-gray-300 p-4 max-sm:p-3">
+              <p className="font-bold">{product.name} <span className="hidden font-normal text-gray-900 md:inline">({product.code})</span></p>
+              <p className="mt-1 text-gray-900">
                 Còn trong kho: {formatQuantity(product.stock)} {product.unit}
                 {' · '}Ngưỡng báo: {formatQuantity(product.warning_threshold)} {product.unit}
               </p>
@@ -164,9 +164,9 @@ export function ReportMobileView({ model }: { model: ReportDashboardModel }) {
 
         <ReportList title="Hàng sắp hết hạn (30 ngày)" emptyText="Không có hàng sắp hết hạn trong 30 ngày tới." isExpanded={expandedLists["Hàng sắp hết hạn (30 ngày)"] ?? false} onToggle={() => toggleListExpanded("Hàng sắp hết hạn (30 ngày)")}>
           {report.near_expiry.map((product) => (
-            <li key={product.id} className="rounded-lg border border-gray-200 p-4 max-sm:p-3">
-              <p className="font-bold">{product.name} <span className="hidden font-normal text-gray-700 md:inline">({product.code})</span></p>
-              <p className="mt-1 text-gray-700">
+            <li key={product.id} className="rounded-lg border border-gray-300 p-4 max-sm:p-3">
+              <p className="font-bold">{product.name} <span className="hidden font-normal text-gray-900 md:inline">({product.code})</span></p>
+              <p className="mt-1 text-gray-900">
                 Còn trong kho: {formatQuantity(product.stock)} {product.unit}
                 {' · '}Hạn dùng: {formatReportDay(product.expiry_date)}
               </p>
@@ -181,7 +181,7 @@ export function ReportMobileView({ model }: { model: ReportDashboardModel }) {
 function MetricCard({ title, value }: { title: string; value: string }) {
   return (
     <article className="rounded-xl border border-gray-300 bg-white p-3">
-      <h2 className="text-xs text-gray-600">{title}</h2>
+      <h2 className="text-xs text-gray-900">{title}</h2>
       <p className="mt-1 whitespace-nowrap text-base font-bold text-gray-950 sm:text-lg">{value}</p>
     </article>
   )
@@ -222,7 +222,7 @@ function ReportList({
             )}
           </>
         )
-        : <p className="text-xs text-gray-700">{emptyText}</p>}
+        : <p className="text-xs text-gray-900">{emptyText}</p>}
     </section>
   )
 }

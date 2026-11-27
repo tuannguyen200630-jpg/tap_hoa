@@ -56,7 +56,7 @@ async function AppShell({
 
   return (
     <FontSizeSync fontSize={fontSize}>
-      <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
+      <div className="min-h-screen bg-gray-100 flex flex-col lg:flex-row">
         <Sidebar user={user} storeName={storeName} initialIsDesktop={initialIsDesktop} />
         <main className="mx-auto w-full min-w-0 max-w-full flex-1 px-1.5 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-3 lg:max-w-7xl lg:px-8 lg:pb-8 lg:pt-6">
           {children}
@@ -75,7 +75,7 @@ export default function AppLayout({
     <Suspense
       fallback={
         <div className="flex min-h-screen flex-col items-center justify-center gap-6 max-sm:gap-2 p-6 max-sm:p-3" role="status" aria-label="Đang tải cửa hàng">
-          <p className="text-sm font-semibold leading-snug text-gray-700">Đang mở cửa hàng, vui lòng chờ một chút…</p>
+          <p className="text-sm font-semibold leading-snug text-gray-900">Đang mở cửa hàng, vui lòng chờ một chút…</p>
           <div className="h-10 max-w-48 animate-pulse rounded bg-gray-200" />
           <div className="mt-6 max-sm:mt-3 h-48 animate-pulse rounded-xl bg-gray-200" />
         </div>

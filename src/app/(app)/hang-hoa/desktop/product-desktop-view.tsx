@@ -36,15 +36,15 @@ function HistoryModalFrame({
         if (event.target === event.currentTarget) onClose()
       }}
     >
-      <div className="my-8 flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl">
+      <div className="my-8 flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-gray-300 bg-white shadow-2xl">
         <div className="flex items-center justify-between bg-gray-800 p-5 max-sm:p-3 text-white">
           <div>
             <h2 className="text-xl max-sm:text-base font-bold sm:text-2xl">{title}</h2>
-            <p className="mt-0.5 text-lg max-sm:text-sm text-gray-300">{productName}</p>
+            <p className="mt-0.5 text-lg max-sm:text-sm text-gray-900">{productName}</p>
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-2 text-white/80 hover:text-white"
+            className="rounded-lg p-2 text-white hover:text-white"
             aria-label="Quay lại chi tiết hàng hóa"
           >
             <X className="h-6 w-6" />
@@ -52,12 +52,12 @@ function HistoryModalFrame({
         </div>
 
         <div className="space-y-5 max-sm:space-y-3 overflow-y-auto p-5 max-sm:p-3 sm:p-6">
-          {isLoading && <div className="text-center text-lg max-sm:text-sm text-gray-600" role="status">Đang tải lịch sử...</div>}
+          {isLoading && <div className="text-center text-lg max-sm:text-sm text-gray-900" role="status">Đang tải lịch sử...</div>}
           {error && <div className="rounded-lg bg-red-50 p-4 max-sm:p-3 text-lg max-sm:text-sm text-red-800" role="alert">{error}</div>}
           {children}
         </div>
 
-        <div className="flex justify-end border-t border-gray-100 bg-gray-50 p-4 max-sm:p-3">
+        <div className="flex justify-end border-t border-gray-300 bg-gray-100 p-4 max-sm:p-3">
           <Button
             variant="outline"
             size="lg"
@@ -81,20 +81,20 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
       <div className="flex min-w-0 flex-col gap-3 bg-white p-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:p-5">
         <div className="min-w-0">
           <h1 className="text-lg font-bold text-gray-900 sm:text-xl">Danh sách hàng hóa</h1>
-          <p className="mt-0.5 text-xs text-gray-500 sm:text-sm">
-            Tổng cộng: <strong className="text-blue-600 font-semibold">{totalCount}</strong> món hàng
+          <p className="mt-0.5 text-xs text-gray-900 sm:text-sm">
+            Tổng cộng: <strong className="text-blue-950 font-semibold">{totalCount}</strong> món hàng
           </p>
         </div>
         <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto">
           <Link
             href="/hang-hoa/kiem-kho"
-            className="inline-flex w-full min-w-0 items-center justify-center whitespace-nowrap rounded-xl border border-blue-700 px-2 py-2 text-xs font-semibold text-blue-800 hover:bg-blue-50 sm:w-auto sm:px-3 sm:text-sm"
+            className="inline-flex w-full min-w-0 items-center justify-center whitespace-nowrap rounded-xl border border-blue-700 px-2 py-2 text-xs font-semibold text-blue-950 hover:bg-blue-50 sm:w-auto sm:px-3 sm:text-sm"
           >
             Kiểm kho
           </Link>
           <Button
             size="sm"
-            className="h-12 w-full min-w-0 justify-center whitespace-nowrap rounded-xl bg-green-600 px-2 py-2 text-xs font-semibold text-white shadow-sm hover:bg-green-700 sm:w-auto sm:px-3 sm:text-sm"
+            className="h-12 w-full min-w-0 justify-center whitespace-nowrap rounded-xl bg-green-800 px-2 py-2 text-xs font-semibold text-white shadow-sm hover:bg-green-900 sm:w-auto sm:px-3 sm:text-sm"
             onClick={openAddModal}
           >
             <Plus className="h-4 w-4 shrink-0" />
@@ -104,7 +104,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
       </div>
 
       {/* Filters & Search Bar */}
-      <div className="min-w-0 space-y-3 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm sm:space-y-4 sm:p-5">
+      <div className="min-w-0 space-y-3 rounded-2xl border border-gray-300 bg-white p-3 shadow-sm sm:space-y-4 sm:p-5">
         <div className="flex items-center gap-2">
           <div className="relative min-w-0 flex-1">
             <Input
@@ -113,7 +113,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                 setSearch(e.target.value)
               }}
               placeholder="Tìm tên món, mã..."
-              className="h-12 min-w-0 flex-1 rounded-xl border-2 border-gray-200 px-3 py-2 pr-9 text-sm focus:border-blue-500"
+              className="h-12 min-w-0 flex-1 rounded-xl border-2 border-gray-300 px-3 py-2 pr-9 text-sm focus:border-blue-700"
             />
             {search && (
               <button
@@ -121,7 +121,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                   setSearch('')
                 }}
                 aria-label="Xóa nội dung tìm kiếm"
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-900 hover:text-gray-900"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -134,8 +134,8 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
             onClick={() => setIsFilterExpanded((expanded) => !expanded)}
             className={`inline-flex min-h-12 shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-xl border-2 px-2.5 py-2 text-xs font-semibold sm:px-3 sm:text-sm ${
               activeFilterCount > 0
-                ? 'border-blue-300 bg-blue-50 text-blue-800'
-                : 'border-gray-200 bg-white text-gray-800 hover:bg-gray-50'
+                ? 'border-blue-700 bg-blue-50 text-blue-950'
+                : 'border-gray-300 bg-white text-gray-900 hover:bg-gray-100'
             }`}
           >
             {isFilterExpanded ? 'Thu gọn' : `Thêm lọc${activeFilterCount > 0 ? ` (${activeFilterCount})` : ''}`}
@@ -145,7 +145,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
             <button
               type="button"
               onClick={clearFilters}
-              className="hidden min-h-12 shrink-0 items-center rounded-xl px-2 text-base font-semibold text-blue-700 hover:bg-blue-50 sm:inline-flex"
+              className="hidden min-h-12 shrink-0 items-center rounded-xl px-2 text-base font-semibold text-blue-950 hover:bg-blue-50 sm:inline-flex"
             >
               Xóa lọc
             </button>
@@ -157,7 +157,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
             <button
               type="button"
               onClick={clearFilters}
-              className="min-h-12 rounded-xl px-2 text-base font-semibold text-blue-700 hover:bg-blue-50"
+              className="min-h-12 rounded-xl px-2 text-base font-semibold text-blue-950 hover:bg-blue-50"
             >
               Xóa lọc
             </button>
@@ -168,13 +168,13 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
           <div id="product-filters" className="space-y-4 max-sm:space-y-3">
             <div className="grid grid-cols-1 gap-3 max-sm:gap-2 sm:grid-cols-2 lg:grid-cols-4">
               <label className="space-y-1">
-                <span className="block text-base font-semibold text-gray-700">Trạng thái hàng hóa</span>
+                <span className="block text-base font-semibold text-gray-900">Trạng thái hàng hóa</span>
                 <select
                   value={filterType}
                   onChange={(event) => {
                     setFilterType(event.target.value as typeof filterType)
                   }}
-                  className="h-[50px] w-full rounded-xl border-2 border-gray-200 bg-white px-4 max-sm:px-3 text-lg max-sm:text-sm text-gray-900 outline-none focus:border-blue-500"
+                  className="h-[50px] w-full rounded-xl border-2 border-gray-300 bg-white px-4 max-sm:px-3 text-lg max-sm:text-sm text-gray-900 outline-none focus:border-blue-700"
                 >
                   <option value="all">Tất cả đang bán</option>
                   <option value="low_stock">Sắp hết hàng</option>
@@ -184,14 +184,14 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
               </label>
 
               <label className="space-y-1">
-                <span className="block text-base font-semibold text-gray-700">Nhóm hàng</span>
+                <span className="block text-base font-semibold text-gray-900">Nhóm hàng</span>
                 <div className="flex gap-2">
                   <select
                     value={selectedCategory}
                     onChange={(event) => {
                       setSelectedCategory(event.target.value)
                     }}
-                    className="h-[50px] min-w-0 flex-1 rounded-xl border-2 border-gray-200 bg-white px-4 max-sm:px-3 text-lg max-sm:text-sm text-gray-900 outline-none focus:border-blue-500"
+                    className="h-[50px] min-w-0 flex-1 rounded-xl border-2 border-gray-300 bg-white px-4 max-sm:px-3 text-lg max-sm:text-sm text-gray-900 outline-none focus:border-blue-700"
                   >
                     <option value="all">Tất cả nhóm</option>
                     {categories.map((category) => (
@@ -207,7 +207,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                     }}
                     aria-label="Sửa nhóm hàng"
                     title={selectedCategory === 'all' ? 'Chọn một nhóm để sửa' : 'Sửa nhóm hàng'}
-                    className="h-[50px] w-[50px] shrink-0 rounded-xl border-2 border-blue-200 text-blue-700 hover:bg-blue-50 disabled:cursor-not-allowed disabled:border-gray-200 disabled:text-gray-300"
+                    className="h-[50px] w-[50px] shrink-0 rounded-xl border-2 border-blue-700 text-blue-950 hover:bg-blue-50 disabled:cursor-not-allowed disabled:border-gray-300 disabled:text-gray-900"
                   >
                     <Edit className="mx-auto h-5 w-5" />
                   </button>
@@ -215,13 +215,13 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
               </label>
 
               <label className="space-y-1">
-                <span className="block text-base font-semibold text-gray-700">Cách tính giá</span>
+                <span className="block text-base font-semibold text-gray-900">Cách tính giá</span>
                 <select
                   value={priceModeFilter}
                   onChange={(event) => {
                     setPriceModeFilter(event.target.value as typeof priceModeFilter)
                   }}
-                  className="h-[50px] w-full rounded-xl border-2 border-gray-200 bg-white px-4 max-sm:px-3 text-lg max-sm:text-sm text-gray-900 outline-none focus:border-blue-500"
+                  className="h-[50px] w-full rounded-xl border-2 border-gray-300 bg-white px-4 max-sm:px-3 text-lg max-sm:text-sm text-gray-900 outline-none focus:border-blue-700"
                 >
                   <option value="all">Tất cả cách tính giá</option>
                   <option value="auto">Tự động theo giá nhập</option>
@@ -230,13 +230,13 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
               </label>
 
               <label className="space-y-1">
-                <span className="block text-base font-semibold text-gray-700">Sắp xếp theo</span>
+                <span className="block text-base font-semibold text-gray-900">Sắp xếp theo</span>
                 <select
                   value={sortBy}
                   onChange={(event) => {
                     setSortBy(event.target.value as typeof sortBy)
                   }}
-                  className="h-[50px] w-full rounded-xl border-2 border-gray-200 bg-white px-4 max-sm:px-3 text-lg max-sm:text-sm text-gray-900 outline-none focus:border-blue-500"
+                  className="h-[50px] w-full rounded-xl border-2 border-gray-300 bg-white px-4 max-sm:px-3 text-lg max-sm:text-sm text-gray-900 outline-none focus:border-blue-700"
                 >
                   <option value="name_asc">Tên món (A → Z)</option>
                   <option value="stock_asc">Còn ít hàng nhất</option>
@@ -265,7 +265,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
       </div>
 
       {/* Product List Table / Cards */}
-      <p className="mb-2 text-sm text-gray-500">
+      <p className="mb-2 text-sm text-gray-900">
         Nhấn giữ vào món hàng để xem chi tiết hoặc chỉnh sửa
       </p>
       {listError && (
@@ -275,21 +275,21 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
         </div>
       )}
       {!listError && (products.length === 0 ? (
-        <div className="bg-white p-12 text-center rounded-2xl border border-gray-100 shadow-sm">
-          <Package className="w-16 h-16 text-gray-300 mx-auto mb-4 max-sm:mb-3" />
-          <h3 className="text-xl max-sm:text-base font-bold text-gray-700 mb-2">
+        <div className="bg-white p-12 text-center rounded-2xl border border-gray-300 shadow-sm">
+          <Package className="w-16 h-16 text-gray-900 mx-auto mb-4 max-sm:mb-3" />
+          <h3 className="text-xl max-sm:text-base font-bold text-gray-900 mb-2">
             {totalCount === 0 && !search && selectedCategory === 'all' && filterType === 'all'
               ? 'Chưa có món hàng nào'
               : 'Không tìm thấy món hàng nào'}
           </h3>
-          <p className="text-gray-500 text-lg max-sm:text-sm max-w-md mx-auto mb-6 max-sm:mb-3">
+          <p className="text-gray-900 text-lg max-sm:text-sm max-w-md mx-auto mb-6 max-sm:mb-3">
             {totalCount === 0 && !search && selectedCategory === 'all' && filterType === 'all'
               ? 'Bấm “Thêm món mới” để bắt đầu tạo danh sách hàng hóa cho cửa hàng.'
               : 'Thử đổi từ khóa hoặc bộ lọc. Bạn cũng có thể bấm “Thêm món mới” để tạo hàng hóa.'}
           </p>
           <Button
             size="lg"
-            className="bg-green-600 hover:bg-green-700 text-white font-medium text-lg max-sm:text-sm px-8 max-sm:px-3 rounded-xl min-h-[48px]"
+            className="bg-green-800 hover:bg-green-900 text-white font-medium text-lg max-sm:text-sm px-8 max-sm:px-3 rounded-xl min-h-[48px]"
             onClick={openAddModal}
           >
             Thêm món mới ngay
@@ -301,7 +301,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
           <div className="hidden lg:block overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-gray-50 text-gray-600 font-semibold border-b border-gray-200 text-lg max-sm:text-sm">
+                <tr className="bg-gray-100 text-gray-900 font-semibold border-b border-gray-300 text-lg max-sm:text-sm">
                   <th className="py-4 max-sm:py-2 px-5 max-sm:px-3">Tên món hàng</th>
                   <th className="py-4 max-sm:py-2 px-4 max-sm:px-3">Nhóm</th>
                   <th className="py-4 max-sm:py-2 px-4 max-sm:px-3 text-center">Còn trong kho</th>
@@ -311,7 +311,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
 
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100 text-lg max-sm:text-sm">
+              <tbody className="divide-y divide-gray-300 text-lg max-sm:text-sm">
                 {visibleProducts.map((p) => {
                   const isLow = Number(p.stock) < Number(p.min_stock)
                   const isOutOfStock = Number(p.stock) <= 0
@@ -327,43 +327,43 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                       onPointerCancel={clearLongPress}
                       onContextMenu={(event) => event.preventDefault()}
                       className={`cursor-pointer touch-pan-y hover:bg-blue-50/50 transition-colors ${
-                        !p.is_active ? 'bg-gray-50/80 opacity-75' : ''
+                        !p.is_active ? 'bg-gray-100/80 opacity-75' : ''
                       }`}
                     >
                       <td className="py-4 max-sm:py-2 px-5 max-sm:px-3">
                         <div className="font-bold text-gray-900 text-lg max-sm:text-sm">{p.name}</div>
                         <div className="flex items-center gap-2 mt-1">
-                          <span className="text-gray-400 text-lg max-sm:text-sm">ĐVT: {p.unit}</span>
+                          <span className="text-gray-900 text-lg max-sm:text-sm">ĐVT: {p.unit}</span>
                           {p.expiry_date && (
-                            <span className="text-purple-600 text-lg max-sm:text-sm bg-purple-50 px-2 py-0.5 rounded">
+                            <span className="text-purple-900 text-lg max-sm:text-sm bg-purple-50 px-2 py-0.5 rounded">
                               HSD: {formatDate(p.expiry_date)}
                             </span>
                           )}
                         </div>
                       </td>
-                      <td className="py-4 max-sm:py-2 px-4 max-sm:px-3 text-gray-600">
+                      <td className="py-4 max-sm:py-2 px-4 max-sm:px-3 text-gray-900">
                         {p.category?.name || 'Chưa phân nhóm'}
                       </td>
                       <td className="py-4 max-sm:py-2 px-4 max-sm:px-3 text-center">
                         <div
                           className={`inline-block font-bold px-3 py-1 rounded-full text-lg max-sm:text-sm ${
                             isOutOfStock
-                              ? 'bg-red-100 text-red-700'
+                              ? 'bg-red-100 text-red-900'
                               : isLow
-                              ? 'bg-amber-100 text-amber-800'
-                              : 'bg-green-100 text-green-800'
+                              ? 'bg-amber-100 text-amber-950'
+                              : 'bg-emerald-100 text-green-900'
                           }`}
                         >
                           {Number(p.stock)} {p.unit}
                         </div>
                         {isLow && !isOutOfStock && (
-                          <div className="text-amber-600 text-lg max-sm:text-sm mt-0.5">Sắp hết hàng</div>
+                          <div className="text-amber-950 text-lg max-sm:text-sm mt-0.5">Sắp hết hàng</div>
                         )}
                         {isOutOfStock && (
-                          <div className="text-red-600 text-lg max-sm:text-sm mt-0.5 font-semibold">Hết hàng</div>
+                          <div className="text-red-800 text-lg max-sm:text-sm mt-0.5 font-semibold">Hết hàng</div>
                         )}
                       </td>
-                      <td className="py-4 max-sm:py-2 px-4 max-sm:px-3 text-right text-gray-600 font-medium">
+                      <td className="py-4 max-sm:py-2 px-4 max-sm:px-3 text-right text-gray-900 font-medium">
                         {formatMoney(p.last_cost)}
                       </td>
                       <td className="py-4 max-sm:py-2 px-4 max-sm:px-3 text-right font-bold text-gray-900 text-lg max-sm:text-sm">
@@ -372,7 +372,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                       <td className="py-4 max-sm:py-2 px-4 max-sm:px-3 text-right">
                         <span
                           className={`font-semibold ${
-                            profit < 0 ? 'text-red-600' : 'text-green-700'
+                            profit < 0 ? 'text-red-800' : 'text-green-900'
                           }`}
                         >
                           {profit > 0 ? '+' : ''}
@@ -420,9 +420,9 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                       <div className="min-w-0 flex-1">
                         <div className="line-clamp-2 min-w-0 text-sm font-semibold leading-tight text-slate-900">{p.name}</div>
                         <div className="mt-0.5 flex flex-wrap items-center gap-1.5">
-                          <span className="text-xs text-slate-500">{p.category?.name || 'Chưa phân nhóm'}</span>
+                          <span className="text-xs text-slate-700">{p.category?.name || 'Chưa phân nhóm'}</span>
                           {p.expiry_date && (
-                            <span className="inline-flex items-center whitespace-nowrap rounded bg-purple-50 px-1.5 py-0.5 text-xs text-purple-600">
+                            <span className="inline-flex items-center whitespace-nowrap rounded bg-purple-50 px-1.5 py-0.5 text-xs text-purple-900">
                               HSD: {formatDate(p.expiry_date)}
                             </span>
                           )}
@@ -431,10 +431,10 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                       <div
                         className={`shrink-0 whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-bold ${
                           isOutOfStock
-                            ? 'bg-red-100 text-red-700'
+                            ? 'bg-red-100 text-red-900'
                             : isLow
-                            ? 'bg-amber-100 text-amber-800'
-                            : 'bg-green-100 text-green-800'
+                            ? 'bg-amber-100 text-amber-950'
+                            : 'bg-emerald-100 text-green-900'
                         }`}
                       >
                         {Number(p.stock)} {p.unit}
@@ -442,20 +442,20 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                     </div>
                   </div>
 
-                  <div className="mt-2 grid grid-cols-3 divide-x divide-slate-200/80 rounded-lg bg-slate-50 px-2 py-1.5 text-center">
+                  <div className="mt-2 grid grid-cols-3 divide-x divide-slate-400 rounded-lg bg-slate-50 px-2 py-1.5 text-center">
                     <div className="min-w-0">
-                      <div className="text-[12px] text-slate-500">Giá nhập</div>
+                      <div className="text-[12px] text-slate-700">Giá nhập</div>
                       <div className="whitespace-nowrap text-xs font-semibold text-slate-700">{formatMoney(p.last_cost)}</div>
                     </div>
                     <div className="min-w-0">
-                      <div className="text-[12px] text-slate-500">Giá bán</div>
-                      <div className="whitespace-nowrap text-sm font-bold text-blue-600">{formatMoney(p.sell_price)}</div>
+                      <div className="text-[12px] text-slate-700">Giá bán</div>
+                      <div className="whitespace-nowrap text-sm font-bold text-blue-950">{formatMoney(p.sell_price)}</div>
                     </div>
                     <div className="min-w-0">
-                      <div className="text-[12px] text-slate-500">Lãi</div>
+                      <div className="text-[12px] text-slate-700">Lãi</div>
                       <div
                         className={`whitespace-nowrap text-xs font-semibold ${
-                          profit < 0 ? 'text-red-600' : 'text-emerald-600'
+                          profit < 0 ? 'text-red-800' : 'text-emerald-900'
                         }`}
                       >
                         {profit > 0 ? '+' : ''}
@@ -471,7 +471,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
       ))}
 
       {visibleProducts.length > 0 && totalCount > visibleCount && !listError && (
-        <div ref={sentinelRef} className="min-h-10 rounded-xl bg-white p-4 max-sm:p-3 text-center text-lg max-sm:text-sm text-gray-600" aria-live="polite">
+        <div ref={sentinelRef} className="min-h-10 rounded-xl bg-white p-4 max-sm:p-3 text-center text-lg max-sm:text-sm text-gray-900" aria-live="polite">
           Cuộn để xem thêm hàng hóa...
         </div>
       )}
@@ -480,7 +480,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
       {isAddOpen && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-0 sm:items-center sm:p-4">
           <div className="flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl sm:max-h-[90dvh] sm:max-w-lg sm:rounded-2xl">
-            <header className="flex shrink-0 items-center justify-between bg-blue-600 p-4 max-sm:p-3 text-white">
+            <header className="flex shrink-0 items-center justify-between bg-blue-800 p-4 max-sm:p-3 text-white">
               <div>
                 <h2 className="text-xl max-sm:text-base font-bold">Thêm món mới</h2>
                 <p className="mt-0.5 text-sm text-blue-100">Điền thông tin để đưa vào bán hàng</p>
@@ -488,7 +488,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
               <button
                 type="button"
                 onClick={() => setIsAddOpen(false)}
-                className="flex min-h-12 min-w-12 items-center justify-center rounded-lg text-white/90 hover:bg-white/10 hover:text-white"
+                className="flex min-h-12 min-w-12 items-center justify-center rounded-lg text-white hover:bg-white/10 hover:text-white"
                 aria-label="Đóng cửa sổ thêm món mới"
               >
                 <X className="h-6 w-6" />
@@ -501,8 +501,8 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                 className="min-h-0 flex-1 overflow-y-auto overscroll-contain scroll-smooth p-4 max-sm:p-3"
               >
               {formError && (
-                <div className="mb-4 max-sm:mb-3 flex items-center gap-2 rounded-xl border-2 border-red-200 bg-red-50 p-3.5 text-base text-red-700" role="alert">
-                  <AlertTriangle className="h-5 w-5 shrink-0 text-red-500" />
+                <div className="mb-4 max-sm:mb-3 flex items-center gap-2 rounded-xl border-2 border-red-300 bg-red-50 p-3.5 text-base text-red-800" role="alert">
+                  <AlertTriangle className="h-5 w-5 shrink-0 text-red-800" />
                   <span>{formError}</span>
                 </div>
               )}
@@ -510,11 +510,11 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
               <div className="mb-4 max-sm:mb-3">
                 <div>
                   <div className="mb-1.5 flex items-center justify-between gap-2">
-                    <label className="text-base font-semibold text-gray-800">Nhóm hàng *</label>
+                    <label className="text-base font-semibold text-gray-900">Nhóm hàng *</label>
                     <button
                       type="button"
                       onClick={openNewCategory}
-                      className="flex min-h-12 items-center gap-1 rounded-lg px-2 text-base font-semibold text-blue-600 hover:bg-blue-50 hover:text-blue-700"
+                      className="flex min-h-12 items-center gap-1 rounded-lg px-2 text-base font-semibold text-blue-950 hover:bg-blue-50 hover:text-blue-950"
                     >
                       <FolderPlus className="h-4 w-4" />
                       + Thêm nhóm
@@ -523,7 +523,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                   <select
                     value={formCategory}
                     onChange={(e) => handleCategoryChange(e.target.value)}
-                    className="h-12 w-full rounded-xl border-2 border-gray-300 bg-white px-3 text-base focus:border-blue-500"
+                    className="h-12 w-full rounded-xl border-2 border-gray-300 bg-white px-3 text-base focus:border-blue-700"
                     required
                   >
                     <option value="">-- Chọn nhóm --</option>
@@ -537,7 +537,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
               </div>
 
               <div className="mb-4 max-sm:mb-3">
-                <label className="mb-1.5 block text-base font-semibold text-gray-800">
+                <label className="mb-1.5 block text-base font-semibold text-gray-900">
                   Tên món hàng *
                 </label>
                 <Input
@@ -550,7 +550,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
               </div>
 
               <div className="mb-4 max-sm:mb-3">
-                <label className="mb-1.5 block text-base font-semibold text-gray-800">
+                <label className="mb-1.5 block text-base font-semibold text-gray-900">
                   Đơn vị tính *
                 </label>
                 <div className="mb-2 flex flex-wrap gap-2">
@@ -561,8 +561,8 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                       onClick={() => setFormUnit(u)}
                       className={`min-h-12 rounded-lg px-3 py-2 text-base font-medium transition-colors ${
                         formUnit === u
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          ? 'bg-blue-800 text-white'
+                          : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
                       }`}
                     >
                       {u}
@@ -580,7 +580,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
 
               <div className="mb-4 max-sm:mb-3 grid grid-cols-2 gap-3 max-sm:gap-2">
                 <div>
-                  <label className="mb-1.5 block text-base font-semibold text-gray-800">
+                  <label className="mb-1.5 block text-base font-semibold text-gray-900">
                     Giá nhập (đ) *
                   </label>
                   <Input
@@ -594,7 +594,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                   />
                 </div>
                 <div>
-                  <label className="mb-1.5 block text-base font-semibold text-gray-800">
+                  <label className="mb-1.5 block text-base font-semibold text-gray-900">
                     Giá bán (đ) *
                   </label>
                   <Input
@@ -603,7 +603,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                     value={formatMoneyInput(formSellPrice)}
                     onChange={(e) => setFormSellPrice(parseMoney(e.target.value))}
                     placeholder="13.000"
-                    className="px-2 text-base font-bold text-blue-600"
+                    className="px-2 text-base font-bold text-blue-950"
                     required
                   />
                 </div>
@@ -612,12 +612,12 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
               <div
                 className={`mb-4 max-sm:mb-3 flex items-center justify-between rounded-xl border-2 p-4 max-sm:p-3 ${
                   profitPerItem >= 0
-                    ? 'bg-green-50 border-green-200 text-green-900'
-                    : 'bg-red-50 border-red-200 text-red-900'
+                    ? 'bg-emerald-100 border-emerald-400 text-green-900'
+                    : 'bg-red-50 border-red-300 text-red-900'
                 }`}
               >
                 <div className="flex items-center gap-2">
-                  <TrendingUp className={`h-5 w-5 ${profitPerItem >= 0 ? 'text-green-600' : 'text-red-600'}`} />
+                  <TrendingUp className={`h-5 w-5 ${profitPerItem >= 0 ? 'text-green-900' : 'text-red-800'}`} />
                   <span className="text-base font-medium">Lãi mỗi cái</span>
                 </div>
                 <div className="text-lg max-sm:text-sm font-bold">
@@ -631,11 +631,11 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                 onClick={() => setIsAdvancedOptionsOpen((open) => !open)}
                 aria-expanded={isAdvancedOptionsOpen}
                 aria-controls="add-product-advanced-options"
-                className="flex min-h-12 w-full items-center justify-between gap-3 max-sm:gap-2 rounded-xl border border-dashed border-gray-300 bg-gray-50 px-4 max-sm:px-3 py-2 text-left text-base font-semibold text-gray-800 hover:bg-gray-100"
+                className="flex min-h-12 w-full items-center justify-between gap-3 max-sm:gap-2 rounded-xl border border-dashed border-gray-300 bg-gray-100 px-4 max-sm:px-3 py-2 text-left text-base font-semibold text-gray-900 hover:bg-gray-100"
               >
                 <span>
                   <span className="block">Tùy chọn nâng cao</span>
-                  <span className="mt-0.5 block text-sm font-normal text-gray-500">
+                  <span className="mt-0.5 block text-sm font-normal text-gray-900">
                     Ảnh, hạn sử dụng, mã vạch, số lượng ban đầu...
                   </span>
                 </span>
@@ -646,7 +646,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                 <div id="add-product-advanced-options" className="mt-4 max-sm:mt-3 space-y-4 max-sm:space-y-3">
                   <div className="grid grid-cols-1 gap-4 max-sm:gap-2 sm:grid-cols-2">
                     <div>
-                      <label className="mb-1.5 block text-base font-semibold text-gray-800">
+                      <label className="mb-1.5 block text-base font-semibold text-gray-900">
                         Còn trong kho hiện tại
                       </label>
                       <Input
@@ -660,7 +660,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                       />
                     </div>
                     <div>
-                      <label className="mb-1.5 block text-base font-semibold text-gray-800">
+                      <label className="mb-1.5 block text-base font-semibold text-gray-900">
                         Báo sắp hết khi còn dưới
                       </label>
                       <Input
@@ -676,7 +676,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                   </div>
 
                   <div>
-                    <label className="mb-1.5 block text-base font-semibold text-gray-800">
+                    <label className="mb-1.5 block text-base font-semibold text-gray-900">
                       Cách tính giá khi nhập hàng mới
                     </label>
                     <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -685,12 +685,12 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                         onClick={() => setFormPriceMode('auto')}
                         className={`min-h-12 rounded-xl border-2 p-3 text-left transition-all ${
                           formPriceMode === 'auto'
-                            ? 'border-blue-600 bg-blue-50/70 text-blue-900'
-                            : 'border-gray-200 hover:border-gray-300'
+                            ? 'border-blue-700 bg-blue-100 text-blue-950'
+                            : 'border-gray-300 hover:border-gray-300'
                         }`}
                       >
                         <div className="text-base font-bold">Tự đề xuất giá</div>
-                        <div className="mt-0.5 text-sm text-gray-500">
+                        <div className="mt-0.5 text-sm text-gray-900">
                           Giá nhập thay đổi thì đề xuất giá bán tương ứng
                         </div>
                       </button>
@@ -699,12 +699,12 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                         onClick={() => setFormPriceMode('fixed')}
                         className={`min-h-12 rounded-xl border-2 p-3 text-left transition-all ${
                           formPriceMode === 'fixed'
-                            ? 'border-blue-600 bg-blue-50/70 text-blue-900'
-                            : 'border-gray-200 hover:border-gray-300'
+                            ? 'border-blue-700 bg-blue-100 text-blue-950'
+                            : 'border-gray-300 hover:border-gray-300'
                         }`}
                       >
                         <div className="text-base font-bold">Giữ giá cố định</div>
-                        <div className="mt-0.5 text-sm text-gray-500">
+                        <div className="mt-0.5 text-sm text-gray-900">
                           Không đề xuất đổi giá khi nhập hàng mới
                         </div>
                       </button>
@@ -713,7 +713,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
 
                   <div className="grid grid-cols-1 gap-4 max-sm:gap-2 sm:grid-cols-2">
                     <div>
-                      <label className="mb-1.5 block text-base font-semibold text-gray-800">
+                      <label className="mb-1.5 block text-base font-semibold text-gray-900">
                         Hạn sử dụng (không bắt buộc)
                       </label>
                       <Input
@@ -724,7 +724,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                       />
                     </div>
                     <div>
-                      <label className="mb-1.5 block text-base font-semibold text-gray-800">
+                      <label className="mb-1.5 block text-base font-semibold text-gray-900">
                         Mã vạch (không bắt buộc)
                       </label>
                       <Input
@@ -737,7 +737,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                   </div>
 
                   <div>
-                    <label className="mb-1.5 block text-base font-semibold text-gray-800">
+                    <label className="mb-1.5 block text-base font-semibold text-gray-900">
                       Ảnh hàng hóa (không bắt buộc)
                     </label>
                     <Input
@@ -746,25 +746,25 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                       onChange={(e) => setFormImageFile(e.target.files?.[0] ?? null)}
                       className="h-auto min-h-12 text-base"
                     />
-                    <p className="mt-1 text-sm text-gray-600">Ảnh JPG, PNG hoặc WebP, tối đa 5 MB.</p>
+                    <p className="mt-1 text-sm text-gray-900">Ảnh JPG, PNG hoặc WebP, tối đa 5 MB.</p>
                   </div>
 
                   <div>
-                    <label className="mb-1.5 block text-base font-semibold text-gray-800">
+                    <label className="mb-1.5 block text-base font-semibold text-gray-900">
                       Mã hàng (tự sinh)
                     </label>
                     <Input
                       value={formCodePreview}
                       readOnly
                       placeholder={formCategory ? 'Đang tạo mã...' : 'Chọn nhóm hàng trước'}
-                      className="bg-gray-100 font-mono font-bold text-gray-700"
+                      className="bg-gray-100 font-mono font-bold text-gray-900"
                     />
                   </div>
                 </div>
               )}
               </div>
 
-              <footer className="flex shrink-0 gap-3 max-sm:gap-2 border-t border-gray-100 bg-white p-3">
+              <footer className="flex shrink-0 gap-3 max-sm:gap-2 border-t border-gray-300 bg-white p-3">
                 <Button
                   type="button"
                   variant="outline"
@@ -778,7 +778,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                   type="submit"
                   size="lg"
                   disabled={isPending}
-                  className="min-h-12 flex-1 rounded-xl bg-green-600 px-4 max-sm:px-3 text-base font-bold text-white shadow-md hover:bg-green-700"
+                  className="min-h-12 flex-1 rounded-xl bg-green-800 px-4 max-sm:px-3 text-base font-bold text-white shadow-md hover:bg-green-900"
                 >
                   {isPending ? 'Đang lưu...' : 'Lưu món mới'}
                 </Button>
@@ -796,15 +796,15 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
             if (event.target === event.currentTarget) closeHistoryOrEditAndReturn()
           }}
         >
-          <div className="bg-white rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden my-8 border border-gray-200">
-            <div className="bg-blue-600 text-white p-5 max-sm:p-3 flex justify-between items-center">
+          <div className="bg-white rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden my-8 border border-gray-300">
+            <div className="bg-blue-800 text-white p-5 max-sm:p-3 flex justify-between items-center">
               <div>
                 <h2 className="text-2xl max-sm:text-lg font-bold">Sửa món hàng</h2>
                 <p className="text-blue-100 text-lg max-sm:text-sm mt-0.5">Mã hàng: {activeProduct.code}</p>
               </div>
               <button
                 onClick={closeHistoryOrEditAndReturn}
-                className="text-white/80 hover:text-white p-2 rounded-lg"
+                className="text-white hover:text-white p-2 rounded-lg"
                 aria-label="Quay lại chi tiết hàng hóa"
               >
                 <X className="w-6 h-6" />
@@ -813,21 +813,21 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
 
             <form onSubmit={handleEditSubmit} className="p-6 max-sm:p-3 space-y-5 max-sm:space-y-3">
               {formError && (
-                <div className="bg-red-50 border-2 border-red-200 text-red-700 p-3.5 rounded-xl text-lg max-sm:text-sm flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5 shrink-0 text-red-500" />
+                <div className="bg-red-50 border-2 border-red-300 text-red-800 p-3.5 rounded-xl text-lg max-sm:text-sm flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5 shrink-0 text-red-800" />
                   <span>{formError}</span>
                 </div>
               )}
 
               {/* Nhóm hàng */}
               <div>
-                <label className="block font-semibold text-gray-800 text-lg max-sm:text-sm mb-1.5">
+                <label className="block font-semibold text-gray-900 text-lg max-sm:text-sm mb-1.5">
                   Nhóm hàng *
                 </label>
                 <select
                   value={formCategory}
                   onChange={(e) => setFormCategory(e.target.value)}
-                  className="w-full h-12 px-3 border-2 border-gray-300 rounded-xl text-lg max-sm:text-sm bg-white focus:border-blue-500"
+                  className="w-full h-12 px-3 border-2 border-gray-300 rounded-xl text-lg max-sm:text-sm bg-white focus:border-blue-700"
                   required
                 >
                   {categories.map((c) => (
@@ -840,7 +840,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
 
               {/* Tên món hàng */}
               <div>
-                <label className="block font-semibold text-gray-800 text-lg max-sm:text-sm mb-1.5">
+                <label className="block font-semibold text-gray-900 text-lg max-sm:text-sm mb-1.5">
                   Tên món hàng *
                 </label>
                 <Input
@@ -853,7 +853,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
 
               {/* ĐVT */}
               <div>
-                <label className="block font-semibold text-gray-800 text-lg max-sm:text-sm mb-1.5">
+                <label className="block font-semibold text-gray-900 text-lg max-sm:text-sm mb-1.5">
                   Đơn vị tính *
                 </label>
                 <Input
@@ -866,7 +866,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
               {/* Giá nhập & Giá bán */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-sm:gap-2">
                 <div>
-                  <label className="block font-semibold text-gray-800 text-lg max-sm:text-sm mb-1.5">
+                  <label className="block font-semibold text-gray-900 text-lg max-sm:text-sm mb-1.5">
                     Giá nhập gần nhất (đ)
                   </label>
                   <Input
@@ -879,7 +879,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-gray-800 text-lg max-sm:text-sm mb-1.5">
+                  <label className="block font-semibold text-gray-900 text-lg max-sm:text-sm mb-1.5">
                     Giá bán đang áp dụng (đ)
                   </label>
                   <Input
@@ -887,14 +887,14 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                     inputMode="numeric"
                     value={formatMoneyInput(formSellPrice)}
                     onChange={(e) => setFormSellPrice(parseMoney(e.target.value))}
-                    className="text-lg max-sm:text-sm font-bold text-blue-600"
+                    className="text-lg max-sm:text-sm font-bold text-blue-950"
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block font-semibold text-gray-800 text-lg max-sm:text-sm mb-1.5">
+                <label className="block font-semibold text-gray-900 text-lg max-sm:text-sm mb-1.5">
                   Ảnh hàng hóa (không bắt buộc)
                 </label>
                 {activeProduct.image_url && (
@@ -914,18 +914,18 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                   onChange={(e) => setFormImageFile(e.target.files?.[0] ?? null)}
                   className="h-auto min-h-[48px] text-lg max-sm:text-sm"
                 />
-                <p className="mt-1 text-lg max-sm:text-sm text-gray-600">Chọn ảnh mới nếu muốn thay ảnh hiện tại.</p>
+                <p className="mt-1 text-lg max-sm:text-sm text-gray-900">Chọn ảnh mới nếu muốn thay ảnh hiện tại.</p>
               </div>
 
               {/* Khung lãi */}
-              <div className="bg-blue-50 border border-blue-200 p-4 max-sm:p-3 rounded-xl flex justify-between items-center text-blue-900">
+              <div className="bg-blue-50 border border-blue-700 p-4 max-sm:p-3 rounded-xl flex justify-between items-center text-blue-950">
                 <span className="font-medium text-lg max-sm:text-sm">Lãi mỗi cái hiện tại:</span>
                 <span className="text-xl max-sm:text-base font-bold">{formatMoney(profitPerItem)}</span>
               </div>
 
               {/* Chế độ giá */}
               <div>
-                <label className="block font-semibold text-gray-800 text-lg max-sm:text-sm mb-1.5">
+                <label className="block font-semibold text-gray-900 text-lg max-sm:text-sm mb-1.5">
                   Cách tính giá khi nhập hàng mới
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -934,8 +934,8 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                     onClick={() => setFormPriceMode('auto')}
                     className={`p-3 min-h-[48px] rounded-xl text-left border-2 transition-all ${
                       formPriceMode === 'auto'
-                        ? 'border-blue-600 bg-blue-50/70 text-blue-900'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-blue-700 bg-blue-100 text-blue-950'
+                        : 'border-gray-300 hover:border-gray-300'
                     }`}
                   >
                     <div className="font-bold text-lg max-sm:text-sm">Tự đề xuất giá</div>
@@ -945,8 +945,8 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                     onClick={() => setFormPriceMode('fixed')}
                     className={`p-3 min-h-[48px] rounded-xl text-left border-2 transition-all ${
                       formPriceMode === 'fixed'
-                        ? 'border-blue-600 bg-blue-50/70 text-blue-900'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-blue-700 bg-blue-100 text-blue-950'
+                        : 'border-gray-300 hover:border-gray-300'
                     }`}
                   >
                     <div className="font-bold text-lg max-sm:text-sm">Giữ giá cố định</div>
@@ -957,7 +957,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
               {/* Ngưỡng báo & HSD */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-sm:gap-2">
                 <div>
-                  <label className="block font-semibold text-gray-800 text-lg max-sm:text-sm mb-1.5">
+                  <label className="block font-semibold text-gray-900 text-lg max-sm:text-sm mb-1.5">
                     Ngưỡng báo sắp hết
                   </label>
                   <Input
@@ -969,7 +969,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-gray-800 text-lg max-sm:text-sm mb-1.5">
+                  <label className="block font-semibold text-gray-900 text-lg max-sm:text-sm mb-1.5">
                     Hạn sử dụng
                   </label>
                   <Input
@@ -980,7 +980,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 max-sm:gap-2 pt-3 border-t border-gray-100">
+              <div className="flex justify-end gap-3 max-sm:gap-2 pt-3 border-t border-gray-300">
                 <Button
                   type="button"
                   variant="outline"
@@ -994,7 +994,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                   type="submit"
                   size="lg"
                   disabled={isPending}
-                  className="bg-blue-600 hover:bg-blue-700 text-white min-h-[48px] text-lg max-sm:text-sm px-8 max-sm:px-3 rounded-xl font-bold shadow-md"
+                  className="bg-blue-800 hover:bg-blue-900 text-white min-h-[48px] text-lg max-sm:text-sm px-8 max-sm:px-3 rounded-xl font-bold shadow-md"
                 >
                   {isPending ? 'Đang lưu...' : 'Lưu thay đổi'}
                 </Button>
@@ -1007,18 +1007,18 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
       {/* MODAL CHI TIẾT HÀNG HÓA */}
       {isDetailOpen && activeProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 max-sm:p-3 bg-black/60 backdrop-blur-xs overflow-y-auto">
-          <div className="my-8 flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl">
+          <div className="my-8 flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-gray-300 bg-white shadow-2xl">
             <div className="bg-gray-800 text-white p-5 max-sm:p-3 flex justify-between items-center">
               <div>
                 <h2 className="text-xl max-sm:text-base sm:text-2xl font-bold">{activeProduct.name}</h2>
-                <p className="text-gray-300 text-lg max-sm:text-sm mt-0.5">
+                <p className="text-gray-900 text-lg max-sm:text-sm mt-0.5">
                   Mã: {activeProduct.code} • Còn trong kho: {Number(activeProduct.stock)}{' '}
                   {activeProduct.unit}
                 </p>
               </div>
               <button
                 onClick={() => closeDetailsModal()}
-                className="text-white/80 hover:text-white p-2 rounded-lg"
+                className="text-white hover:text-white p-2 rounded-lg"
                 aria-label="Đóng chi tiết hàng hóa"
               >
                 <X className="w-6 h-6" />
@@ -1027,7 +1027,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
 
             <div className="min-h-0 flex-1 space-y-4 max-sm:space-y-3 overflow-y-auto p-4 max-sm:p-3 sm:p-5">
               {isDetailLoading && (
-                <div className="text-center text-lg max-sm:text-sm text-gray-600" role="status">Đang tải chi tiết hàng hóa…</div>
+                <div className="text-center text-lg max-sm:text-sm text-gray-900" role="status">Đang tải chi tiết hàng hóa…</div>
               )}
               {detailError && (
                 <div className="rounded-lg bg-red-50 p-4 max-sm:p-3 text-lg max-sm:text-sm text-red-800" role="alert">{detailError}</div>
@@ -1044,71 +1044,71 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                 </div>
               )}
               {/* Thẻ tóm tắt thông số mốc */}
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 max-sm:gap-2 bg-blue-50/60 p-4 max-sm:p-3 rounded-xl border border-blue-100 text-center">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 max-sm:gap-2 bg-blue-50/60 p-4 max-sm:p-3 rounded-xl border border-blue-700 text-center">
                 <div>
-                  <div className="text-lg max-sm:text-sm text-gray-500">Lãi mỗi cái</div>
-                  <div className={`font-bold text-lg max-sm:text-sm ${activeProduct.sell_price - activeProduct.last_cost < 0 ? 'text-red-600' : 'text-green-700'}`}>
+                  <div className="text-lg max-sm:text-sm text-gray-900">Lãi mỗi cái</div>
+                  <div className={`font-bold text-lg max-sm:text-sm ${activeProduct.sell_price - activeProduct.last_cost < 0 ? 'text-red-800' : 'text-green-900'}`}>
                     {formatMoney(activeProduct.sell_price - activeProduct.last_cost)}
                   </div>
                 </div>
                 <div>
-                  <div className="text-lg max-sm:text-sm text-gray-500">Mốc giá nhập</div>
-                  <div className="font-bold text-gray-800 text-lg max-sm:text-sm">
+                  <div className="text-lg max-sm:text-sm text-gray-900">Mốc giá nhập</div>
+                  <div className="font-bold text-gray-900 text-lg max-sm:text-sm">
                     {formatMoney(activeProduct.base_cost)}
                   </div>
                 </div>
                 <div>
-                  <div className="text-lg max-sm:text-sm text-gray-500">Mốc giá bán</div>
-                  <div className="font-bold text-gray-800 text-lg max-sm:text-sm">
+                  <div className="text-lg max-sm:text-sm text-gray-900">Mốc giá bán</div>
+                  <div className="font-bold text-gray-900 text-lg max-sm:text-sm">
                     {formatMoney(activeProduct.base_price)}
                   </div>
                 </div>
                 <div>
-                  <div className="text-lg max-sm:text-sm text-gray-500">Giá vốn trung bình</div>
-                  <div className="font-bold text-gray-800 text-lg max-sm:text-sm">
+                  <div className="text-lg max-sm:text-sm text-gray-900">Giá vốn trung bình</div>
+                  <div className="font-bold text-gray-900 text-lg max-sm:text-sm">
                     {formatMoney(activeProduct.avg_cost)}
                   </div>
                 </div>
                 <div>
-                  <div className="text-lg max-sm:text-sm text-gray-500">Giá bán hiện tại</div>
-                  <div className="font-bold text-blue-600 text-lg max-sm:text-sm">
+                  <div className="text-lg max-sm:text-sm text-gray-900">Giá bán hiện tại</div>
+                  <div className="font-bold text-blue-950 text-lg max-sm:text-sm">
                     {formatMoney(activeProduct.sell_price)}
                   </div>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3 max-sm:gap-2 text-base sm:text-lg">
-                <div className="rounded-xl border border-gray-200 p-4 max-sm:p-3">
-                  <div className="text-gray-500">Mã hàng</div>
+                <div className="rounded-xl border border-gray-300 p-4 max-sm:p-3">
+                  <div className="text-gray-900">Mã hàng</div>
                   <div className="font-semibold">{activeProduct.code}</div>
                 </div>
-                <div className="rounded-xl border border-gray-200 p-4 max-sm:p-3">
-                  <div className="text-gray-500">Nhóm hàng</div>
+                <div className="rounded-xl border border-gray-300 p-4 max-sm:p-3">
+                  <div className="text-gray-900">Nhóm hàng</div>
                   <div className="font-semibold">{activeProduct.category?.name || 'Chưa phân nhóm'}</div>
                 </div>
-                <div className="rounded-xl border border-gray-200 p-4 max-sm:p-3">
-                  <div className="text-gray-500">Đơn vị tính</div>
+                <div className="rounded-xl border border-gray-300 p-4 max-sm:p-3">
+                  <div className="text-gray-900">Đơn vị tính</div>
                   <div className="font-semibold">{activeProduct.unit}</div>
                 </div>
-                <div className="rounded-xl border border-gray-200 p-4 max-sm:p-3">
-                  <div className="text-gray-500">Mã vạch</div>
+                <div className="rounded-xl border border-gray-300 p-4 max-sm:p-3">
+                  <div className="text-gray-900">Mã vạch</div>
                   <div className="font-semibold">{activeProduct.barcode || 'Chưa có'}</div>
                 </div>
-                <div className="rounded-xl border border-gray-200 p-4 max-sm:p-3">
-                  <div className="text-gray-500">Hạn sử dụng</div>
+                <div className="rounded-xl border border-gray-300 p-4 max-sm:p-3">
+                  <div className="text-gray-900">Hạn sử dụng</div>
                   <div className="font-semibold">
                     {activeProduct.expiry_date ? formatDate(activeProduct.expiry_date) : 'Chưa khai báo'}
                   </div>
-                  <div className="mt-1 text-base text-gray-500">Hiển thị hạn của lô sắp hết hạn sớm nhất</div>
+                  <div className="mt-1 text-base text-gray-900">Hiển thị hạn của lô sắp hết hạn sớm nhất</div>
                 </div>
-                <div className="rounded-xl border border-gray-200 p-4 max-sm:p-3">
-                  <div className="text-gray-500">Ngưỡng báo sắp hết</div>
+                <div className="rounded-xl border border-gray-300 p-4 max-sm:p-3">
+                  <div className="text-gray-900">Ngưỡng báo sắp hết</div>
                   <div className="font-semibold">
                     {activeProduct.min_stock} {activeProduct.unit}
                   </div>
                 </div>
-                <div className="rounded-xl border border-gray-200 p-4 max-sm:p-3">
-                  <div className="text-gray-500">Cách tính giá</div>
+                <div className="rounded-xl border border-gray-300 p-4 max-sm:p-3">
+                  <div className="text-gray-900">Cách tính giá</div>
                   <div className="font-semibold">
                     {activeProduct.price_mode === 'auto' ? 'Tự động theo giá nhập' : 'Giá bán cố định'}
                   </div>
@@ -1117,7 +1117,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
 
             </div>
 
-            <div className="grid grid-cols-2 gap-2 border-t border-gray-100 bg-gray-50 p-3">
+            <div className="grid grid-cols-2 gap-2 border-t border-gray-300 bg-gray-100 p-3">
               <Button
                 variant="outline"
                 onClick={() => openEditModal(activeProduct)}
@@ -1161,26 +1161,26 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
         >
           <section>
             <h3 className="mb-3 flex items-center gap-2 text-lg max-sm:text-sm font-bold text-gray-900">
-              <TrendingUp className="h-5 w-5 text-blue-600" />
+              <TrendingUp className="h-5 w-5 text-blue-950" />
               Thay đổi giá nhập và giá bán
             </h3>
             {priceHistory?.length ? (
               <div className="space-y-3">
                 {priceHistory.map((history) => (
-                  <article key={history.id} className="rounded-xl border border-gray-200 p-4 max-sm:p-3 text-lg max-sm:text-sm">
+                  <article key={history.id} className="rounded-xl border border-gray-300 p-4 max-sm:p-3 text-lg max-sm:text-sm">
                     <p className="font-bold text-gray-900">{formatDate(history.created_at)}</p>
-                    <p className="text-gray-700">Người đổi: {history.changed_by_name || 'Chưa ghi nhận'}</p>
-                    <p className="mt-2 text-gray-800">
+                    <p className="text-gray-900">Người đổi: {history.changed_by_name || 'Chưa ghi nhận'}</p>
+                    <p className="mt-2 text-gray-900">
                       Giá nhập: {formatMoney(history.old_cost)} → <strong>{formatMoney(history.new_cost)}</strong>
                     </p>
-                    <p className="text-gray-800">
-                      Giá bán: {formatMoney(history.old_price)} → <strong className="text-blue-700">{formatMoney(history.new_price)}</strong>
+                    <p className="text-gray-900">
+                      Giá bán: {formatMoney(history.old_price)} → <strong className="text-blue-950">{formatMoney(history.new_price)}</strong>
                     </p>
                   </article>
                 ))}
               </div>
             ) : !isPriceHistoryLoading && !priceHistoryError ? (
-              <p className="text-lg max-sm:text-sm italic text-gray-500">Chưa có thay đổi giá nào được ghi nhận.</p>
+              <p className="text-lg max-sm:text-sm italic text-gray-900">Chưa có thay đổi giá nào được ghi nhận.</p>
             ) : null}
           </section>
         </HistoryModalFrame>
@@ -1196,7 +1196,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
         >
           <section>
             <h3 className="mb-3 flex items-center gap-2 text-lg max-sm:text-sm font-bold text-gray-900">
-              <Package className="h-5 w-5 text-green-600" />
+              <Package className="h-5 w-5 text-green-900" />
               Nhập, bán, kiểm kho và hủy đơn
             </h3>
             {stockHistory?.length ? (
@@ -1215,24 +1215,24 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                   const isPlus = movement.quantity > 0
 
                   return (
-                    <article key={movement.id} className="rounded-xl border border-gray-200 p-4 max-sm:p-3 text-lg max-sm:text-sm">
+                    <article key={movement.id} className="rounded-xl border border-gray-300 p-4 max-sm:p-3 text-lg max-sm:text-sm">
                       <div className="flex justify-between gap-3 max-sm:gap-2">
                         <strong className="text-gray-900">{typeLabel}</strong>
-                        <strong className={isPlus ? 'text-green-700' : 'text-red-700'}>
+                        <strong className={isPlus ? 'text-green-900' : 'text-red-800'}>
                           {isPlus ? '+' : ''}{movement.quantity}
                         </strong>
                       </div>
-                      <p className="text-gray-700">{formatDate(movement.created_at)}</p>
-                      <p className="text-gray-800">
+                      <p className="text-gray-900">{formatDate(movement.created_at)}</p>
+                      <p className="text-gray-900">
                         Còn trong kho sau đó: <strong>{movement.balance_after}</strong>
                       </p>
-                      {movement.note && <p className="break-words text-gray-700">Ghi chú: {movement.note}</p>}
+                      {movement.note && <p className="break-words text-gray-900">Ghi chú: {movement.note}</p>}
                     </article>
                   )
                 })}
               </div>
             ) : !isStockHistoryLoading && !stockHistoryError ? (
-              <p className="text-lg max-sm:text-sm italic text-gray-500">Chưa có biến động kho.</p>
+              <p className="text-lg max-sm:text-sm italic text-gray-900">Chưa có biến động kho.</p>
             ) : null}
           </section>
         </HistoryModalFrame>
@@ -1243,16 +1243,16 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
         <div className="fixed inset-0 z-60 flex items-center justify-center p-4 max-sm:p-3 bg-black/60 backdrop-blur-xs">
           <form
             onSubmit={handleCategorySubmit}
-            className="bg-white rounded-2xl w-full max-w-md p-6 max-sm:p-3 shadow-2xl border border-gray-200 space-y-4 max-sm:space-y-3"
+            className="bg-white rounded-2xl w-full max-w-md p-6 max-sm:p-3 shadow-2xl border border-gray-300 space-y-4 max-sm:space-y-3"
           >
             <h3 className="text-xl max-sm:text-base font-bold text-gray-900">
               {editingCategoryId ? 'Sửa nhóm hàng' : 'Thêm nhóm hàng mới'}
             </h3>
             {newCatError && (
-              <div className="text-red-600 text-lg max-sm:text-sm bg-red-50 p-2.5 rounded-lg" role="alert">{newCatError}</div>
+              <div className="text-red-800 text-lg max-sm:text-sm bg-red-50 p-2.5 rounded-lg" role="alert">{newCatError}</div>
             )}
             <div>
-              <label className="block text-lg max-sm:text-sm font-semibold text-gray-700 mb-1">
+              <label className="block text-lg max-sm:text-sm font-semibold text-gray-900 mb-1">
                 Tên nhóm hàng *
               </label>
               <Input
@@ -1278,7 +1278,7 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
               <Button
                 type="submit"
                 disabled={isPending}
-                className="bg-blue-600 text-white min-h-[48px] font-semibold"
+                className="bg-blue-800 text-white min-h-[48px] font-semibold"
               >
                 {editingCategoryId ? 'Lưu thay đổi' : 'Lưu nhóm'}
               </Button>
@@ -1290,14 +1290,14 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
       {/* MODAL XÁC NHẬN ẨN / HIỆN HÀNG HÓA */}
       {isConfirmHideOpen && activeProduct && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 max-sm:p-3 bg-black/60 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl w-full max-w-md p-6 max-sm:p-3 shadow-2xl border border-gray-200 space-y-5 max-sm:space-y-3">
-            <div className="flex items-center gap-3 max-sm:gap-2 text-amber-600">
+          <div className="bg-white rounded-2xl w-full max-w-md p-6 max-sm:p-3 shadow-2xl border border-gray-300 space-y-5 max-sm:space-y-3">
+            <div className="flex items-center gap-3 max-sm:gap-2 text-amber-950">
               <AlertTriangle className="w-8 h-8 shrink-0" />
               <h3 className="text-xl max-sm:text-base font-bold text-gray-900">
                 {activeProduct.is_active ? 'Ẩn món hàng?' : 'Hiện lại món hàng?'}
               </h3>
             </div>
-            <p className="text-lg max-sm:text-sm text-gray-600 leading-relaxed">
+            <p className="text-lg max-sm:text-sm text-gray-900 leading-relaxed">
               {activeProduct.is_active ? (
                 <>
                   Bạn có chắc muốn ẩn món{' '}
@@ -1327,8 +1327,8 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                 disabled={isPending}
                 className={`min-h-[48px] text-lg max-sm:text-sm px-6 max-sm:px-3 rounded-xl font-bold text-white shadow-md ${
                   activeProduct.is_active
-                    ? 'bg-red-600 hover:bg-red-700'
-                    : 'bg-green-600 hover:bg-green-700'
+                    ? 'bg-red-800 hover:bg-red-900'
+                    : 'bg-green-800 hover:bg-green-900'
                 }`}
               >
                 {activeProduct.is_active ? 'Có, ẩn' : 'Có, hiện lại'}

@@ -24,6 +24,11 @@ body {
   line-height: 1.6;
 }
 
+::placeholder {
+  color: var(--color-gray-600);
+  opacity: 1;
+}
+
 /* Font size settings */
 [data-font-size="medium"] body,
 [data-font-size="medium"] {
@@ -154,6 +159,6 @@ input[inputmode="numeric"] {
 
 /* High contrast focus styles */
 :focus-visible {
-  outline: 3px solid #2563eb;
+  outline: 3px solid #1d4ed8;
   outline-offset: 2px;
 }

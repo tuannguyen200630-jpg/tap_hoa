@@ -11,23 +11,23 @@ export function SidebarDesktopView({ model }: { model: ReturnType<typeof useSide
   return (
       <aside
         aria-label="Thanh điều hướng bên"
-        className="hidden lg:flex lg:w-64 xl:w-72 shrink-0 border-r border-gray-200 bg-white min-h-screen flex-col justify-between sticky top-0 h-screen"
+        className="hidden lg:flex lg:w-64 xl:w-72 shrink-0 border-r border-gray-300 bg-white min-h-screen flex-col justify-between sticky top-0 h-screen"
       >
         {/* Top: Logo & Main Navigation */}
         <div className="flex flex-col flex-1 overflow-y-auto p-4 max-sm:p-3">
           {/* Brand header */}
           <Link
             href="/ban-hang"
-            className="flex items-center gap-3 max-sm:gap-2 px-3 py-3 max-sm:py-2 rounded-xl hover:bg-gray-50 min-h-[48px] transition-colors mb-4 max-sm:mb-3"
+            className="flex items-center gap-3 max-sm:gap-2 px-3 py-3 max-sm:py-2 rounded-xl hover:bg-gray-100 min-h-[48px] transition-colors mb-4 max-sm:mb-3"
           >
-            <div className="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-xs">
+            <div className="w-11 h-11 rounded-xl bg-blue-800 flex items-center justify-center text-white shadow-xs">
               <Store className="w-7 h-7" />
             </div>
             <div>
               <span className="font-bold text-xl max-sm:text-base text-gray-900 block leading-tight">
                 {storeName}
               </span>
-              <span className="text-sm leading-snug text-gray-700 font-medium">
+              <span className="text-sm leading-snug text-gray-900 font-medium">
                 Quản lý cửa hàng
               </span>
             </div>
@@ -47,7 +47,7 @@ export function SidebarDesktopView({ model }: { model: ReturnType<typeof useSide
                   className={cn(
                     'flex items-center gap-3 max-sm:gap-2.5 px-4 max-sm:px-3 py-3 max-sm:py-2 rounded-xl min-h-[48px] text-[18px] transition-all',
                     isActive
-                      ? 'bg-blue-600 text-white font-semibold shadow-xs'
+                      ? 'bg-blue-100 text-blue-950 font-semibold shadow-xs'
                       : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-medium'
                   )}
                 >
@@ -65,17 +65,17 @@ export function SidebarDesktopView({ model }: { model: ReturnType<typeof useSide
         </div>
 
         {/* Bottom: Secondary Menu (Settings, User Info, Logout) */}
-        <div className="p-4 max-sm:p-3 border-t border-gray-200 bg-gray-50/50 space-y-1.5">
+        <div className="p-4 max-sm:p-3 border-t border-gray-300 bg-gray-100/50 space-y-1.5">
           {/* User info preview */}
-          <div className="px-3 py-2 flex items-center gap-2.5 text-gray-600">
-            <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm shrink-0">
+          <div className="px-3 py-2 flex items-center gap-2.5 text-gray-900">
+            <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-950 flex items-center justify-center font-bold text-sm shrink-0">
               <UserIcon className="w-4 h-4" />
             </div>
             <div className="truncate">
               <p className="text-lg max-sm:text-sm font-semibold text-gray-900 truncate">
                 {displayName}
               </p>
-              <p className="text-sm leading-snug text-gray-700">Tài khoản</p>
+              <p className="text-sm leading-snug text-gray-900">Tài khoản</p>
             </div>
           </div>
 
@@ -85,7 +85,7 @@ export function SidebarDesktopView({ model }: { model: ReturnType<typeof useSide
             className={cn(
               'flex items-center gap-3 max-sm:gap-2.5 px-4 max-sm:px-3 py-3 max-sm:py-2 rounded-xl min-h-[48px] text-[18px] transition-colors',
               isCaiDatActive
-                ? 'bg-blue-600 text-white font-semibold shadow-xs'
+                ? 'bg-blue-100 text-blue-950 font-semibold shadow-xs'
                 : 'text-gray-700 hover:bg-gray-200/70 hover:text-gray-900 font-medium'
             )}
           >
@@ -98,7 +98,7 @@ export function SidebarDesktopView({ model }: { model: ReturnType<typeof useSide
             type="button"
             onClick={handleLogout}
             disabled={isLoggingOut}
-            className="flex items-center gap-3 max-sm:gap-2.5 px-4 max-sm:px-3 py-3 max-sm:py-2 rounded-xl min-h-[48px] w-full text-left text-[18px] text-red-600 hover:bg-red-50 hover:text-red-700 font-medium transition-colors cursor-pointer disabled:opacity-50"
+            className="flex items-center gap-3 max-sm:gap-2.5 px-4 max-sm:px-3 py-3 max-sm:py-2 rounded-xl min-h-[48px] w-full text-left text-[18px] text-red-800 hover:bg-red-50 hover:text-red-800 font-medium transition-colors cursor-pointer disabled:opacity-100 disabled:bg-gray-200 disabled:text-gray-900 disabled:border-gray-400"
           >
             <LogOut className="w-6 h-6 shrink-0 stroke-[1.75]" />
             <span>{isLoggingOut ? 'Đang đăng xuất...' : 'Đăng xuất'}</span>

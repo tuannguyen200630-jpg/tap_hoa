@@ -57,7 +57,7 @@ function ExpandableProductName({ name }: { name: string }) {
           <button
             type="button"
             onClick={() => setExpanded(false)}
-            className="ml-1.5 inline text-xs font-semibold text-blue-600 hover:underline"
+            className="ml-1.5 inline text-xs font-semibold text-blue-950 hover:underline"
           >
             Thu gọn
           </button>
@@ -68,7 +68,7 @@ function ExpandableProductName({ name }: { name: string }) {
         <button
           type="button"
           onClick={() => setExpanded(true)}
-          className="absolute bottom-0 right-0 bg-gradient-to-l from-white via-white via-80% to-transparent pl-3 text-xs font-semibold leading-5 text-blue-600 hover:underline"
+          className="absolute bottom-0 right-0 bg-gradient-to-l from-white via-white via-80% to-transparent pl-3 text-xs font-semibold leading-5 text-blue-950 hover:underline"
         >
           ...thêm
         </button>
@@ -188,13 +188,13 @@ export function PurchaseMobileView({
         style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 120px' }}
         className={`relative flex min-h-[104px] min-w-0 max-w-full flex-col items-start justify-between rounded-xl border-2 p-2.5 text-left transition duration-150 active:scale-[0.98] ${
           selectedQuantity > 0
-            ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-200'
-            : 'border-gray-200 bg-white hover:border-blue-500 hover:bg-blue-50'
+            ? 'border-blue-700 bg-blue-50 ring-2 ring-blue-600/30'
+            : 'border-gray-300 bg-white hover:border-blue-700 hover:bg-blue-50'
         }`}
       >
         {selectedQuantity > 0 && (
           <span
-            className="absolute right-2 top-2 inline-flex min-h-7 min-w-7 items-center justify-center rounded-full bg-blue-700 px-2 text-xs font-bold text-white"
+            className="absolute right-2 top-2 inline-flex min-h-7 min-w-7 items-center justify-center rounded-full bg-blue-800 px-2 text-xs font-bold text-white"
             aria-label={`Đã chọn ${selectedQuantity}`}
           >
             {selectedQuantity}
@@ -206,15 +206,15 @@ export function PurchaseMobileView({
           {product.name}
         </span>
         {lowStock && (
-          <span className="max-w-full truncate whitespace-nowrap rounded-full bg-orange-100 px-2 py-0.5 text-xs font-bold text-orange-800">
+          <span className="max-w-full truncate whitespace-nowrap rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-950">
             Còn: {Number(product.stock)} {product.unit}
           </span>
         )}
-        <span className="max-w-full truncate whitespace-nowrap text-xs text-gray-600">
+        <span className="max-w-full truncate whitespace-nowrap text-xs text-gray-900">
           Giá cũ: {formatMoney(product.last_cost)}
         </span>
         {!lowStock && (
-          <span className="max-w-full truncate whitespace-nowrap text-xs text-gray-600">
+          <span className="max-w-full truncate whitespace-nowrap text-xs text-gray-900">
             Còn: {Number(product.stock)} {product.unit}
           </span>
         )}
@@ -224,18 +224,18 @@ export function PurchaseMobileView({
 
   const renderSelectedItems = (idPrefix: string) => (
     <div className="min-w-0 max-w-full">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="bg-blue-50 px-4 max-sm:px-3 py-2 border-b border-blue-100">
-          <h3 className="font-bold text-blue-900 text-lg max-sm:text-sm">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-300 overflow-hidden">
+        <div className="bg-blue-50 px-4 max-sm:px-3 py-2 border-b border-blue-700">
+          <h3 className="font-bold text-blue-950 text-lg max-sm:text-sm">
             Các món cần nhập ({cart.length} món)
           </h3>
         </div>
         {cart.length === 0 ? (
-          <p className="px-4 max-sm:px-3 py-2 text-base text-gray-500">
+          <p className="px-4 max-sm:px-3 py-2 text-base text-gray-900">
             Chưa chọn món. Chọn thẻ bên dưới để thêm ngay.
           </p>
         ) : (
-            <div className="max-h-[42vh] divide-y divide-gray-100 overflow-y-auto pr-1">
+            <div className="max-h-[42vh] divide-y divide-gray-300 overflow-y-auto pr-1">
             {cart.map((item, index) => {
               const subtotal = Math.round(item.costPrice * getPurchaseQuantity(item))
               const costDiff = item.costPrice - item.product.last_cost
@@ -245,7 +245,7 @@ export function PurchaseMobileView({
               const hasOptionalSetting = item.isBulk || Boolean(item.expiryDate)
 
               return (
-                <div key={item.product.id} className="space-y-2 border-b border-gray-100 p-3 last:border-b-0 sm:p-4">
+                <div key={item.product.id} className="space-y-2 border-b border-gray-300 p-3 last:border-b-0 sm:p-4">
                   <div className="flex min-w-0 items-start justify-between gap-2">
                     <div className="flex min-w-0 flex-1 flex-col items-start gap-1">
                       <ExpandableProductName name={item.product.name} />
@@ -258,7 +258,7 @@ export function PurchaseMobileView({
                     </div>
                     <div className="flex shrink-0 items-start justify-end gap-1">
                       <span className="min-w-0 text-right">
-                        <span className="block text-xs font-medium text-gray-500">Thành tiền</span>
+                        <span className="block text-xs font-medium text-gray-900">Thành tiền</span>
                         <span className="block whitespace-nowrap text-sm font-bold tabular-nums text-gray-900 sm:text-lg">
                           {formatMoney(subtotal)}
                         </span>
@@ -268,7 +268,7 @@ export function PurchaseMobileView({
                         onClick={() => removeFromCart(index)}
                         aria-label={`Xóa ${item.product.name} khỏi phiếu nhập`}
                         title="Xóa khỏi phiếu nhập"
-                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-red-500 transition-colors hover:bg-red-50 hover:text-red-600 sm:h-10 sm:w-10"
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-red-800 transition-colors hover:bg-red-50 hover:text-red-800 sm:h-10 sm:w-10"
                       >
                         <Trash2 className="h-4 w-4 sm:h-5 sm:w-5" />
                       </button>
@@ -277,7 +277,7 @@ export function PurchaseMobileView({
 
                   <div className="grid grid-cols-[124px_minmax(0,1fr)] items-end gap-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
                     <div className="min-w-0">
-                      <label className="mb-1 block text-xs font-semibold leading-tight text-gray-700 sm:text-sm">
+                      <label className="mb-1 block text-xs font-semibold leading-tight text-gray-900 sm:text-sm">
                         {item.isBulk ? 'Số thùng' : `Số lượng (${item.product.unit})`}
                       </label>
 <div className="flex min-w-0 items-center gap-1">
@@ -291,7 +291,7 @@ export function PurchaseMobileView({
                                 : Math.max(1, roundQuantity(item.quantity - 10)),
                             })
                           }
-                          className="flex h-9 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-700 transition-colors hover:bg-gray-200 sm:h-11 sm:w-11"
+                          className="flex h-9 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-900 transition-colors hover:bg-gray-200 sm:h-11 sm:w-11"
                         >
                           <Minus className="h-4 w-4" />
                         </HoldRepeatButton>
@@ -328,7 +328,7 @@ export function PurchaseMobileView({
                                 : roundQuantity(item.quantity + 10),
                             })
                           }
-                          className="flex h-9 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-700 transition-colors hover:bg-gray-200 sm:h-11 sm:w-11"
+                          className="flex h-9 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-900 transition-colors hover:bg-gray-200 sm:h-11 sm:w-11"
                         >
                           <Plus className="h-4 w-4" />
                         </HoldRepeatButton>
@@ -336,7 +336,7 @@ export function PurchaseMobileView({
                     </div>
 
                     <div className="min-w-0">
-                      <label className="mb-1 block text-xs font-semibold leading-tight text-gray-700 sm:text-sm">
+                      <label className="mb-1 block text-xs font-semibold leading-tight text-gray-900 sm:text-sm">
                         Giá nhập mỗi {item.product.unit} (đ)
                       </label>
                       <Input
@@ -356,7 +356,7 @@ export function PurchaseMobileView({
                       {hasDiff && (
                         <div
                           className={`mt-1 flex items-center gap-1 text-xs font-medium leading-tight ${
-                            costDiff > 0 ? 'text-red-600' : 'text-green-600'
+                            costDiff > 0 ? 'text-red-800' : 'text-green-900'
                           }`}
                         >
                           {costDiff > 0 ? (
@@ -381,17 +381,17 @@ export function PurchaseMobileView({
                           [item.product.id]: !isOptionsExpanded,
                         }))
                       }
-                      className="col-span-2 flex h-9 min-w-0 items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-2.5 text-xs font-semibold text-gray-800 transition-colors hover:bg-gray-50 sm:col-span-1 sm:h-11 sm:min-w-44 sm:text-sm"
+                      className="col-span-2 flex h-9 min-w-0 items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-2.5 text-xs font-semibold text-gray-900 transition-colors hover:bg-gray-100 sm:col-span-1 sm:h-11 sm:min-w-44 sm:text-sm"
                     >
                       <span className="whitespace-nowrap">Thùng / Hạn SD</span>
                       <span className="flex min-w-0 items-center gap-1.5">
                         <span
                           className={`h-2.5 w-2.5 shrink-0 rounded-full ${
-                            hasOptionalSetting ? 'bg-green-600' : 'bg-gray-300'
+                            hasOptionalSetting ? 'bg-green-800' : 'bg-gray-300'
                           }`}
                           aria-hidden="true"
                         />
-                        <span className="truncate text-xs font-medium text-gray-600">
+                        <span className="truncate text-xs font-medium text-gray-900">
                           {item.isBulk && item.expiryDate
                             ? 'Theo thùng · Có HSD'
                             : item.isBulk
@@ -412,7 +412,7 @@ export function PurchaseMobileView({
                   {isOptionsExpanded && (
                     <div
                       id={`${idPrefix}-purchase-options-${item.product.id}`}
-                      className="grid grid-cols-1 gap-2.5 rounded-lg bg-gray-50 p-2.5 sm:grid-cols-2 sm:gap-3 sm:p-3"
+                      className="grid grid-cols-1 gap-2.5 rounded-lg bg-gray-100 p-2.5 sm:grid-cols-2 sm:gap-3 sm:p-3"
                     >
                       <div className="min-w-0">
                         <label className="flex min-h-9 cursor-pointer select-none items-center gap-2 sm:min-h-11">
@@ -436,7 +436,7 @@ export function PurchaseMobileView({
                             }}
                             className="h-4 w-4 shrink-0 rounded accent-blue-600 sm:h-5 sm:w-5"
                           />
-                          <span className="text-xs font-semibold leading-tight text-gray-800 sm:text-sm">
+                          <span className="text-xs font-semibold leading-tight text-gray-900 sm:text-sm">
                             Nhập theo thùng
                           </span>
                         </label>
@@ -444,7 +444,7 @@ export function PurchaseMobileView({
 {item.isBulk && (
                           <div className="mt-2 grid grid-cols-[minmax(0,1fr)_124px] items-end gap-2 sm:grid-cols-2">
                             <div className="min-w-0">
-                              <label className="mb-1 block text-xs font-semibold leading-tight text-gray-700 sm:text-sm">
+                              <label className="mb-1 block text-xs font-semibold leading-tight text-gray-900 sm:text-sm">
                                 Giá cả thùng (đ)
                               </label>
                               <Input
@@ -465,7 +465,7 @@ export function PurchaseMobileView({
                             </div>
 
                             <div className="min-w-0">
-                              <label className="mb-1 block text-xs font-semibold leading-tight text-gray-700 sm:text-sm">
+                              <label className="mb-1 block text-xs font-semibold leading-tight text-gray-900 sm:text-sm">
                                 Số {item.product.unit} trong thùng
                               </label>
                               <div className="flex min-w-0 items-center gap-1">
@@ -487,7 +487,7 @@ export function PurchaseMobileView({
                                       isBulk: true,
                                     })
                                   }}
-                                  className="flex h-9 w-8 shrink-0 items-center justify-center rounded-lg bg-white border border-gray-300 text-gray-700 transition-colors hover:bg-gray-100 sm:h-11 sm:w-11"
+                                  className="flex h-9 w-8 shrink-0 items-center justify-center rounded-lg bg-white border border-gray-300 text-gray-900 transition-colors hover:bg-gray-100 sm:h-11 sm:w-11"
                                 >
                                   <Minus className="h-4 w-4" />
                                 </HoldRepeatButton>
@@ -527,14 +527,14 @@ export function PurchaseMobileView({
                                       isBulk: true,
                                     })
                                   }}
-                                  className="flex h-9 w-8 shrink-0 items-center justify-center rounded-lg bg-white border border-gray-300 text-gray-700 transition-colors hover:bg-gray-100 sm:h-11 sm:w-11"
+                                  className="flex h-9 w-8 shrink-0 items-center justify-center rounded-lg bg-white border border-gray-300 text-gray-900 transition-colors hover:bg-gray-100 sm:h-11 sm:w-11"
                                 >
                                   <Plus className="h-4 w-4" />
                                 </HoldRepeatButton>
                               </div>
                             </div>
 
-                            <div className="col-span-2 rounded-lg bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-blue-800 sm:text-sm">
+                            <div className="col-span-2 rounded-lg bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-blue-950 sm:text-sm">
                               → Giá mỗi {item.product.unit}:{' '}
                               <strong>{formatMoney(item.costPrice)}</strong>
                             </div>
@@ -543,7 +543,7 @@ export function PurchaseMobileView({
                       </div>
 
                       <div className="min-w-0">
-                        <label className="mb-1 block text-xs font-semibold text-gray-700 sm:text-sm">
+                        <label className="mb-1 block text-xs font-semibold text-gray-900 sm:text-sm">
                           Hạn sử dụng (không bắt buộc)
                         </label>
                         <Input
@@ -577,11 +577,11 @@ export function PurchaseMobileView({
     const hasExtraInfo = Boolean(selectedSupplier) || Boolean(note.trim())
 
     return (
-      <div className="min-w-0 space-y-3 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm sm:p-4">
+      <div className="min-w-0 space-y-3 rounded-2xl border border-gray-300 bg-white p-3 shadow-sm sm:p-4">
         <h3 className="text-sm font-bold text-gray-900 sm:text-base">Thông tin phiếu nhập</h3>
 
         <fieldset className="min-w-0">
-          <legend className="mb-1.5 block text-xs font-semibold text-gray-700 sm:text-sm">Thanh toán</legend>
+          <legend className="mb-1.5 block text-xs font-semibold text-gray-900 sm:text-sm">Thanh toán</legend>
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
@@ -589,8 +589,8 @@ export function PurchaseMobileView({
               aria-pressed={payFull}
               className={`min-h-11 rounded-xl border-2 px-2.5 py-1.5 text-left text-sm transition-all ${
                 payFull
-                  ? 'border-blue-600 bg-blue-50 text-blue-900'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-blue-700 bg-blue-50 text-blue-950'
+                  : 'border-gray-300 hover:border-gray-300'
               }`}
             >
               <span className="block font-bold">Trả ngay</span>
@@ -601,8 +601,8 @@ export function PurchaseMobileView({
               aria-pressed={!payFull}
               className={`min-h-11 rounded-xl border-2 px-2.5 py-1.5 text-left text-sm transition-all ${
                 !payFull
-                  ? 'border-blue-600 bg-blue-50 text-blue-900'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-blue-700 bg-blue-50 text-blue-950'
+                  : 'border-gray-300 hover:border-gray-300'
               }`}
             >
               <span className="block font-bold">Ghi nợ</span>
@@ -611,7 +611,7 @@ export function PurchaseMobileView({
 
           {!payFull && (
             <div className="mt-2.5 min-w-0">
-              <label htmlFor={`${idPrefix}-paid-amount`} className="mb-1 block text-xs font-semibold text-gray-700 sm:text-sm">
+              <label htmlFor={`${idPrefix}-paid-amount`} className="mb-1 block text-xs font-semibold text-gray-900 sm:text-sm">
                 Số tiền trả trước (đ)
               </label>
               <Input
@@ -623,7 +623,7 @@ export function PurchaseMobileView({
                 className="h-10 min-w-0 text-sm font-bold"
               />
               {debtAmount > 0 && (
-                <p className="mt-1 text-xs font-medium text-red-600">
+                <p className="mt-1 text-xs font-medium text-red-800">
                   Nợ nhà cung cấp: {formatMoney(debtAmount)}
                 </p>
               )}
@@ -637,17 +637,17 @@ export function PurchaseMobileView({
             aria-expanded={isExtraInfoOpen}
             aria-controls={`${idPrefix}-extra-info`}
             onClick={() => setIsExtraInfoOpen((prev) => !prev)}
-            className="flex h-9 w-full items-center justify-between gap-2 rounded-lg border border-gray-200 bg-gray-50 px-2.5 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-100 sm:text-sm"
+            className="flex h-9 w-full items-center justify-between gap-2 rounded-lg border border-gray-300 bg-gray-100 px-2.5 text-xs font-semibold text-gray-900 transition-colors hover:bg-gray-100 sm:text-sm"
           >
             <span className="flex items-center gap-1.5">
               <span>Thêm</span>
-              <span className="font-normal text-gray-400">(Nhà cung cấp, ghi chú)</span>
+              <span className="font-normal text-gray-900">(Nhà cung cấp, ghi chú)</span>
               {hasExtraInfo && (
-                <span className="h-2 w-2 rounded-full bg-green-600" aria-hidden="true" />
+                <span className="h-2 w-2 rounded-full bg-green-800" aria-hidden="true" />
               )}
             </span>
             <ChevronDown
-              className={`h-4 w-4 shrink-0 text-gray-500 transition-transform ${
+              className={`h-4 w-4 shrink-0 text-gray-900 transition-transform ${
                 isExtraInfoOpen ? 'rotate-180' : ''
               }`}
             />
@@ -656,17 +656,17 @@ export function PurchaseMobileView({
           {isExtraInfoOpen && (
             <div
               id={`${idPrefix}-extra-info`}
-              className="mt-2 space-y-2.5 rounded-lg border border-gray-200 bg-gray-50/70 p-2.5"
+              className="mt-2 space-y-2.5 rounded-lg border border-gray-300 bg-gray-100/70 p-2.5"
             >
               <div className="min-w-0">
-                <label htmlFor={`${idPrefix}-supplier`} className="mb-1 block text-xs font-semibold text-gray-700">
+                <label htmlFor={`${idPrefix}-supplier`} className="mb-1 block text-xs font-semibold text-gray-900">
                   Nhà cung cấp (không bắt buộc)
                 </label>
                 <select
                   id={`${idPrefix}-supplier`}
                   value={selectedSupplier}
                   onChange={(e) => setSelectedSupplier(e.target.value)}
-                  className="h-10 w-full min-w-0 max-w-full rounded-lg border border-gray-300 bg-white px-2.5 text-sm focus:border-blue-500"
+                  className="h-10 w-full min-w-0 max-w-full rounded-lg border border-gray-300 bg-white px-2.5 text-sm focus:border-blue-700"
                 >
                   <option value="">-- Không chọn --</option>
                   {suppliers.map((supplier) => (
@@ -680,7 +680,7 @@ export function PurchaseMobileView({
               </div>
 
               <div className="min-w-0">
-                <label htmlFor={`${idPrefix}-note`} className="mb-1 block text-xs font-semibold text-gray-700">
+                <label htmlFor={`${idPrefix}-note`} className="mb-1 block text-xs font-semibold text-gray-900">
                   Ghi chú (không bắt buộc)
                 </label>
                 <textarea
@@ -688,7 +688,7 @@ export function PurchaseMobileView({
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
                   rows={2}
-                  className="w-full min-w-0 max-w-full resize-none rounded-lg border border-gray-300 bg-white p-2 text-sm focus:border-blue-500 focus:outline-none"
+                  className="w-full min-w-0 max-w-full resize-none rounded-lg border border-gray-300 bg-white p-2 text-sm focus:border-blue-700 focus:outline-none"
                   placeholder="Ghi chú thêm nếu cần..."
                 />
               </div>
@@ -700,7 +700,7 @@ export function PurchaseMobileView({
   }
 
   const renderPurchaseSummary = () => (
-    <div className="space-y-3 rounded-2xl bg-blue-600 p-4 max-sm:p-3 text-white shadow-md sm:p-5">
+    <div className="space-y-3 rounded-2xl bg-blue-800 p-4 max-sm:p-3 text-white shadow-md sm:p-5">
       <div className="flex items-center justify-between gap-2 text-lg max-sm:text-sm">
         <span>Tổng hàng:</span>
         <span className="font-semibold">{cart.length} món</span>
@@ -711,14 +711,14 @@ export function PurchaseMobileView({
           {cart.reduce((sum, item) => sum + getPurchaseQuantity(item), 0)}
         </span>
       </div>
-      <div className="mt-2 border-t border-blue-500 pt-3">
+      <div className="mt-2 border-t border-blue-700 pt-3">
         <div className="flex items-center justify-between gap-2">
           <span className="text-xl max-sm:text-base font-semibold">Tổng tiền:</span>
           <span className="whitespace-nowrap text-base font-bold sm:text-xl">{formatMoney(totalAmount)}</span>
         </div>
       </div>
       {!payFull && debtAmount > 0 && (
-        <div className="flex items-center justify-between gap-2 text-base text-yellow-200">
+        <div className="flex items-center justify-between gap-2 text-base text-amber-950">
           <span>Nợ nhà cung cấp:</span>
           <span className="font-bold">{formatMoney(debtAmount)}</span>
         </div>
@@ -726,7 +726,7 @@ export function PurchaseMobileView({
       <Button
         onClick={handleSubmit}
         disabled={isPending || cart.length === 0}
-        className="mt-2 min-h-14 w-full rounded-xl bg-white text-xl max-sm:text-base font-bold text-blue-700 shadow-md hover:bg-blue-50"
+        className="mt-2 min-h-14 w-full rounded-xl bg-white text-xl max-sm:text-base font-bold text-blue-950 shadow-md hover:bg-blue-50"
       >
         {isPending ? 'Đang xử lý...' : 'Lưu phiếu nhập'}
       </Button>
@@ -736,7 +736,7 @@ export function PurchaseMobileView({
 const renderPurchaseHistoryLink = () => (
     <Link
       href="/nhap-hang/lich-su"
-      className="inline-flex h-9 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl border border-blue-600 bg-white px-2.5 text-xs font-semibold text-blue-700 shadow-sm transition-colors hover:bg-blue-50 sm:h-10 sm:px-3.5 sm:text-sm"
+      className="inline-flex h-9 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl border border-blue-700 bg-white px-2.5 text-xs font-semibold text-blue-950 shadow-sm transition-colors hover:bg-blue-50 sm:h-10 sm:px-3.5 sm:text-sm"
     >
       <History className="h-4 w-4 shrink-0" />
       Lịch sử nhập hàng
@@ -756,10 +756,10 @@ const renderPurchaseHistoryLink = () => (
 
       {/* Lỗi form */}
       {formError && (
-        <div className="bg-red-50 border-2 border-red-200 text-red-700 p-4 max-sm:p-3 rounded-xl text-base flex items-center gap-2">
-          <AlertTriangle className="w-5 h-5 shrink-0 text-red-500" />
+        <div className="bg-red-50 border-2 border-red-300 text-red-800 p-4 max-sm:p-3 rounded-xl text-base flex items-center gap-2">
+          <AlertTriangle className="w-5 h-5 shrink-0 text-red-800" />
           <span>{formError}</span>
-          <button onClick={() => setFormError('')} className="ml-auto text-red-400 hover:text-red-600">
+          <button onClick={() => setFormError('')} className="ml-auto text-red-800 hover:text-red-800">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -767,14 +767,14 @@ const renderPurchaseHistoryLink = () => (
 
       {/* Thông báo nhập thành công */}
       {successInfo && !showPriceModal && (
-        <div className="bg-green-50 border-2 border-green-300 p-5 max-sm:p-3 rounded-2xl shadow-sm">
+        <div className="bg-emerald-100 border-2 border-emerald-400 p-5 max-sm:p-3 rounded-2xl shadow-sm">
           <div className="flex items-center gap-3 max-sm:gap-2 mb-3">
-            <CheckCircle className="w-8 h-8 text-green-600" />
+            <CheckCircle className="w-8 h-8 text-green-900" />
             <div>
-              <div className="text-xl max-sm:text-base font-bold text-green-800">
+              <div className="text-xl max-sm:text-base font-bold text-green-900">
                 Nhập hàng thành công!
               </div>
-              <div className="text-green-700 text-base">
+              <div className="text-green-900 text-base">
                 Phiếu nhập: <strong>{successInfo.code}</strong>
               </div>
             </div>
@@ -785,7 +785,7 @@ const renderPurchaseHistoryLink = () => (
             </div>
             {successInfo.debt > 0 && (
               <div>
-                Còn nợ nhà cung cấp: <strong className="text-red-600">{formatMoney(successInfo.debt)}</strong>
+                Còn nợ nhà cung cấp: <strong className="text-red-800">{formatMoney(successInfo.debt)}</strong>
               </div>
             )}
           </div>
@@ -805,7 +805,7 @@ const renderPurchaseHistoryLink = () => (
            ———————————————————————————————————— */}
         <div className="min-w-0 max-w-full space-y-4 max-sm:space-y-3">
           {/* Tìm hàng */}
-          <div className="min-w-0 max-w-full rounded-2xl border border-gray-100 bg-white p-3 shadow-sm sm:p-5">
+          <div className="min-w-0 max-w-full rounded-2xl border border-gray-300 bg-white p-3 shadow-sm sm:p-5">
             <div className="mb-3 flex min-w-0 items-center justify-between gap-2">
               <h2 className="min-w-0 text-base font-bold text-gray-900">Chọn hàng nhập</h2>
               
@@ -818,28 +818,28 @@ const renderPurchaseHistoryLink = () => (
                   setSearch(e.target.value)
                 }}
                 placeholder="Gõ tên hoặc mã hàng..."
-                className="h-12 min-w-0 border-2 border-gray-200 px-3 py-2 pr-10 text-sm focus:border-blue-500"
+                className="h-12 min-w-0 border-2 border-gray-300 px-3 py-2 pr-10 text-sm focus:border-blue-700"
               />
               {search && (
                 <button
                   onClick={() => {
                     setSearch('')
                   }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-900 hover:text-gray-900 p-1"
                 >
                   <X className="w-5 h-5" />
                 </button>
               )}
             </div>
             <div className="mt-3 min-w-0 max-w-full" aria-label="Lọc theo nhóm hàng">
-              <label htmlFor="purchase-category" className="mb-1 block text-sm font-semibold text-gray-800 sm:text-base">
+              <label htmlFor="purchase-category" className="mb-1 block text-sm font-semibold text-gray-900 sm:text-base">
                 Nhóm hàng
               </label>
               <select
                 id="purchase-category"
                 value={selectedCategory}
                 onChange={(event) => setSelectedCategory(event.target.value)}
-                className="h-12 min-h-[48px] w-full min-w-0 max-w-full rounded-xl border-2 border-gray-300 bg-white px-3 text-sm text-gray-900 focus:border-blue-500 sm:text-base"
+                className="h-12 min-h-[48px] w-full min-w-0 max-w-full rounded-xl border-2 border-gray-300 bg-white px-3 text-sm text-gray-900 focus:border-blue-700 sm:text-base"
               >
                 <option value="all">Tất cả nhóm</option>
                 {categories.map((category) => (
@@ -855,7 +855,7 @@ const renderPurchaseHistoryLink = () => (
                   {visibleLowStockProducts.map((product) => renderProductCard(product, true))}
                 </div>
                 {lowStockProducts.length > lowStockVisibleCount && (
-                  <div ref={lowStockSentinelRef} className="min-h-10 text-center text-lg max-sm:text-sm text-gray-600">
+                  <div ref={lowStockSentinelRef} className="min-h-10 text-center text-lg max-sm:text-sm text-gray-900">
                     Cuộn để xem thêm hàng gần hết...
                   </div>
                 )}
@@ -865,7 +865,7 @@ const renderPurchaseHistoryLink = () => (
             <section className="mt-4 max-sm:mt-3 space-y-3" aria-label="Tất cả món hàng">
               <div className="flex items-center justify-between gap-2">
                 <h3 className="whitespace-nowrap text-base font-bold text-gray-900">Tất cả món hàng</h3>
-                <span className="whitespace-nowrap text-xs text-gray-600">{filteredProducts.length} món</span>
+                <span className="whitespace-nowrap text-xs text-gray-900">{filteredProducts.length} món</span>
               </div>
               {visibleProducts.length > 0 ? (
                 <div className="grid min-w-0 max-w-full grid-cols-2 gap-3 max-sm:gap-2 sm:grid-cols-3">
@@ -873,15 +873,15 @@ const renderPurchaseHistoryLink = () => (
                 </div>
               ) : (
                 <div className="rounded-xl border-2 border-dashed border-gray-300 p-7 text-center">
-                  <PackageIcon className="mx-auto mb-2 h-10 w-10 text-gray-300" />
-                  <p className="text-lg max-sm:text-sm font-semibold text-gray-700">
+                  <PackageIcon className="mx-auto mb-2 h-10 w-10 text-gray-900" />
+                  <p className="text-lg max-sm:text-sm font-semibold text-gray-900">
                     {search.trim() ? 'Không tìm thấy món hàng phù hợp' : 'Chưa có món hàng để hiển thị'}
                   </p>
                   {search.trim() && (
                     <Button
                       variant="outline"
                       size="sm"
-                      className="mt-3 min-h-[48px] text-green-700 border-green-300 hover:bg-green-50"
+                      className="mt-3 min-h-[48px] text-green-900 border-emerald-400 hover:bg-emerald-100"
                       onClick={openQuickAdd}
                     >
                       <Plus className="mr-1 h-4 w-4" />
@@ -891,7 +891,7 @@ const renderPurchaseHistoryLink = () => (
                 </div>
               )}
               {visibleProducts.length > 0 && (
-                <div ref={allProductsSentinelRef} className="min-h-10 text-center text-lg max-sm:text-sm text-gray-600" aria-live="polite">
+                <div ref={allProductsSentinelRef} className="min-h-10 text-center text-lg max-sm:text-sm text-gray-900" aria-live="polite">
                   {allProductsVisibleCount < filteredProducts.length ? 'Cuộn để tải thêm món...' : ''}
                 </div>
               )}
@@ -900,13 +900,13 @@ const renderPurchaseHistoryLink = () => (
 
           {/* Danh sách hàng đã chọn */}
           {false && cart.length > 0 && (
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              <div className="bg-blue-50 px-5 max-sm:px-3 py-3 max-sm:py-2 border-b border-blue-100">
-                <h3 className="font-bold text-blue-900 text-lg max-sm:text-sm">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-300 overflow-hidden">
+              <div className="bg-blue-50 px-5 max-sm:px-3 py-3 max-sm:py-2 border-b border-blue-700">
+                <h3 className="font-bold text-blue-950 text-lg max-sm:text-sm">
                   Các món cần nhập ({cart.length} món)
                 </h3>
               </div>
-              <div className="max-h-[45vh] divide-y divide-gray-100 overflow-y-auto">
+              <div className="max-h-[45vh] divide-y divide-gray-300 overflow-y-auto">
             {cart.map((item, index) => {
                   const subtotal = Math.round(item.costPrice * getPurchaseQuantity(item))
                   const costDiff = item.costPrice - item.product.last_cost
@@ -919,10 +919,10 @@ const renderPurchaseHistoryLink = () => (
                         <div>
                           <div className="font-bold text-gray-900 text-lg max-sm:text-sm">{item.product.name}</div>
                           <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                            <span className="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-xs font-mono font-bold">
+                            <span className="bg-gray-100 text-gray-900 px-2 py-0.5 rounded text-xs font-mono font-bold">
                               {item.product.code}
                             </span>
-                            <span className="text-gray-500 text-sm">ĐVT: {item.product.unit}</span>
+                            <span className="text-gray-900 text-sm">ĐVT: {item.product.unit}</span>
                             <Badge variant={item.product.price_mode === 'auto' ? 'default' : 'outline'}>
                               {item.product.price_mode === 'auto' ? 'Tự đề xuất giá' : 'Giá cố định'}
                             </Badge>
@@ -930,7 +930,7 @@ const renderPurchaseHistoryLink = () => (
                         </div>
                         <button
                           onClick={() => removeFromCart(index)}
-                          className="text-red-400 hover:text-red-600 p-2 hover:bg-red-50 rounded-lg transition-colors"
+                          className="text-red-800 hover:text-red-800 p-2 hover:bg-red-50 rounded-lg transition-colors"
                           title="Xóa khỏi phiếu nhập"
                         >
                           <Trash2 className="w-5 h-5" />
@@ -941,14 +941,14 @@ const renderPurchaseHistoryLink = () => (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-sm:gap-2">
                         {/* Số lượng */}
                         <div>
-                          <label className="block text-sm font-semibold text-gray-700 mb-1">
+                          <label className="block text-sm font-semibold text-gray-900 mb-1">
                             Số {item.isBulk ? 'thùng' : `lượng (${item.product.unit})`}
                           </label>
                           <div className="flex items-center gap-2">
                             <button
                               type="button"
                               onClick={() => decreaseCartQuantity(index)}
-                              className="w-12 h-12 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-700 transition-colors"
+                              className="w-12 h-12 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-900 transition-colors"
                             >
                               <Minus className="w-5 h-5" />
                             </button>
@@ -977,7 +977,7 @@ const renderPurchaseHistoryLink = () => (
                             <button
                               type="button"
                               onClick={() => increaseCartQuantity(index)}
-                              className="w-12 h-12 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-700 transition-colors"
+                              className="w-12 h-12 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-900 transition-colors"
                             >
                               <Plus className="w-5 h-5" />
                             </button>
@@ -986,7 +986,7 @@ const renderPurchaseHistoryLink = () => (
 
                         {/* Giá nhập */}
                         <div>
-                          <label className="block text-sm font-semibold text-gray-700 mb-1">
+                          <label className="block text-sm font-semibold text-gray-900 mb-1">
                             Giá nhập mỗi {item.product.unit} (đ)
                           </label>
                           <Input
@@ -1004,7 +1004,7 @@ const renderPurchaseHistoryLink = () => (
                           {hasDiff && (
                             <div
                               className={`text-sm mt-1 flex items-center gap-1 font-medium ${
-                                costDiff > 0 ? 'text-red-600' : 'text-green-600'
+                                costDiff > 0 ? 'text-red-800' : 'text-green-900'
                               }`}
                             >
                               {costDiff > 0 ? (
@@ -1019,7 +1019,7 @@ const renderPurchaseHistoryLink = () => (
                       </div>
 
                       {/* Dòng 3: Nhập theo thùng (toggle) */}
-                      <div className="bg-gray-50 rounded-xl p-3">
+                      <div className="bg-gray-100 rounded-xl p-3">
                         <label className="flex items-center gap-2 cursor-pointer select-none">
                           <input
                             type="checkbox"
@@ -1037,7 +1037,7 @@ const renderPurchaseHistoryLink = () => (
                             }}
                             className="w-5 h-5 rounded accent-blue-600"
                           />
-                          <span className="text-sm font-medium text-gray-700">
+                          <span className="text-sm font-medium text-gray-900">
                             Nhập theo thùng 
                           </span>
                         </label>
@@ -1045,7 +1045,7 @@ const renderPurchaseHistoryLink = () => (
                         {item.isBulk && (
                           <div className="grid grid-cols-2 gap-3 max-sm:gap-2 mt-3">
                             <div>
-                              <label className="block text-xs font-semibold text-gray-600 mb-1">
+                              <label className="block text-xs font-semibold text-gray-900 mb-1">
                                 Giá cả thùng (đ)
                               </label>
                               <Input
@@ -1064,7 +1064,7 @@ const renderPurchaseHistoryLink = () => (
                               />
                             </div>
                             <div>
-                              <label className="block text-xs font-semibold text-gray-600 mb-1">
+                              <label className="block text-xs font-semibold text-gray-900 mb-1">
                                 Số {item.product.unit} trong thùng
                               </label>
                               <Input
@@ -1083,7 +1083,7 @@ const renderPurchaseHistoryLink = () => (
                                 className="text-base font-bold h-11"
                               />
                             </div>
-                            <div className="col-span-2 text-sm text-blue-700 bg-blue-50 px-3 py-2 rounded-lg">
+                            <div className="col-span-2 text-sm text-blue-950 bg-blue-50 px-3 py-2 rounded-lg">
                               → Giá mỗi {item.product.unit}:{' '}
                               <strong>{formatMoney(item.costPrice)}</strong>
                             </div>
@@ -1093,7 +1093,7 @@ const renderPurchaseHistoryLink = () => (
 
                       {/* Dòng 4: Hạn dùng (không bắt buộc) */}
                       <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        <label className="block text-sm font-semibold text-gray-900 mb-1">
                           Hạn sử dụng (không bắt buộc)
                         </label>
                         <Input
@@ -1107,8 +1107,8 @@ const renderPurchaseHistoryLink = () => (
                       </div>
 
                       {/* Thành tiền */}
-                      <div className="flex justify-end items-center pt-1 border-t border-gray-100 text-base">
-                        <span className="text-gray-500 mr-2">Thành tiền:</span>
+                      <div className="flex justify-end items-center pt-1 border-t border-gray-300 text-base">
+                        <span className="text-gray-900 mr-2">Thành tiền:</span>
                         <span className="text-xl max-sm:text-base font-bold text-gray-900">{formatMoney(subtotal)}</span>
                       </div>
                     </div>
@@ -1120,10 +1120,10 @@ const renderPurchaseHistoryLink = () => (
 
           {/* Trạng thái trống */}
           {false && cart.length === 0 && !successInfo && (
-            <div className="bg-white p-12 rounded-2xl shadow-sm border border-gray-100 text-center">
-              <PackagePlus className="w-16 h-16 text-gray-300 mx-auto mb-4 max-sm:mb-3" />
-              <h3 className="text-xl max-sm:text-base font-bold text-gray-700 mb-2">Chưa có món hàng nào</h3>
-              <p className="text-gray-500 text-base max-w-md mx-auto">
+            <div className="bg-white p-12 rounded-2xl shadow-sm border border-gray-300 text-center">
+              <PackagePlus className="w-16 h-16 text-gray-900 mx-auto mb-4 max-sm:mb-3" />
+              <h3 className="text-xl max-sm:text-base font-bold text-gray-900 mb-2">Chưa có món hàng nào</h3>
+              <p className="text-gray-900 text-base max-w-md mx-auto">
                 Dùng ô tìm kiếm phía trên để chọn hàng cần nhập, hoặc bấm &quot;Tạo hàng mới&quot; nếu chưa có trong danh sách.
               </p>
             </div>
@@ -1146,7 +1146,7 @@ const renderPurchaseHistoryLink = () => (
         />
       )}
       <section
-        className={`fixed inset-x-0 bottom-0 z-[60] flex max-h-[90dvh] min-w-0 flex-col overflow-y-auto rounded-t-3xl bg-gray-50 px-3 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-3 shadow-2xl transition-[transform,visibility] duration-300 lg:hidden ${
+        className={`fixed inset-x-0 bottom-0 z-[60] flex max-h-[90dvh] min-w-0 flex-col overflow-y-auto rounded-t-3xl bg-gray-100 px-3 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-3 shadow-2xl transition-[transform,visibility] duration-300 lg:hidden ${
           isCartOpen ? 'visible translate-y-0' : 'invisible translate-y-full'
         }`}
         aria-label="Phiếu nhập"
@@ -1167,7 +1167,7 @@ const renderPurchaseHistoryLink = () => (
         </div>
         <div className="min-w-0 space-y-4 max-sm:space-y-3">
           {formError && (
-            <p className="rounded-xl border-2 border-red-200 bg-red-50 p-3 text-base text-red-700" role="alert">
+            <p className="rounded-xl border-2 border-red-300 bg-red-50 p-3 text-base text-red-800" role="alert">
               {formError}
             </p>
           )}
@@ -1181,14 +1181,14 @@ const renderPurchaseHistoryLink = () => (
         <button
           type="button"
           onClick={() => setIsCartOpen(true)}
-          className="flex w-full items-center justify-between gap-2 rounded-xl bg-blue-700 px-3 py-1.5 text-left text-white shadow-xl"
+          className="flex w-full items-center justify-between gap-2 rounded-xl bg-blue-800 px-3 py-1.5 text-left text-white shadow-xl"
           aria-label={`Xem phiếu nhập: ${cart.length} món, tổng ${formatMoney(totalAmount)}`}
           aria-expanded={isCartOpen}
         >
           <span className="min-w-0 whitespace-nowrap text-[13px] font-medium leading-none">
             Phiếu: {cart.length} món • {formatMoney(totalAmount)}
           </span>
-          <span className="inline-flex items-center justify-center h-7 !min-h-0 px-3 py-0 text-xs font-semibold rounded-lg whitespace-nowrap shrink-0 leading-none bg-white text-blue-800">
+          <span className="inline-flex items-center justify-center h-7 !min-h-0 px-3 py-0 text-xs font-semibold rounded-lg whitespace-nowrap shrink-0 leading-none bg-white text-blue-950">
             Xem phiếu
           </span>
         </button>
