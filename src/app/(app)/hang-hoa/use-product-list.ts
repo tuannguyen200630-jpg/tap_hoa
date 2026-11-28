@@ -74,6 +74,8 @@ export function useProductList({ initialProducts, categories: initialCategories,
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [isAdvancedOptionsOpen, setIsAdvancedOptionsOpen] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
+  const [isEditAdvancedOpen, setIsEditAdvancedOpen] = useState(false)
+  const [isEditCustomUnit, setIsEditCustomUnit] = useState(false)
   const [isDetailOpen, setIsDetailOpen] = useState(false)
   const [isPriceHistoryOpen, setIsPriceHistoryOpen] = useState(false)
   const [isStockHistoryOpen, setIsStockHistoryOpen] = useState(false)
@@ -311,6 +313,8 @@ export function useProductList({ initialProducts, categories: initialCategories,
   const openEditModal = (p: Product) => {
     setReturnToDetailProductId(p.id)
     closeDetailsModal(true)
+    setIsEditAdvancedOpen(false)
+    setIsEditCustomUnit(false)
     setActiveProduct(p)
     setFormName(p.name)
     setFormCategory(p.category_id || '')
@@ -356,6 +360,9 @@ export function useProductList({ initialProducts, categories: initialCategories,
         if (res.error) {
           setFormError(res.error)
         } else {
+          if (!units.includes(formUnit)) {
+            setUnits([...units, formUnit])
+          }
           setIsEditOpen(false)
           setIsPriceHistoryOpen(false)
           setIsStockHistoryOpen(false)
@@ -628,6 +635,10 @@ export function useProductList({ initialProducts, categories: initialCategories,
     setIsAdvancedOptionsOpen,
     isEditOpen,
     setIsEditOpen,
+    isEditAdvancedOpen,
+    setIsEditAdvancedOpen,
+    isEditCustomUnit,
+    setIsEditCustomUnit,
     isDetailOpen,
     setIsDetailOpen,
     isPriceHistoryOpen,

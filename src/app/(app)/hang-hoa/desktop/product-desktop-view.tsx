@@ -74,6 +74,7 @@ function HistoryModalFrame({
 
 export function ProductDesktopView({ model }: { model: ProductListModel }) {
   const { products, categories, search, setSearch, selectedCategory, setSelectedCategory, filterType, setFilterType, priceModeFilter, setPriceModeFilter, sortBy, setSortBy, isFilterExpanded, setIsFilterExpanded, listError, isAddOpen, setIsAddOpen, isAdvancedOptionsOpen, setIsAdvancedOptionsOpen, isEditOpen, isDetailOpen, isPriceHistoryOpen, isStockHistoryOpen, isNewCatOpen, setIsNewCatOpen, editingCategoryId, setEditingCategoryId, isConfirmHideOpen, setIsConfirmHideOpen, activeProduct, priceHistory, stockHistory, priceHistoryError, stockHistoryError, isPriceHistoryLoading, isStockHistoryLoading, formName, setFormName, formCategory, setFormCategory, formCodePreview, formUnit, setFormUnit, formCostPrice, setFormCostPrice, formSellPrice, setFormSellPrice, formStock, setFormStock, formMinStock, setFormMinStock, formPriceMode, setFormPriceMode, formBarcode, setFormBarcode, formExpiryDate, setFormExpiryDate, setFormImageFile, formError, addModalBodyRef, newCatName, setNewCatName, newCatError, detailError, isDetailLoading, isPending, profitPerItem, totalCount, visibleCount, visibleProducts, refreshProductList, activeFilterCount, clearFilters, openAddModal, handleCategoryChange, handleAddSubmit, openEditModal, handleEditSubmit, handleToggleActive, confirmToggleActive, closeDetailsModal, startLongPress, moveLongPress, clearLongPress, openPriceHistoryModal, openStockHistoryModal, closeHistoryOrEditAndReturn, openEditCategory, openNewCategory, handleCategorySubmit, sentinelRef } = model
+  const { units, isEditAdvancedOpen, setIsEditAdvancedOpen, isEditCustomUnit, setIsEditCustomUnit } = model
 
   return (
     <div className="space-y-6 max-sm:space-y-3 pb-20">
@@ -791,27 +792,29 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
       {/* MODAL SỬA MÓN HÀNG */}
       {isEditOpen && activeProduct && (
         <div
-          className="fixed inset-0 z-[60] flex items-center justify-center p-4 max-sm:p-3 bg-black/60 backdrop-blur-xs overflow-y-auto"
+          className="fixed inset-0 z-[60] flex items-start justify-center overflow-hidden bg-black/60 p-3 backdrop-blur-xs sm:items-center sm:p-4"
           onClick={(event) => {
             if (event.target === event.currentTarget) closeHistoryOrEditAndReturn()
           }}
         >
-          <div className="bg-white rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden my-8 border border-gray-300">
-            <div className="bg-blue-800 text-white p-5 max-sm:p-3 flex justify-between items-center">
+          <div className="flex max-h-[90dvh] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-gray-300 bg-white shadow-2xl">
+            <header className="flex shrink-0 items-center justify-between bg-blue-800 p-5 text-white max-sm:p-3">
               <div>
                 <h2 className="text-2xl max-sm:text-lg font-bold">Sửa món hàng</h2>
                 <p className="text-blue-100 text-lg max-sm:text-sm mt-0.5">Mã hàng: {activeProduct.code}</p>
               </div>
               <button
+                type="button"
                 onClick={closeHistoryOrEditAndReturn}
                 className="text-white hover:text-white p-2 rounded-lg"
                 aria-label="Quay lại chi tiết hàng hóa"
               >
                 <X className="w-6 h-6" />
               </button>
-            </div>
+            </header>
 
-            <form onSubmit={handleEditSubmit} className="p-6 max-sm:p-3 space-y-5 max-sm:space-y-3">
+            <form onSubmit={handleEditSubmit} className="flex min-h-0 flex-1 flex-col">
+              <div className="min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-contain p-6 max-sm:space-y-3 max-sm:p-3">
               {formError && (
                 <div className="bg-red-50 border-2 border-red-300 text-red-800 p-3.5 rounded-xl text-lg max-sm:text-sm flex items-center gap-2">
                   <AlertTriangle className="w-5 h-5 shrink-0 text-red-800" />
@@ -856,11 +859,39 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                 <label className="block font-semibold text-gray-900 text-lg max-sm:text-sm mb-1.5">
                   Đơn vị tính *
                 </label>
-                <Input
-                  value={formUnit}
-                  onChange={(e) => setFormUnit(e.target.value)}
+                <select
+                  value={isEditCustomUnit ? '__edit_custom_unit__' : formUnit}
+                  onChange={(e) => {
+                    if (e.target.value === '__edit_custom_unit__') {
+                      setFormUnit('')
+                      setIsEditCustomUnit(true)
+                    } else {
+                      setFormUnit(e.target.value)
+                      setIsEditCustomUnit(false)
+                    }
+                  }}
+                  aria-label="Đơn vị tính"
+                  className="w-full h-12 px-3 border-2 border-gray-300 rounded-xl text-lg max-sm:text-sm bg-white focus:border-blue-700"
                   required
-                />
+                >
+                  {Array.from(new Set([...QUICK_UNITS, ...units])).map((unit) => (
+                    <option key={unit} value={unit}>{unit}</option>
+                  ))}
+                  {activeProduct.unit && !units.includes(activeProduct.unit) && !QUICK_UNITS.includes(activeProduct.unit) && (
+                    <option value={activeProduct.unit}>{activeProduct.unit}</option>
+                  )}
+                  <option value="__edit_custom_unit__">Khác (nhập đơn vị)</option>
+                </select>
+                {isEditCustomUnit && (
+                  <Input
+                    value={formUnit}
+                    onChange={(e) => setFormUnit(e.target.value)}
+                    className="mt-2 text-lg max-sm:text-sm"
+                    placeholder="Nhập đơn vị tính khác..."
+                    aria-label="Nhập đơn vị tính khác"
+                    required
+                  />
+                )}
               </div>
 
               {/* Giá nhập & Giá bán */}
@@ -893,100 +924,108 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                 </div>
               </div>
 
-              <div>
-                <label className="block font-semibold text-gray-900 text-lg max-sm:text-sm mb-1.5">
-                  Ảnh hàng hóa (không bắt buộc)
-                </label>
-                {activeProduct.image_url && (
-                  <div className="relative mb-2 h-20 w-20 overflow-hidden rounded-lg bg-gray-100">
-                    <Image
-                      src={activeProduct.image_url}
-                      alt={`Ảnh ${activeProduct.name}`}
-                      fill
-                      sizes="80px"
-                      className="object-cover"
-                    />
-                  </div>
-                )}
-                <Input
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp"
-                  onChange={(e) => setFormImageFile(e.target.files?.[0] ?? null)}
-                  className="h-auto min-h-[48px] text-lg max-sm:text-sm"
-                />
-                <p className="mt-1 text-lg max-sm:text-sm text-gray-900">Chọn ảnh mới nếu muốn thay ảnh hiện tại.</p>
-              </div>
-
-              {/* Khung lãi */}
               <div className="bg-blue-50 border border-blue-700 p-4 max-sm:p-3 rounded-xl flex justify-between items-center text-blue-950">
-                <span className="font-medium text-lg max-sm:text-sm">Lãi mỗi cái hiện tại:</span>
+                <span className="font-medium text-lg max-sm:text-sm">Lãi mỗi {formUnit || 'đơn vị'} hiện tại:</span>
                 <span className="text-xl max-sm:text-base font-bold">{formatMoney(profitPerItem)}</span>
               </div>
 
-              {/* Chế độ giá */}
+              <button
+                type="button"
+                onClick={() => setIsEditAdvancedOpen((open) => !open)}
+                aria-expanded={isEditAdvancedOpen}
+                aria-controls="edit-product-advanced-options"
+                className="flex min-h-12 w-full items-center justify-between rounded-xl border border-dashed border-gray-300 bg-gray-100 px-4 py-2 text-left text-base font-semibold text-gray-900 hover:bg-gray-100 max-sm:px-3"
+              >
+                <span>Nâng cao</span>
+                <ChevronDown className={`h-5 w-5 shrink-0 transition-transform ${isEditAdvancedOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {isEditAdvancedOpen && (
+                <div id="edit-product-advanced-options" className="space-y-4 max-sm:space-y-3">
+                  <div>
+                    <label className="block font-semibold text-gray-900 text-lg max-sm:text-sm mb-1.5">
+                      Ảnh hàng hóa (không bắt buộc)
+                    </label>
+                    {activeProduct.image_url && (
+                      <div className="relative mb-2 h-20 w-20 overflow-hidden rounded-lg bg-gray-100">
+                        <Image
+                          src={activeProduct.image_url}
+                          alt={`Ảnh ${activeProduct.name}`}
+                          fill
+                          sizes="80px"
+                          className="object-cover"
+                        />
+                      </div>
+                    )}
+                    <Input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      onChange={(e) => setFormImageFile(e.target.files?.[0] ?? null)}
+                      className="h-auto min-h-[48px] text-lg max-sm:text-sm"
+                    />
+                    <p className="mt-1 text-lg max-sm:text-sm text-gray-900">Chọn ảnh mới nếu muốn thay ảnh hiện tại.</p>
+                  </div>
+
+                  <div>
+                    <label className="block font-semibold text-gray-900 text-lg max-sm:text-sm mb-1.5">
+                      Cách tính giá khi nhập hàng mới
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setFormPriceMode('auto')}
+                        className={`p-3 min-h-[48px] rounded-xl text-left border-2 transition-all ${
+                          formPriceMode === 'auto'
+                            ? 'border-blue-700 bg-blue-100 text-blue-950'
+                            : 'border-gray-300 hover:border-gray-300'
+                        }`}
+                      >
+                        <div className="font-bold text-lg max-sm:text-sm">Tự đề xuất giá</div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFormPriceMode('fixed')}
+                        className={`p-3 min-h-[48px] rounded-xl text-left border-2 transition-all ${
+                          formPriceMode === 'fixed'
+                            ? 'border-blue-700 bg-blue-100 text-blue-950'
+                            : 'border-gray-300 hover:border-gray-300'
+                        }`}
+                      >
+                        <div className="font-bold text-lg max-sm:text-sm">Giữ giá cố định</div>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block font-semibold text-gray-900 text-lg max-sm:text-sm mb-1.5">
+                      Ngưỡng báo sắp hết
+                    </label>
+                    <Input
+                      type="number"
+                      inputMode="decimal"
+                      step="any"
+                      value={formMinStock}
+                      onChange={(e) => setFormMinStock(Number(e.target.value))}
+                    />
+                  </div>
+                </div>
+              )}
+
               <div>
                 <label className="block font-semibold text-gray-900 text-lg max-sm:text-sm mb-1.5">
-                  Cách tính giá khi nhập hàng mới
+                  Hạn sử dụng
                 </label>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setFormPriceMode('auto')}
-                    className={`p-3 min-h-[48px] rounded-xl text-left border-2 transition-all ${
-                      formPriceMode === 'auto'
-                        ? 'border-blue-700 bg-blue-100 text-blue-950'
-                        : 'border-gray-300 hover:border-gray-300'
-                    }`}
-                  >
-                    <div className="font-bold text-lg max-sm:text-sm">Tự đề xuất giá</div>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setFormPriceMode('fixed')}
-                    className={`p-3 min-h-[48px] rounded-xl text-left border-2 transition-all ${
-                      formPriceMode === 'fixed'
-                        ? 'border-blue-700 bg-blue-100 text-blue-950'
-                        : 'border-gray-300 hover:border-gray-300'
-                    }`}
-                  >
-                    <div className="font-bold text-lg max-sm:text-sm">Giữ giá cố định</div>
-                  </button>
-                </div>
+                <Input type="date" value={formExpiryDate} onChange={(e) => setFormExpiryDate(e.target.value)} />
+              </div>
               </div>
 
-              {/* Ngưỡng báo & HSD */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-sm:gap-2">
-                <div>
-                  <label className="block font-semibold text-gray-900 text-lg max-sm:text-sm mb-1.5">
-                    Ngưỡng báo sắp hết
-                  </label>
-                  <Input
-                    type="number"
-                    inputMode="decimal"
-                    step="any"
-                    value={formMinStock}
-                    onChange={(e) => setFormMinStock(Number(e.target.value))}
-                  />
-                </div>
-                <div>
-                  <label className="block font-semibold text-gray-900 text-lg max-sm:text-sm mb-1.5">
-                    Hạn sử dụng
-                  </label>
-                  <Input
-                    type="date"
-                    value={formExpiryDate}
-                    onChange={(e) => setFormExpiryDate(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-end gap-3 max-sm:gap-2 pt-3 border-t border-gray-300">
+              <footer className="flex shrink-0 justify-end gap-3 border-t border-gray-300 p-4 max-sm:gap-2 max-sm:p-3">
                 <Button
                   type="button"
                   variant="outline"
                   size="lg"
                   onClick={closeHistoryOrEditAndReturn}
-                  className="min-h-[48px] text-lg max-sm:text-sm px-6 max-sm:px-3 rounded-xl"
+                  className="min-h-[48px] flex-1 rounded-xl px-3 text-sm sm:flex-none sm:px-6 sm:text-lg"
                 >
                   Quay lại chi tiết
                 </Button>
@@ -994,11 +1033,11 @@ export function ProductDesktopView({ model }: { model: ProductListModel }) {
                   type="submit"
                   size="lg"
                   disabled={isPending}
-                  className="bg-blue-800 hover:bg-blue-900 text-white min-h-[48px] text-lg max-sm:text-sm px-8 max-sm:px-3 rounded-xl font-bold shadow-md"
+                  className="min-h-[48px] flex-1 rounded-xl bg-blue-800 px-3 text-sm font-bold text-white shadow-md hover:bg-blue-900 sm:flex-none sm:px-8 sm:text-lg"
                 >
                   {isPending ? 'Đang lưu...' : 'Lưu thay đổi'}
                 </Button>
-              </div>
+              </footer>
             </form>
           </div>
         </div>

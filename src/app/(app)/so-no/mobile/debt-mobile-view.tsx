@@ -8,17 +8,19 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
   const { targetType, search, setSearch, isLoading, listError, notice, isContactDialogOpen, setContactDialogOpen, editingContact, contactForm, setContactForm, contactError, isSavingContact, paymentContact, setPaymentContact, paymentAmount, paymentNote, setPaymentNote, paymentError, isSavingPayment, historyContact, history, originPage, paymentPage, historyError, isLoadingHistory, activeData, filteredContacts, visibleCount, visibleContacts, refreshContacts, changeTarget, openNewContact, openEditContact, submitContact, openPayment, handlePaymentAmountChange, setPaymentToFullDebt, submitPayment, loadHistory, openHistory, closeHistory, paymentValue, sentinelRef, targetTitle } = model
 
   return (
-    <section className="space-y-6 max-sm:space-y-3">
-      <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1">
-        <h1 className="min-w-0 text-lg font-bold text-gray-900 sm:text-3xl">Sổ nợ</h1>
-        <button
-          type="button"
-          onClick={openNewContact}
-          className="col-start-2 row-start-1 shrink-0 whitespace-nowrap rounded-lg bg-blue-800 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-900 sm:px-5 sm:py-3 sm:text-base"
-        >
-          {targetType === 'customer' ? '+ Thêm khách hàng' : '+ Thêm nhà cung cấp'}
-        </button>
-        <p className="col-span-2 row-start-2 text-xs text-gray-900 sm:text-base">Theo dõi các khoản khách còn nợ và khoản cần trả nhà cung cấp.</p>
+    <section className="space-y-2.5">
+      <header className="space-y-1">
+        <div className="flex items-center justify-between gap-2">
+          <h1 className="min-w-0 text-lg font-bold text-gray-900 sm:text-3xl">Sổ nợ</h1>
+          <button
+            type="button"
+            onClick={openNewContact}
+            className="inline-flex h-9 w-44 shrink-0 items-center justify-center whitespace-nowrap rounded-lg bg-blue-800 px-2.5 text-xs font-semibold text-white hover:bg-blue-900 sm:w-52 sm:px-3 sm:text-sm"
+          >
+            {targetType === 'customer' ? '+ Thêm khách hàng' : '+ Thêm nhà cung cấp'}
+          </button>
+        </div>
+        <p className="hidden text-xs text-gray-900 sm:block sm:text-base">Theo dõi các khoản khách còn nợ và khoản cần trả nhà cung cấp.</p>
       </header>
 
       {notice && (
@@ -26,14 +28,13 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
           {notice}
         </div>
       )}
-
-      <div className="grid grid-cols-2 gap-2" role="tablist" aria-label="Chọn sổ công nợ">
+      <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-2" role="tablist" aria-label="Chọn sổ công nợ">
         <button
           type="button"
           role="tab"
           aria-selected={targetType === 'customer'}
           onClick={() => changeTarget('customer')}
-          className={`whitespace-nowrap rounded-lg border-2 px-2 py-2 text-center text-xs font-semibold ${
+          className={`inline-flex min-h-10 items-center justify-center rounded-lg border-2 px-1.5 py-1 text-center text-xs font-semibold leading-tight sm:px-2 sm:text-sm ${
             targetType === 'customer'
               ? 'border-blue-700 bg-blue-50 text-blue-950'
               : 'border-gray-300 bg-white text-gray-900'
@@ -46,7 +47,7 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
           role="tab"
           aria-selected={targetType === 'supplier'}
           onClick={() => changeTarget('supplier')}
-          className={`whitespace-nowrap rounded-lg border-2 px-2 py-2 text-center text-xs font-semibold ${
+          className={`inline-flex min-h-10 items-center justify-center rounded-lg border-2 px-1.5 py-1 text-center text-xs font-semibold leading-tight sm:px-2 sm:text-sm ${
             targetType === 'supplier'
               ? 'border-blue-700 bg-blue-50 text-blue-950'
               : 'border-gray-300 bg-white text-gray-900'
@@ -55,12 +56,11 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
           Mình nợ nhà cung cấp
         </button>
       </div>
-
-      <div className="flex items-center justify-between gap-2 rounded-xl border border-blue-700 bg-blue-50 p-3">
+      <div className="flex items-center justify-between gap-2 rounded-xl border border-blue-700 bg-blue-50 px-3 py-2">
         <p className="text-xs font-medium text-blue-950">
           {targetType === 'customer' ? 'Tổng khách hàng đang nợ' : 'Tổng tiền cần trả nhà cung cấp'}
         </p>
-        <p className="shrink-0 whitespace-nowrap text-base font-bold text-blue-950">{formatMoney(activeData.totalDebt)}</p>
+        <p className="shrink-0 whitespace-nowrap text-base font-bold tabular-nums text-blue-950">{formatMoney(activeData.totalDebt)}</p>
       </div>
 
       <div className="flex flex-col gap-3 max-sm:gap-2 sm:flex-row">
@@ -70,8 +70,8 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
           type="search"
           value={search}
           onChange={(event) => setSearch(event.target.value)}
-          placeholder="Tìm tên, số điện thoại, địa chỉ hoặc ghi chú"
-          className="min-h-12 w-full rounded-lg border border-gray-400 bg-white px-3 py-2 text-sm text-gray-900"
+          placeholder="Tìm tên, SĐT, địa chỉ..."
+          className="h-10 w-full rounded-lg border border-gray-400 bg-white px-3 py-2 text-sm text-gray-900"
         />
         {isLoading && <p className="self-center text-gray-900" role="status">Đang tải danh sách…</p>}
       </div>
@@ -112,49 +112,48 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
       )}
 
       {filteredContacts.length > 0 && (
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           {visibleContacts.map((contact) => (
             <article key={contact.id} className="rounded-xl border border-gray-300 bg-white p-3 shadow-sm">
-              <div className="flex flex-col gap-4 max-sm:gap-2 lg:flex-row lg:items-center lg:justify-between">
-                <div className="min-w-0">
-                  <h2 className="break-words text-sm font-bold text-gray-950 sm:text-base">{contact.name}</h2>
-                  {contact.phone && <p className="mt-1 text-xs text-gray-900 sm:text-sm">Điện thoại: {contact.phone}</p>}
-                  {contact.address && <p className="mt-1 hidden break-words text-xs text-gray-900 md:block">Địa chỉ: {contact.address}</p>}
-                  {contact.note && <p className="mt-1 hidden break-words text-xs text-gray-900 md:block">Ghi chú: {contact.note}</p>}
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0 flex-1">
+                  <h2 className="truncate text-sm font-bold text-gray-900 sm:text-base">{contact.name}</h2>
+                  {contact.phone && <p className="truncate text-xs text-gray-700">SĐT: {contact.phone}</p>}
+                  {contact.address && <p className="truncate text-xs text-gray-700">Địa chỉ: {contact.address}</p>}
+                  {contact.note && <p className="truncate text-xs text-gray-700">Ghi chú: {contact.note}</p>}
                 </div>
-                <div className="flex flex-col gap-3 max-sm:gap-2 sm:flex-row sm:items-center">
-                  <div className="sm:min-w-48 sm:text-right">
-                    <p className="text-xs text-gray-900">{targetType === 'customer' ? 'Còn nợ' : 'Cần trả'}</p>
-                    <p className="whitespace-nowrap text-base font-bold text-gray-950 sm:text-2xl">
-                      {contact.debt > 0 ? formatMoney(contact.debt) : 'Không có công nợ'}
-                    </p>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {contact.debt > 0 && (
-                      <button
-                        type="button"
-                        onClick={() => openPayment(contact)}
-                        className="rounded-lg bg-green-800 px-4 py-2 text-xs font-semibold text-white hover:bg-green-800"
-                      >
-                        {targetType === 'customer' ? 'Thu nợ' : 'Trả nợ'}
-                      </button>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => openHistory(contact)}
-                      className="rounded-lg border border-blue-700 px-4 py-2 text-xs font-semibold text-blue-950 hover:bg-blue-50"
-                    >
-                      Xem lịch sử
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => openEditContact(contact)}
-                      className="rounded-lg border border-gray-500 px-4 py-2 text-xs font-semibold text-gray-900 hover:bg-gray-100"
-                    >
-                      Sửa thông tin
-                    </button>
-                  </div>
+                <div className="shrink-0 text-right">
+                  <p className="text-xs text-gray-700">{targetType === 'customer' ? 'Còn nợ' : 'Cần trả'}</p>
+                  <p className={`whitespace-nowrap text-base font-bold tabular-nums ${contact.debt > 0 ? 'text-red-700' : 'text-gray-950'}`}>
+                    {contact.debt > 0 ? formatMoney(contact.debt) : 'Không có công nợ'}
+                  </p>
                 </div>
+              </div>
+              <div className="mt-2.5 grid grid-cols-[1fr_1fr_auto] gap-1.5">
+                {contact.debt > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => openPayment(contact)}
+                    className="h-9 whitespace-nowrap rounded-lg bg-green-800 px-2.5 text-xs font-semibold text-white hover:bg-green-800"
+                  >
+                    {targetType === 'customer' ? 'Thu nợ' : 'Trả nợ'}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => openHistory(contact)}
+                  className="h-9 whitespace-nowrap rounded-lg border border-blue-700 px-2.5 text-xs font-semibold text-blue-950 hover:bg-blue-50"
+                >
+                  <span className="min-[380px]:hidden">Lịch sử</span>
+                  <span className="hidden min-[380px]:inline">Xem lịch sử</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => openEditContact(contact)}
+                  className="h-9 whitespace-nowrap rounded-lg border border-gray-500 px-2.5 text-xs font-semibold text-gray-900 hover:bg-gray-100"
+                >
+                  Sửa
+                </button>
               </div>
             </article>
           ))}
@@ -183,7 +182,6 @@ export function DebtMobileView({ model }: { model: ReturnType<typeof useDebtLedg
                 <input
                   required
                   maxLength={150}
-                  autoFocus
                   value={contactForm.name}
                   onChange={(event) => setContactForm({ ...contactForm, name: event.target.value })}
                   className="mt-1 min-h-12 w-full rounded-lg border border-gray-400 px-3 py-2 font-normal"
